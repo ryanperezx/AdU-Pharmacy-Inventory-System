@@ -23,6 +23,48 @@ namespace AdU_Pharmacy_Inventory_System
         public MainWindow()
         {
             InitializeComponent();
+            //date.Content = DateTime.Now.ToString("D");
+            //stack.DataContext = new ExpanderListViewModel();
+        }
+
+        private void lblExit_Click(object sender, RoutedEventArgs e)
+        {
+            string sMessageBoxText = "Do you want to exit the application?";
+            string sCaption = "Exit";
+            MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+            MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+            MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+
+            switch (dr)
+            {
+                case MessageBoxResult.Yes:
+                    this.DialogResult = true;
+                    Application.Current.Shutdown();
+                    break;
+                case MessageBoxResult.No:
+                    break;
+            }
+        }
+
+        private void lblLogOut_Click(object sender, RoutedEventArgs e)
+        {
+            string sMessageBoxText = "Do you want to log out?";
+            string sCaption = "Logout";
+            MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+            MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+            MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+
+            switch (dr)
+            {
+                case MessageBoxResult.Yes:
+                    this.DialogResult = false;
+                    Close();
+                    break;
+                case MessageBoxResult.No:
+                    break;
+            }
         }
     }
 }

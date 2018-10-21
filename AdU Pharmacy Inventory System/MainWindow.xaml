@@ -4,9 +4,106 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AdU_Pharmacy_Inventory_System"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Main"
+        ResizeMode="NoResize" 
+        WindowStyle="None"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        Width="{Binding ActualWidth, RelativeSource = {RelativeSource AncestorType = {x:Type Window}}}" 
+        Height="{Binding ActualHeight,  RelativeSource ={RelativeSource AncestorType = {x:Type Window}}}"
+        d:DesignHeight="768" d:DesignWidth="1366"
+        >
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Storyboard x:Key="MenuOpen">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="300"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="Frame">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="1375"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1075"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="MenuClose">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="300"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="Frame">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="1075"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1375"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="ButtonMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuOpen}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="ButtonMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
+        </EventTrigger>
+    </Window.Triggers>
     <Grid>
-        
+        <materialDesign:Card
+            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+            materialDesign:ShadowAssist.ShadowEdges="Bottom" VerticalAlignment="Top" Height="75">
+            <Grid Height="75" VerticalAlignment="Top">
+                <ToggleButton x:Name="ButtonMenu"  Width="Auto" Height="30"  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Left" Cursor="Hand" Margin="25,24,0,21"/>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,25,13">
+                    <Label x:Name="lblUser" Content="User" VerticalAlignment="Center" FontSize="16" Foreground="Black"/>
+                    <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Width="55" StaysOpen="False">
+                        <StackPanel>
+                            <Button x:Name="ButtonPopUpLogout" Content="Logout" Click="lblLogOut_Click"/>
+                            <Button x:Name="ButtonPopUpExit" Content="Exit" Click="lblExit_Click"/>
+                        </StackPanel>
+                    </materialDesign:PopupBox>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+
+        <Grid x:Name="GridMenu" Width="0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="0,75,0,0" Panel.ZIndex="2">
+            <materialDesign:Card
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            materialDesign:ShadowAssist.ShadowEdges="Right" VerticalAlignment="Stretch">
+                <StackPanel x:Name="stack">
+                    <StackPanel.Resources>
+                        <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
+                    </StackPanel.Resources>
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Width="285" Header="Reference Data Management">
+                        <StackPanel>
+                        </StackPanel>
+                    </Expander>
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" x:Name="expTransact" Width="285" Header="Transaction Management">
+                        <StackPanel>
+                        </StackPanel>
+                    </Expander>
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" x:Name="expReport" Width="285" Header="Reports Management">
+                        <StackPanel>
+                        </StackPanel>
+                    </Expander>
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=4}" x:Name="expMaintenance" Width="285" Header="Maintenance Management">
+                        <StackPanel>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+
+
+
+        <!--Frame-->
+        <Frame x:Name="Frame" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  Margin="0,75,0,0" NavigationUIVisibility="Hidden" Panel.ZIndex="-1"/>
     </Grid>
 </Window>
