@@ -85,7 +85,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Apparatus Stock In.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Chemical Stock In.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChemicalStockIn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ForgotPassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GenerateChemicalMonitoring.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GenerateIssuanceForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,10 +121,25 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Apparatus Stock In.xaml.cs">
+      <DependentUpon>Apparatus Stock In.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Chemical Stock In.xaml.cs">
+      <DependentUpon>Chemical Stock In.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChemicalStockIn.xaml.cs">
+      <DependentUpon>ChemicalStockIn.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExpanderListViewModel.cs" />
     <Compile Include="ExpanderToBooleanConverter.cs" />
     <Compile Include="ForgotPassword.xaml.cs">
       <DependentUpon>ForgotPassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateChemicalMonitoring.xaml.cs">
+      <DependentUpon>GenerateChemicalMonitoring.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateIssuanceForm.xaml.cs">
+      <DependentUpon>GenerateIssuanceForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>

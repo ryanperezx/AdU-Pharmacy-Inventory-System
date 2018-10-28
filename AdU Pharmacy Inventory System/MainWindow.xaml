@@ -85,15 +85,13 @@
                         <StackPanel>
                         </StackPanel>
                     </Expander>
-                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" x:Name="expTransact" Width="285" Header="Transaction Management">
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Width="285" Header="Transaction Management">
                         <StackPanel>
+                            <TextBlock x:Name="tbAppaStockIn" HorizontalAlignment="Right" Text="Apparatus Stock In"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbAppaStockIn_MouseLeftButtonUp" MouseEnter="tbAppaStockIn_MouseEnter" MouseLeave="tbAppaStockIn_MouseLeave" Cursor="Hand" />
+
                         </StackPanel>
                     </Expander>
-                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" x:Name="expReport" Width="285" Header="Reports Management">
-                        <StackPanel>
-                        </StackPanel>
-                    </Expander>
-                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=4}" x:Name="expMaintenance" Width="285" Header="Maintenance Management">
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" Width="285" Header="Reports Management">
                         <StackPanel>
                         </StackPanel>
                     </Expander>

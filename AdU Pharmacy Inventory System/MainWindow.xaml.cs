@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Input;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -20,6 +21,7 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class MainWindow : Window
     {
+        Apparatus_Stock_In aps = new Apparatus_Stock_In();
         public MainWindow()
         {
             InitializeComponent();
@@ -65,6 +67,21 @@ namespace AdU_Pharmacy_Inventory_System
                 case MessageBoxResult.No:
                     break;
             }
+        }
+
+        private void tbAppaStockIn_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Frame.Navigate(aps);
+        }
+
+        private void tbAppaStockIn_MouseEnter(object sender, MouseEventArgs e)
+        {
+            tbAppaStockIn.TextDecorations = TextDecorations.Underline;
+        }
+
+        private void tbAppaStockIn_MouseLeave(object sender, MouseEventArgs e)
+        {
+            tbAppaStockIn.TextDecorations = null;
         }
     }
 }
