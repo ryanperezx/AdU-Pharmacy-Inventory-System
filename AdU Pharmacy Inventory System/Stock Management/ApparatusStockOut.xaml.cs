@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
-    /// Interaction logic for Apparatus_Stock_In.xaml
+    /// Interaction logic for ApparatusStockOut.xaml
     /// </summary>
-    public partial class Apparatus_Stock_In : Page
+    public partial class ApparatusStockOut : Page
     {
-        public Apparatus_Stock_In()
+        public ApparatusStockOut()
         {
             InitializeComponent();
         }

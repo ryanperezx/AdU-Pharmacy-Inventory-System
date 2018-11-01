@@ -85,15 +85,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Apparatus Stock In.xaml">
+    <Page Include="Add Inventory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Chemical Stock In.xaml">
+    <Page Include="Stock In.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChemicalStockIn.xaml">
+    <Page Include="Stock Management\ApparatusStockOut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stock Management\ChemicalStockOut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stock Management\AddChemicals.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stock Management\AddApparatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Academic Management\AddSubject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stock Management\ApparatusStockIn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stock Management\ChemicalStockIn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,11 +125,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GenerateChemicalMonitoring.xaml">
+    <Page Include="Report Management\GenerateChemicalMonitoring.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GenerateIssuanceForm.xaml">
+    <Page Include="Report Management\GenerateIssuanceForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -117,17 +141,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Add Inventory.xaml.cs">
+      <DependentUpon>Add Inventory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stock In.xaml.cs">
+      <DependentUpon>Stock In.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stock Management\ApparatusStockOut.xaml.cs">
+      <DependentUpon>ApparatusStockOut.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stock Management\ChemicalStockOut.xaml.cs">
+      <DependentUpon>ChemicalStockOut.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stock Management\AddChemicals.xaml.cs">
+      <DependentUpon>AddChemicals.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stock Management\AddApparatus.xaml.cs">
+      <DependentUpon>AddApparatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Academic Management\AddSubject.xaml.cs">
+      <DependentUpon>AddSubject.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Apparatus Stock In.xaml.cs">
-      <DependentUpon>Apparatus Stock In.xaml</DependentUpon>
+    <Compile Include="Stock Management\ApparatusStockIn.xaml.cs">
+      <DependentUpon>ApparatusStockIn.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Chemical Stock In.xaml.cs">
-      <DependentUpon>Chemical Stock In.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ChemicalStockIn.xaml.cs">
+    <Compile Include="Stock Management\ChemicalStockIn.xaml.cs">
       <DependentUpon>ChemicalStockIn.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExpanderListViewModel.cs" />
@@ -135,10 +177,10 @@
     <Compile Include="ForgotPassword.xaml.cs">
       <DependentUpon>ForgotPassword.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GenerateChemicalMonitoring.xaml.cs">
+    <Compile Include="Report Management\GenerateChemicalMonitoring.xaml.cs">
       <DependentUpon>GenerateChemicalMonitoring.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GenerateIssuanceForm.xaml.cs">
+    <Compile Include="Report Management\GenerateIssuanceForm.xaml.cs">
       <DependentUpon>GenerateIssuanceForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Login.xaml.cs">
