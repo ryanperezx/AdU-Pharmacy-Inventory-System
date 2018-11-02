@@ -60,6 +60,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -85,11 +88,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Add Inventory.xaml">
+    <Page Include="Apparatus Inventory Summary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Stock In.xaml">
+    <Page Include="Stock Management\Stock In.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stock Management\Add Inventory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,23 +108,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Stock Management\AddChemicals.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Stock Management\AddApparatus.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Academic Management\AddSubject.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Stock Management\ApparatusStockIn.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Stock Management\ChemicalStockIn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -141,11 +132,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Add Inventory.xaml.cs">
-      <DependentUpon>Add Inventory.xaml</DependentUpon>
+    <Compile Include="Apparatus Inventory Summary.xaml.cs">
+      <DependentUpon>Apparatus Inventory Summary.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Stock In.xaml.cs">
+    <Compile Include="DBSQLServerUtils.cs" />
+    <Compile Include="DBUtils.cs" />
+    <Compile Include="Stock Management\Stock In.xaml.cs">
       <DependentUpon>Stock In.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stock Management\Add Inventory.xaml.cs">
+      <DependentUpon>Add Inventory.xaml</DependentUpon>
     </Compile>
     <Compile Include="Stock Management\ApparatusStockOut.xaml.cs">
       <DependentUpon>ApparatusStockOut.xaml</DependentUpon>
@@ -153,24 +149,12 @@
     <Compile Include="Stock Management\ChemicalStockOut.xaml.cs">
       <DependentUpon>ChemicalStockOut.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Stock Management\AddChemicals.xaml.cs">
-      <DependentUpon>AddChemicals.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Stock Management\AddApparatus.xaml.cs">
-      <DependentUpon>AddApparatus.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Academic Management\AddSubject.xaml.cs">
       <DependentUpon>AddSubject.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stock Management\ApparatusStockIn.xaml.cs">
-      <DependentUpon>ApparatusStockIn.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Stock Management\ChemicalStockIn.xaml.cs">
-      <DependentUpon>ChemicalStockIn.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExpanderListViewModel.cs" />
     <Compile Include="ExpanderToBooleanConverter.cs" />
@@ -225,4 +209,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

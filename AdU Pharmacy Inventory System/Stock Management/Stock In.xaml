@@ -14,29 +14,30 @@
       Title="Stock_In">
 
     <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Stock Ins" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <Label Content="Inventory Type:" HorizontalAlignment="Left" Margin="500,59,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbInventType" HorizontalAlignment="Left" Margin="630,59,0,0" VerticalAlignment="Top" Width="165" Height="31">
-            <ComboBoxItem Content="Apparatus"/>
+        <ComboBox x:Name="cmbInventType" HorizontalAlignment="Left" Margin="630,59,0,0" VerticalAlignment="Top" Width="165">
+            <ComboBoxItem Content="Apparatuses"/>
             <ComboBoxItem Content="Chemicals"/>
         </ComboBox>
-        <Label x:Name="lblInventName" Content="Inventory Name:" HorizontalAlignment="Left" Margin="493,109,0,0" VerticalAlignment="Top"/>
+        <Label Content="Inventory Name:" HorizontalAlignment="Left" Margin="493,109,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbContent" HorizontalAlignment="Left" Margin="630,109,0,0" VerticalAlignment="Top" Width="165" Height="31">
             <ComboBoxItem Content="Item1"/>
             <ComboBoxItem Content="Item2"/>
             <ComboBoxItem Content="Item3"/>
+        </ComboBox>        <Label Content="Qty:" HorizontalAlignment="Left" Margin="581,155,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="630,155,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="45"/>
+        <Label Content="Size:" HorizontalAlignment="Left" Margin="579,205,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSize" HorizontalAlignment="Left" Height="31" Margin="630,205,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cmbUnit" HorizontalAlignment="Left" Margin="630,257,0,0" VerticalAlignment="Top" Width="72" Height="31">
+            <ComboBoxItem Name="milliliter">mL</ComboBoxItem>
+            <ComboBoxItem Name="gram">g</ComboBoxItem>
         </ComboBox>
-        <Label Content="Qty:" HorizontalAlignment="Left" Margin="586,168,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="630,168,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="50"/>
-        <Label Content="Size:" HorizontalAlignment="Left" Margin="584,233,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSize" HorizontalAlignment="Left" Height="31" Margin="630,233,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="cmbUnit" HorizontalAlignment="Left" Margin="630,293,0,0" VerticalAlignment="Top" Width="72" Height="31">
-            <ComboBoxItem x:Name="milliliter" Content="mL"/>
-            <ComboBoxItem x:Name="gram" Content="g"/>
-        </ComboBox>
+        <Label Content="Unit:" HorizontalAlignment="Left" Margin="577,257,0,0" VerticalAlignment="Top"/>
+        <Label Content="Remarks:" HorizontalAlignment="Left" Margin="552,305,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtUnit" HorizontalAlignment="Left" Height="31" Margin="630,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
+        
         <Button x:Name="btnAdd" Content="ADD" HorizontalAlignment="Left" Margin="445,415,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
-        <Label Content="Unit:" HorizontalAlignment="Left" Margin="582,293,0,0" VerticalAlignment="Top"/>
-        <Label Content="Remarks:" HorizontalAlignment="Left" Margin="552,359,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtUnit" HorizontalAlignment="Left" Height="31" Margin="630,359,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="790,415,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
+        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="810,415,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
     </Grid>
 </Page>

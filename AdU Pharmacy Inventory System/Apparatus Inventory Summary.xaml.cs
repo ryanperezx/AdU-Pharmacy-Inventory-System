@@ -16,18 +16,14 @@ using System.Windows.Shapes;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
-    /// Interaction logic for AddSubject.xaml
+    /// Interaction logic for Apparatus_Inventory_Summary.xaml
     /// </summary>
-    public partial class AddSubject : Page
+    public partial class Apparatus_Inventory_Summary : Page
     {
-        public AddSubject()
+        public Apparatus_Inventory_Summary()
         {
             InitializeComponent();
-        }
-
-        private void searchCode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
+            date.Text = DateTime.Now.ToString("dd MMMM yyyy");
         }
     }
 }

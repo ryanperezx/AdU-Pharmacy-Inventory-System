@@ -15,6 +15,7 @@
       Title="GenerateIssuanceForm">
 
     <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Issuance form" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <Label Content="Locker Number : " Margin="158,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="300,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195"/>
         <Label Content="Subject:" HorizontalAlignment="Left" Margin="224,184,0,0" VerticalAlignment="Top"/>
