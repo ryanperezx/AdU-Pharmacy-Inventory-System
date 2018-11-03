@@ -23,6 +23,22 @@ namespace AdU_Pharmacy_Inventory_System
         public GenerateIssuanceForm()
         {
             InitializeComponent();
+            
+        }
+
+        private void cmbSubject_SelectionChanged(object sender, EventArgs e)
+        {
+            var item = (ComboBoxItem)cmbSubject.SelectedValue;
+            var content = (string)item.Content;
+
+            if(content.Equals("Biochem Lab"))
+            {
+                this.lvSubject.Items.Clear();
+                this.lvSubject.Items.Add(new MyItem { apparatusName = "Aspirator", qty = 1, remarks = "" });
+                this.lvSubject.Items.Add(new MyItem { apparatusName = "Beaker", qty = 1, remarks = "1000mL" });
+            }
         }
     }
+
+
 }

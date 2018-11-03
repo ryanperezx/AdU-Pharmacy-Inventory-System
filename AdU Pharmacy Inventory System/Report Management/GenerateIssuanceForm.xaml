@@ -19,16 +19,29 @@
         <Label Content="Locker Number : " Margin="158,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="300,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195"/>
         <Label Content="Subject:" HorizontalAlignment="Left" Margin="224,184,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" Margin="300,184,0,0" VerticalAlignment="Top" Width="195"/>
+        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" Margin="300,184,0,0" VerticalAlignment="Top" Width="195" SelectionChanged="cmbSubject_SelectionChanged">
+            <ComboBoxItem Content="Biochem Lab"/>
+            <ComboBoxItem Content="Botany"/>
+            <ComboBoxItem Content="Clinical Toxicology"/>
+            <ComboBoxItem Content="DDS"/>
+            <ComboBoxItem Content="Inorganic Pharm &amp; Chem"/>
+            <ComboBoxItem Content="Manufacturing Pharmacy"/>
+            <ComboBoxItem Content="Med. Microbiology"/>
+            <ComboBoxItem Content="Org. Chem. Lab"/>
+            <ComboBoxItem Content="Pharm Tech and Calculations"/>
+            <ComboBoxItem Content="Pharmacognosy"/>
+            <ComboBoxItem Content="Pharmacology"/>
+            <ComboBoxItem Content="Physical Pharmacy"/>
+        </ComboBox>
         <Label Content="Schedule: " HorizontalAlignment="Left" Margin="207,230,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="300,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195"/>
         <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,510,0,0" VerticalAlignment="Top" Width="165"/>
-        <ListView HorizontalAlignment="Left" Height="463" Margin="750,42,0,0" VerticalAlignment="Top" Width="515" ItemsSource="{Binding}">
+        <ListView x:Name="lvSubject" HorizontalAlignment="Left" Height="463" Margin="750,42,0,0" VerticalAlignment="Top" Width="515" ItemsSource="{Binding}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Apparatus Name" Width="150"/>
-                    <GridViewColumn Header="Qty" Width="70"/>
-                    <GridViewColumn Header="Size/Brand/Remarks" Width="200"/>
+                    <GridViewColumn Header="Apparatus Name" Width="150" DisplayMemberBinding="{Binding apparatusName}"/>
+                    <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
+                    <GridViewColumn Header="Size/Brand/Remarks" Width="200" DisplayMemberBinding="{Binding remarks}"/>
                 </GridView>
             </ListView.View>
         </ListView>

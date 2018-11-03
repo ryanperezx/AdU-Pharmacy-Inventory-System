@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="DBSQLServerUtils.cs" />
     <Compile Include="DBUtils.cs" />
+    <Compile Include="MyItem.cs" />
     <Compile Include="Stock Management\Stock In.xaml.cs">
       <DependentUpon>Stock In.xaml</DependentUpon>
     </Compile>
