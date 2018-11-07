@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AdU_Pharmacy_Inventory_System"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
       mc:Ignorable="d" 
       d:DesignHeight="613" d:DesignWidth="1375"
       Background="White" 
@@ -24,20 +25,21 @@
         <Label Content="Inventory Name:" HorizontalAlignment="Left" Margin="493,109,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtInventName" HorizontalAlignment="Left" Height="31" Margin="630,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="140"/>
         <Label Content="Qty:" HorizontalAlignment="Left" Margin="581,155,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="630,155,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="45"/>
+        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="630,155,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="45" PreviewTextInput="txtQty_PreviewTextInput"/>
         <Label Content="Size:" HorizontalAlignment="Left" Margin="579,205,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSize" HorizontalAlignment="Left" Height="31" Margin="630,205,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="cmbUnit" HorizontalAlignment="Left" Margin="630,257,0,0" VerticalAlignment="Top" Width="72" Height="31">
-            <ComboBoxItem Name="milliliter">mL</ComboBoxItem>
-            <ComboBoxItem Name="gram">g</ComboBoxItem>
+            <ComboBoxItem Content="mL"/>
+            <ComboBoxItem Content="g"/>
         </ComboBox>
         <Label Content="Unit:" HorizontalAlignment="Left" Margin="577,257,0,0" VerticalAlignment="Top"/>
         <Label Content="Remarks:" HorizontalAlignment="Left" Margin="552,305,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtUnit" HorizontalAlignment="Left" Height="31" Margin="630,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtRemarks" HorizontalAlignment="Left" Height="31" Margin="630,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
 
-        <Button x:Name="btnAdd" Content="ADD" HorizontalAlignment="Left" Margin="375,415,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
-        <Button x:Name="btnEdit" Content="EDIT" HorizontalAlignment="Left" Margin="760,415,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
-        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="552,415,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
-        <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="940,415,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
+        <Button x:Name="btnEdit" Content="EDIT" HorizontalAlignment="Left" Margin="615,415,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnEdit_Click"/>
+        <iconPacks:PackIconMaterial x:Name="searchInName" Kind="Magnify" Height="31" Width="20" Margin="775,109,0,0" Cursor="Hand" MouseLeftButtonUp="searchInName_MouseLeftButtonUp"/>
+
+        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="430,415,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnSave_Click"/>
+        <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="800,415,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnDelete_Click"/>
     </Grid>
 </Page>

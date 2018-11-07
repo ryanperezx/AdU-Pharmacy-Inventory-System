@@ -22,10 +22,8 @@
 
         <Label Content="Subject Name:" HorizontalAlignment="Left" Margin="483,226,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSubjName" HorizontalAlignment="Left" Height="36" Margin="640,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
-        <Label Content="Section:" HorizontalAlignment="Left" Margin="542,268,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSection" HorizontalAlignment="Left" Height="37" Margin="640,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
-        <Button Content="ADD" HorizontalAlignment="Left" Margin="521,425,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
-        <Button Content="DELETE" HorizontalAlignment="Left" Margin="750,425,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
+        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="560,425,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnSave_Click"/>
+        <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="790,425,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnDelete_Click"/>
 
     </Grid>
 </Page>
