@@ -130,20 +130,26 @@ namespace AdU_Pharmacy_Inventory_System
                     case MessageBoxResult.Yes:
                         SqlCeConnection conn = DBUtils.GetDBConnection();
                         conn.Open();
-                        using (SqlCeCommand command = new SqlCeCommand("DELETE from Subjects where subjCode= @subjCode", conn))
+                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchivedSubjects (subjCode, subjName) select subjCode, subjName from Subjects where subjCode = @subjCode",conn))
                         {
-                            command.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
-                            int result = command.ExecuteNonQuery();
-                            if (result == 1)
+                            cmd.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
+                            int result = cmd.ExecuteNonQuery();
+                            if(result == 1)
                             {
-                                MessageBox.Show("Subject has been deleted!");
+                                using (SqlCeCommand command = new SqlCeCommand("DELETE from Subjects where subjCode= @subjCode", conn))
+                                {
+                                    command.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
+                                    int query = command.ExecuteNonQuery();
+                                    MessageBox.Show("Subject has been deleted!");
+                                }
                             }
                             else
                             {
                                 MessageBox.Show("Subject does not exist!");
-                                return;
                             }
+
                         }
+
                         emptyTextbox();
                         break;
 

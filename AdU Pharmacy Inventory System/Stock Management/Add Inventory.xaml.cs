@@ -29,11 +29,48 @@ namespace AdU_Pharmacy_Inventory_System
                 MessageBox.Show("Inventory name field is empty!");
                 txtInventName.Focus();
             }
+            else if (string.IsNullOrEmpty(txtSize.Text))
+            {
+                MessageBox.Show("size field is empty!");
+                txtSize.Focus();
+            }
             else
             {
-                SqlCeConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                
+                string sMessageBoxText = "Do you want to update the record?";
+                string sCaption = "Edit Record";
+                MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+                MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                switch (dr)
+                {
+                    case MessageBoxResult.Yes:
+                        SqlCeConnection conn = DBUtils.GetDBConnection();
+                        conn.Open();
+                        using (SqlCeCommand cmd = new SqlCeCommand("UPDATE InventoryStock set size = @size, unit = @unit, remarks = @remarks where name = @inventName", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@size",txtSize.Text);
+                            cmd.Parameters.AddWithValue("@unit",cmbUnit.Text);
+                            cmd.Parameters.AddWithValue("@remarks",txtRemarks.Text);
+                            cmd.Parameters.AddWithValue("@inventName",txtRemarks.Text);
+
+                            try
+                            {
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Updated Successfully");
+                                emptyFields();
+                                enableFields();
+                            }
+                            catch(SqlException ex)
+                            {
+                                MessageBox.Show("Error! Log has been updated with the error.");
+
+                            }
+
+                        }
+                        break;
+                    case MessageBoxResult.No: break;
+                }
             }
         }
 
@@ -69,6 +106,7 @@ namespace AdU_Pharmacy_Inventory_System
                             {
                                 cmd.ExecuteNonQuery();
                                 MessageBox.Show("Added Successfully");
+                                emptyFields();
                             }
                             catch (SqlCeException ex)
                             {
@@ -102,18 +140,25 @@ namespace AdU_Pharmacy_Inventory_System
                     case MessageBoxResult.Yes:
                         SqlCeConnection conn = DBUtils.GetDBConnection();
                         conn.Open();
-                        using(SqlCeCommand cmd = new SqlCeCommand("SELECT COUNT(1) from inventoryStock where name = @inventName", conn))
+                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchivedInventoryStock (inventType, name, qty, size, unit, remarks) SELECT inventType, name, qty, size, unit, remarks from InventoryStock where name = @inventName", conn))
                         {
                             cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                            int count = (int)cmd.ExecuteScalar();
-                            if(count > 0)
+                            int result = cmd.ExecuteNonQuery();
+                            if (result > 0)
                             {
+                                using (SqlCeCommand command = new SqlCeCommand("DELETE from InventoryStock where name = @inventName", conn))
+                                {
+                                    command.Parameters.AddWithValue("@inventName", txtInventName.Text);
+                                    int query = command.ExecuteNonQuery();
+                                    MessageBox.Show("Item has been deleted!");
+                                    emptyFields();
+                                    enableFields();
 
+                                }
                             }
                             else
                             {
-
-
+                                MessageBox.Show("Item does not exist!");
                             }
                         }
                         break;
@@ -158,7 +203,7 @@ namespace AdU_Pharmacy_Inventory_System
 
                                     int qtyIndex = reader.GetOrdinal("qty");
                                     int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
- 
+
                                     int sizeIndex = reader.GetOrdinal("size");
                                     string size = Convert.ToString(reader.GetValue(sizeIndex));
 
@@ -173,7 +218,10 @@ namespace AdU_Pharmacy_Inventory_System
                                     txtSize.Text = size;
                                     cmbUnit.Text = unit;
                                     txtRemarks.Text = remarks;
-
+                                    disableFields();
+                                    txtSize.IsEnabled = true;
+                                    txtRemarks.IsEnabled = true;
+                                    cmbUnit.IsEnabled = true;
                                 }
                             }
                         }
@@ -202,19 +250,19 @@ namespace AdU_Pharmacy_Inventory_System
             cmbInventType.IsEnabled = false;
             cmbUnit.IsEnabled = false;
 
-            txtQty.IsReadOnly = true;
-            txtSize.IsReadOnly = true;
-            txtRemarks.IsReadOnly = true;
+            txtQty.IsEnabled = false;
+            txtSize.IsEnabled = false;
+            txtRemarks.IsEnabled = false;
         }
-        
+
         private void enableFields()
         {
             cmbInventType.IsEnabled = true;
             cmbUnit.IsEnabled = true;
 
-            txtQty.IsReadOnly = false;
-            txtSize.IsReadOnly = false;
-            txtRemarks.IsReadOnly = false;
+            txtQty.IsEnabled = false;
+            txtSize.IsEnabled = false;
+            txtRemarks.IsEnabled = false;
         }
     }
 }

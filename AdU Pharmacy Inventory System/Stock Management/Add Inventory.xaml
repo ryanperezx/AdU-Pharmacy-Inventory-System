@@ -15,7 +15,7 @@
       Title="Add_Inventory">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Add New Inventory" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Add New Inventory Item" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
 
         <Label Content="Inventory Type:" HorizontalAlignment="Left" Margin="500,59,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbInventType" HorizontalAlignment="Left" Margin="630,59,0,0" VerticalAlignment="Top" Width="140">
@@ -34,7 +34,7 @@
         </ComboBox>
         <Label Content="Unit:" HorizontalAlignment="Left" Margin="577,257,0,0" VerticalAlignment="Top"/>
         <Label Content="Remarks:" HorizontalAlignment="Left" Margin="552,305,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtRemarks" HorizontalAlignment="Left" Height="31" Margin="630,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtRemarks" HorizontalAlignment="Left" Height="31" Margin="630,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
 
         <Button x:Name="btnEdit" Content="EDIT" HorizontalAlignment="Left" Margin="615,415,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnEdit_Click"/>
         <iconPacks:PackIconMaterial x:Name="searchInName" Kind="Magnify" Height="31" Width="20" Margin="775,109,0,0" Cursor="Hand" MouseLeftButtonUp="searchInName_MouseLeftButtonUp"/>
