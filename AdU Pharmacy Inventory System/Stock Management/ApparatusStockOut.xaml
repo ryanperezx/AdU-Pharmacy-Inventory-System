@@ -32,7 +32,7 @@
         <Label Content="Unit:" HorizontalAlignment="Left" Margin="342,294,0,0" VerticalAlignment="Top"/>
         <Label Content="Remarks:" HorizontalAlignment="Left" Margin="312,360,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtUnit" HorizontalAlignment="Left" Height="31" Margin="390,360,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" Margin="360,462,0,0" VerticalAlignment="Top" Width="150" Height="50"/>
+        <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" Margin="360,462,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="btnAdd_Click"/>
 
         <ListView x:Name="lvAppaStockOut" HorizontalAlignment="Left" Height="413" Margin="785,80,0,0" VerticalAlignment="Top" Width="475" ItemsSource="{Binding}">
             <ListView.View>
@@ -45,7 +45,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btnStockOut" Content="STOCK OUT" HorizontalAlignment="Left" Margin="1110,525,0,0" VerticalAlignment="Top" Width="150" Height="50"/>
+        <Button x:Name="btnStockOut" Content="STOCK OUT" HorizontalAlignment="Left" Margin="1110,525,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="btnStockOut_Click"/>
 
     </Grid>
 </Page>
