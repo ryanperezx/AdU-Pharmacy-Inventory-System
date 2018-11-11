@@ -16,7 +16,7 @@
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Chemical Monitoring" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <Label Content="Date: " HorizontalAlignment="Left" Margin="125,90,0,0" VerticalAlignment="Top"/>
-        <DatePicker HorizontalAlignment="Left" Margin="181,90,0,0" VerticalAlignment="Top" Height="31" Width="140"/>
-        <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,220,0,0" VerticalAlignment="Top" Width="165"/>
+        <DatePicker x:Name="date" HorizontalAlignment="Left" Margin="181,90,0,0" VerticalAlignment="Top" Height="31" Width="140"/>
+        <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="125,211,0,0" VerticalAlignment="Top" Width="196" Height="59" Click="btnGenForm_Click"/>
     </Grid>
 </Page>

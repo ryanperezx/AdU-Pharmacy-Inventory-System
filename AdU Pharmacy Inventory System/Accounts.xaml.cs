@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
-    /// Interaction logic for Apparatus_Inventory_Summary.xaml
+    /// Interaction logic for Accounts.xaml
     /// </summary>
-    public partial class Apparatus_Inventory_Summary : Page
+    public partial class Accounts : Page
     {
-        public Apparatus_Inventory_Summary()
+        public Accounts()
         {
             InitializeComponent();
-            date.Text = DateTime.Now.ToString("dd MMMM yyyy");
         }
     }
 }

@@ -19,27 +19,35 @@
 
         <Label Content="Inventory Type:" HorizontalAlignment="Left" Margin="500,59,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbInventType" HorizontalAlignment="Left" Margin="630,59,0,0" VerticalAlignment="Top" Width="165">
-            <ComboBoxItem Content="Apparatuses"/>
-            <ComboBoxItem Content="Chemicals"/>
+            <ComboBoxItem Content="Apparatus"/>
+            <ComboBoxItem Content="Chemical"/>
         </ComboBox>
+
         <Label Content="Inventory Name:" HorizontalAlignment="Left" Margin="493,109,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtInventName" HorizontalAlignment="Left" Height="31" Margin="630,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
-        <Label Content="Qty:" HorizontalAlignment="Left" Margin="581,155,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="630,155,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="45" PreviewTextInput="txtQty_PreviewTextInput"/>
-        <Label Content="Size:" HorizontalAlignment="Left" Margin="579,205,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSize" HorizontalAlignment="Left" Height="31" Margin="630,205,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="cmbUnit" HorizontalAlignment="Left" Margin="630,257,0,0" VerticalAlignment="Top" Width="72" Height="31">
+
+        <Label Content="Manufacturer:" HorizontalAlignment="Left" Margin="511,162,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cmbManuf" IsEditable="True" HorizontalAlignment="Left" Height="31" Margin="630,162,0,0"  VerticalAlignment="Top" Width="165"/>
+        <TextBox x:Name="txtManuf" Text="{Binding Text, ElementName=cmbManuf}" Visibility="Collapsed" TextChanged="txtManuf_TextChanged"/>
+
+
+        <Label Content="Qty:" HorizontalAlignment="Left" Margin="581,209,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="630,209,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="45" PreviewTextInput="txtQty_PreviewTextInput"/>
+
+        <Label Content="Size:" HorizontalAlignment="Left" Margin="579,259,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSize" HorizontalAlignment="Left" Height="31" Margin="630,259,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cmbUnit" HorizontalAlignment="Left" Margin="630,311,0,0" VerticalAlignment="Top" Width="72" Height="31">
             <ComboBoxItem Content="mL"/>
             <ComboBoxItem Content="g"/>
         </ComboBox>
-        <Label Content="Unit:" HorizontalAlignment="Left" Margin="577,257,0,0" VerticalAlignment="Top"/>
-        <Label Content="Remarks:" HorizontalAlignment="Left" Margin="552,305,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtRemarks" HorizontalAlignment="Left" Height="31" Margin="630,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
+        <Label Content="Unit:" HorizontalAlignment="Left" Margin="577,311,0,0" VerticalAlignment="Top"/>
+        <Label Content="Remarks:" HorizontalAlignment="Left" Margin="552,359,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtRemarks" HorizontalAlignment="Left" Height="31" Margin="630,359,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
 
-        <Button x:Name="btnEdit" Content="EDIT" HorizontalAlignment="Left" Margin="615,415,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnEdit_Click"/>
+        <Button x:Name="btnEdit" Content="EDIT" HorizontalAlignment="Left" Margin="615,450,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnEdit_Click"/>
         <iconPacks:PackIconMaterial x:Name="searchInName" Kind="Magnify" Height="31" Width="20" Margin="800,109,0,0" Cursor="Hand" MouseLeftButtonUp="searchInName_MouseLeftButtonUp"/>
 
-        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="430,415,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnSave_Click"/>
-        <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="800,415,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnDelete_Click"/>
+        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="430,450,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnSave_Click"/>
+        <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="800,450,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnDelete_Click"/>
     </Grid>
 </Page>

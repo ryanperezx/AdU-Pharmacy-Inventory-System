@@ -15,31 +15,25 @@
       Title="ApparatusStockOut">
 
     <Grid>
-        <Label Content="Apparatus Name:" HorizontalAlignment="Left" Margin="253,110,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbAppaName" HorizontalAlignment="Left" Margin="390,110,0,0" VerticalAlignment="Top" Width="165" Height="31">
-            <ComboBoxItem x:Name="cbi1" Content="Item1"/>
-            <ComboBoxItem x:Name="cbi2" Content="Item2"/>
-            <ComboBoxItem x:Name="cbi3" Content="Item3"/>
-        </ComboBox>
-        <Label Content="Qty:" HorizontalAlignment="Left" Margin="346,169,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="390,169,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="50"/>
-        <Label Content="Size:" HorizontalAlignment="Left" Margin="344,234,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSize" HorizontalAlignment="Left" Height="31" Margin="390,234,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="cmbUnit" HorizontalAlignment="Left" Margin="390,294,0,0" VerticalAlignment="Top" Width="72" Height="31">
-            <ComboBoxItem x:Name="milliliter" Content="mL"/>
-            <ComboBoxItem x:Name="gram" Content="g"/>
-        </ComboBox>
-        <Label Content="Unit:" HorizontalAlignment="Left" Margin="342,294,0,0" VerticalAlignment="Top"/>
-        <Label Content="Remarks:" HorizontalAlignment="Left" Margin="312,360,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtUnit" HorizontalAlignment="Left" Height="31" Margin="390,360,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" Margin="360,462,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="btnAdd_Click"/>
+        <Label Content="Inventory Name:" HorizontalAlignment="Left" Margin="253,110,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cmbInventName" HorizontalAlignment="Left" Margin="390,110,0,0" VerticalAlignment="Top" Width="165" Height="31"/>
+        <TextBox x:Name="txtInventName" Text="{Binding Text, ElementName=cmbInventName}" Visibility="Collapsed" TextChanged="txtInventName_TextChanged"/>
+
+        <Label Content="Qty:" HorizontalAlignment="Left" Margin="341,221,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="390,221,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="50" PreviewTextInput="txtQty_PreviewTextInput"/>
+
+        <Label Content="Manufacturer:" HorizontalAlignment="Left" Margin="271,169,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cmbManuf" IsEditable="True" HorizontalAlignment="Left" Height="31" Margin="390,169,0,0"  VerticalAlignment="Top" Width="165"/>
+
+        <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" Margin="360,315,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="btnAdd_Click"/>
 
         <ListView x:Name="lvAppaStockOut" HorizontalAlignment="Left" Height="413" Margin="785,80,0,0" VerticalAlignment="Top" Width="475" ItemsSource="{Binding}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Apparatus Name" Width="150"/>
-                    <GridViewColumn Header="Qty" Width="70"/>
-                    <GridViewColumn Header="Size/Brand/Remarks" Width="200"/>
+                    <GridViewColumn Header="No." Width="50" DisplayMemberBinding="{Binding i}"/>
+                    <GridViewColumn Header="Apparatus Name" Width="150" DisplayMemberBinding="{Binding inventName}"/>
+                    <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
+                    <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
 
 
                 </GridView>

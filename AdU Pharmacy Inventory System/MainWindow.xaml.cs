@@ -23,7 +23,6 @@ namespace AdU_Pharmacy_Inventory_System
         //REPORT MANAGEMENT
         GenerateIssuanceForm gif = new GenerateIssuanceForm();
         GenerateChemicalMonitoring gcm = new GenerateChemicalMonitoring();
-        Apparatus_Inventory_Summary ais = new Apparatus_Inventory_Summary();
         //STOCK MANAGEMENT
         Stock_In si = new Stock_In();
         Add_Inventory ai = new Add_Inventory();
@@ -189,7 +188,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbApparatusInventSum_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Frame.Navigate(ais);
+            Frame.Navigate(new Apparatus_Inventory_Summary());
         }
 
         private void tbApparatusInventSum_MouseEnter(object sender, MouseEventArgs e)
