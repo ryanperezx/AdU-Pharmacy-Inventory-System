@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.SqlServerCe;
+using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -23,21 +26,50 @@ namespace AdU_Pharmacy_Inventory_System
         public GenerateIssuanceForm()
         {
             InitializeComponent();
-            
+            fillSubjects();
         }
 
-        private void cmbSubject_SelectionChanged(object sender, EventArgs e)
+        private void fillSubjects()
         {
-            var item = (ComboBoxItem)cmbSubject.SelectedValue;
-            var content = (string)item.Content;
-
-            if(content.Equals("Biochem Lab"))
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT subjName from Subjects", conn))
             {
-                this.lvSubject.Items.Clear();
-                this.lvSubject.Items.Add(new MyItem { apparatusName = "Aspirator", qty = 1, remarks = "" });
-                this.lvSubject.Items.Add(new MyItem { apparatusName = "Beaker", qty = 1, remarks = "1000mL" });
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    if (reader.HasRows)
+                    {
+                        cmbSubject.Items.Clear();
+                        while (reader.Read())
+                        {
+                            string subjName = reader["subjName"].ToString();
+                            cmbSubject.Items.Add(subjName);
+                        }
+                    }
+                }
             }
         }
+        private void txtSubject_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            dgSubject.ItemsSource = LoadCollectionData();
+        }
+
+        private List<LVApparatusStockOut> LoadCollectionData()
+        {
+            List<LVApparatusStockOut> items = new List<LVApparatusStockOut>();
+            items.Add(new LVApparatusStockOut()
+            {
+                i = 1,
+                inventName = "hotdog",
+                manuf = "purefoods",
+                qty = 5,
+                size = "jumbo",
+                unit = "g",
+                remarks = "yummy"
+            });
+            return items;
+        }
+
     }
 
 

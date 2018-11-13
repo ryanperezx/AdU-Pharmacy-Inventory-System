@@ -30,6 +30,7 @@ namespace AdU_Pharmacy_Inventory_System
         ChemicalStockOut cso = new ChemicalStockOut();
         //ACADEMIC MANAGEMENT
         AddSubject ads = new AddSubject();
+        Accounts a = new Accounts();
         public MainWindow()
         {
             InitializeComponent();
@@ -200,6 +201,22 @@ namespace AdU_Pharmacy_Inventory_System
         private void tbApparatusInventSum_MouseLeave(object sender, MouseEventArgs e)
         {
             tbApparatusInventSum.TextDecorations = null;
+
+        }
+
+        private void tbAccounts_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Frame.Navigate(a);
+        }
+
+        private void tbAccounts_MouseEnter(object sender, MouseEventArgs e)
+        {
+            tbAccounts.TextDecorations = TextDecorations.Underline;
+        }
+
+        private void tbAccounts_MouseLeave(object sender, MouseEventArgs e)
+        {
+            tbAccounts.TextDecorations = null;
 
         }
     }

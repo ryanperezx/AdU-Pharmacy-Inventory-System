@@ -88,7 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Accounts.xaml">
+    <Page Include="Academic Management\Accounts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -96,7 +96,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChemicalStocks.xaml">
+    <Page Include="Report Management\ChemicalStocks.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,19 +140,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Accounts.xaml.cs">
+    <Compile Include="Academic Management\Accounts.xaml.cs">
       <DependentUpon>Accounts.xaml</DependentUpon>
     </Compile>
     <Compile Include="Report Management\Apparatus Inventory Summary.xaml.cs">
       <DependentUpon>Apparatus Inventory Summary.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChemicalStocks.xaml.cs">
+    <Compile Include="Report Management\ChemicalStocks.xaml.cs">
       <DependentUpon>ChemicalStocks.xaml</DependentUpon>
     </Compile>
     <Compile Include="DBSQLServerUtils.cs" />
     <Compile Include="DBUtils.cs" />
     <Compile Include="LVApparatusStockOut.cs" />
-    <Compile Include="MyItem.cs" />
     <Compile Include="Stock Management\Stock In.xaml.cs">
       <DependentUpon>Stock In.xaml</DependentUpon>
     </Compile>
