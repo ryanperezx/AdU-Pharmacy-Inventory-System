@@ -92,6 +92,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Report Management\BorrowersList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Report Management\Apparatus Inventory Summary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,10 +128,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Report Management\GenerateChemicalMonitoring.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Report Management\GenerateIssuanceForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +142,9 @@
     </Page>
     <Compile Include="Academic Management\Accounts.xaml.cs">
       <DependentUpon>Accounts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Report Management\BorrowersList.xaml.cs">
+      <DependentUpon>BorrowersList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Report Management\Apparatus Inventory Summary.xaml.cs">
       <DependentUpon>Apparatus Inventory Summary.xaml</DependentUpon>
@@ -175,9 +178,6 @@
     <Compile Include="ExpanderToBooleanConverter.cs" />
     <Compile Include="ForgotPassword.xaml.cs">
       <DependentUpon>ForgotPassword.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Report Management\GenerateChemicalMonitoring.xaml.cs">
-      <DependentUpon>GenerateChemicalMonitoring.xaml</DependentUpon>
     </Compile>
     <Compile Include="Report Management\GenerateIssuanceForm.xaml.cs">
       <DependentUpon>GenerateIssuanceForm.xaml</DependentUpon>

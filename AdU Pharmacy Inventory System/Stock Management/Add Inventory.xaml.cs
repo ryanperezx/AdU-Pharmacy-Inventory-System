@@ -258,6 +258,7 @@ namespace AdU_Pharmacy_Inventory_System
         private void emptyFields()
         {
             cmbInventType.SelectedIndex = -1;
+            cmbInventType.Text = null;
             txtInventName.Text = null;
             txtQty.Text = null;
             txtSize.Text = null;
@@ -326,6 +327,11 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                 }
             }
+        }
+
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.NavigationService.Navigate(new Add_Inventory());
         }
     }
 }

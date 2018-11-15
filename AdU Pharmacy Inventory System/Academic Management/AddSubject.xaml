@@ -18,12 +18,13 @@
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Add Subject" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <Label Content="Subject Code:" HorizontalAlignment="Left" Margin="490,185,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSubjCode" HorizontalAlignment="Left" Height="37" Margin="640,185,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
-        <iconPacks:PackIconMaterial x:Name="searchCode" Kind="Magnify" Height="37" Width="35" Margin="855,185,0,0" Cursor="Hand" MouseLeftButtonUp="searchCode_MouseLeftButtonUp"/>
-
-        <Label Content="Subject Name:" HorizontalAlignment="Left" Margin="483,226,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSubjName" HorizontalAlignment="Left" Height="36" Margin="640,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
-        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="560,425,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnSave_Click"/>
-        <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="790,425,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnDelete_Click"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Margin="860,185,480,391">
+            <iconPacks:PackIconMaterial x:Name="searchCode" HorizontalAlignment="Left" VerticalAlignment="Top" Kind="Magnify" Height="35" Width="35" MouseLeftButtonUp="searchCode_MouseLeftButtonUp"/>
+        </TextBlock>
+        <Label Content="Subject Name:" HorizontalAlignment="Left" Margin="445,228,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSubjName" HorizontalAlignment="Left" Height="36" Margin="588,229,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290"/>
+        <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="521,425,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnSave_Click"/>
+        <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="778,425,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnDelete_Click"/>
 
     </Grid>
 </Page>

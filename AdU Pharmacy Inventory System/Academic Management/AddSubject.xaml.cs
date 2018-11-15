@@ -54,6 +54,7 @@ namespace AdU_Pharmacy_Inventory_System
                                     string subjName = Convert.ToString(reader.GetValue(subjNameIndex));
 
                                     txtSubjName.Text = subjName;
+
                                 }
                             }
                         }

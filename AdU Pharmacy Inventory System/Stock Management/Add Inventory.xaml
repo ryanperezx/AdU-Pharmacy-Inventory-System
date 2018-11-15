@@ -15,6 +15,12 @@
       Title="Add_Inventory">
 
     <Grid>
+        <StackPanel materialDesign:HintAssist.Hint="Reset" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="55" Margin="1300,10,0,0" Cursor="Hand">
+            <TextBlock>
+                <iconPacks:PackIconMaterial Kind="Refresh"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" Height="50" Width="50"/>
+            </TextBlock>
+        </StackPanel>
+        
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Add New Inventory Item" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
 
         <Label Content="Inventory Type:" HorizontalAlignment="Left" Margin="500,59,0,0" VerticalAlignment="Top"/>

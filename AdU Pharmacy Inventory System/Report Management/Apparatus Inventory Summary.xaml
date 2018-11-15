@@ -25,7 +25,6 @@
                     <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
                     <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding size}"/>
                     <GridViewColumn Header="Unit" Width="100" DisplayMemberBinding="{Binding unit}"/>
-
                     <GridViewColumn Header="Remarks" Width="200" DisplayMemberBinding="{Binding remarks}"/>
                 </GridView>
             </ListView.View>

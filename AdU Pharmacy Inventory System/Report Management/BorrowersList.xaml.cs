@@ -16,26 +16,13 @@ using System.Windows.Shapes;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
-    /// Interaction logic for GenerateChemicalMonitoring.xaml
+    /// Interaction logic for BorrowersList.xaml
     /// </summary>
-    public partial class GenerateChemicalMonitoring : Page
+    public partial class BorrowersList : Page
     {
-        public GenerateChemicalMonitoring()
+        public BorrowersList()
         {
             InitializeComponent();
-        }
-
-        private void btnGenForm_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(date.Text))
-            {
-                MessageBox.Show("Date field is empty!");
-                date.Focus();
-            }
-            else
-            {
-                ChemicalStocks cs = new ChemicalStocks();
-            }
         }
     }
 }

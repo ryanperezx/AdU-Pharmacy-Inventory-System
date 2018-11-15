@@ -22,7 +22,8 @@ namespace AdU_Pharmacy_Inventory_System
     {
         //REPORT MANAGEMENT
         GenerateIssuanceForm gif = new GenerateIssuanceForm();
-        GenerateChemicalMonitoring gcm = new GenerateChemicalMonitoring();
+        ChemicalStocks cs = new ChemicalStocks();
+        BorrowersList bl = new BorrowersList();
         //STOCK MANAGEMENT
         Stock_In si = new Stock_In();
         Add_Inventory ai = new Add_Inventory();
@@ -97,17 +98,17 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbGenerateChemMon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Frame.Navigate(gcm);
+            Frame.Navigate(cs);
         }
 
         private void tbGenerateChemMon_MouseEnter(object sender, MouseEventArgs e)
         {
-            tbGenerateChemMon.TextDecorations = TextDecorations.Underline;
+            tbChemStock.TextDecorations = TextDecorations.Underline;
         }
 
         private void tbGenerateChemMon_MouseLeave(object sender, MouseEventArgs e)
         {
-            tbGenerateChemMon.TextDecorations = null;
+            tbChemStock.TextDecorations = null;
         }
 
         private void tbSubjects_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -218,6 +219,21 @@ namespace AdU_Pharmacy_Inventory_System
         {
             tbAccounts.TextDecorations = null;
 
+        }
+
+        private void tbBorrowerList_MouseLeave(object sender, MouseEventArgs e)
+        {
+            tbBorrowerList.TextDecorations = null;
+        }
+
+        private void tbBorrowerList_MouseEnter(object sender, MouseEventArgs e)
+        {
+            tbBorrowerList.TextDecorations = TextDecorations.Underline;
+        }
+
+        private void tbBorrowerList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Frame.Navigate(bl);
         }
     }
 }

@@ -50,6 +50,7 @@ namespace AdU_Pharmacy_Inventory_System
                         using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE inventoryStock set qty = qty + @qty where name = @inventName and manuf = @manuf", conn))
                         {
                             cmd1.Parameters.AddWithValue("@qty", txtQty.Text);
+                            cmd1.Parameters.AddWithValue("@inventName", txtInventName.Text);
                             cmd1.Parameters.AddWithValue("@manuf", cmbManuf.Text);
 
                             try

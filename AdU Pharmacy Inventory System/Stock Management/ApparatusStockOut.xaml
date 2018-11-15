@@ -15,17 +15,46 @@
       Title="ApparatusStockOut">
 
     <Grid>
-        <Label Content="Inventory Name:" HorizontalAlignment="Left" Margin="253,110,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbInventName" HorizontalAlignment="Left" Margin="390,110,0,0" VerticalAlignment="Top" Width="165" Height="31"/>
-        <TextBox x:Name="txtInventName" Text="{Binding Text, ElementName=cmbInventName}" Visibility="Collapsed" TextChanged="txtInventName_TextChanged"/>
+        <StackPanel materialDesign:HintAssist.Hint="Reset" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="55" Margin="1300,10,0,0" Cursor="Hand">
+            <TextBlock>
+                <iconPacks:PackIconMaterial Kind="Refresh"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" Height="50" Width="50"/>
+            </TextBlock>
+        </StackPanel>
+        <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="100,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel x:Name="stack">
+                <StackPanel.Resources>
+                    <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
+                </StackPanel.Resources>
+                <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=1, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Placeholder" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid Height="300">
+                        <Label Content="Inventory Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="113,41,0,0"/>
+                        <ComboBox x:Name="cmbInventName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="165" Height="31" Margin="245,41,0,0"/>
+                        <TextBox x:Name="txtInventName" Text="{Binding Text, ElementName=cmbInventName}" Visibility="Collapsed" TextChanged="txtInventName_TextChanged"/>
 
-        <Label Content="Qty:" HorizontalAlignment="Left" Margin="341,221,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="390,221,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="50" PreviewTextInput="txtQty_PreviewTextInput"/>
+                        <Label Content="Qty:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="201,146,0,0"/>
+                        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap"  VerticalAlignment="Top" Width="50" PreviewTextInput="txtQty_PreviewTextInput" Margin="245,146,0,0"/>
 
-        <Label Content="Manufacturer:" HorizontalAlignment="Left" Margin="271,169,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbManuf" HorizontalAlignment="Left" Height="31" Margin="390,169,0,0"  VerticalAlignment="Top" Width="165"/>
+                        <Label Content="Manufacturer:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="131,96,0,0"/>
+                        <ComboBox x:Name="cmbManuf" HorizontalAlignment="Left" Height="31" VerticalAlignment="Top" Width="165" Margin="245,96,0,0"/>
 
-        <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" Margin="360,315,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="btnAdd_Click"/>
+                        <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="50" Click="btnAdd_Click" Margin="185,217,0,0"/>
+                    </Grid>
+                </Expander>
+                <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=2, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Borrower Form" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid Height="300">
+                        <Label Content="Borrower's Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,42,0,0"/>
+                        <TextBox x:Name="txtBName"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="254" Margin="195,42,0,0"/>
+                        <Label Content="Group No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="102,88,0,0"/>
+                        <TextBox x:Name="txtGroup"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="88" PreviewTextInput="txtQty_PreviewTextInput" Margin="197,88,0,0"/>
+                        <Label Content="Student No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="89,134,0,0" />
+                        <TextBox x:Name="txtStudNo"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="192,134,0,0"/>
+                        <Label Content="Subject: " HorizontalAlignment="Left"  VerticalAlignment="Top" Height="33" Margin="60,181,0,0"/>
+                        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" VerticalAlignment="Top" Width="364" Margin="135,181,0,0"/>
+
+                    </Grid>
+                </Expander>
+            </StackPanel>
+        </materialDesign:Card>
 
         <ListView x:Name="lvAppaStockOut" HorizontalAlignment="Left" Height="413" Margin="785,80,0,0" VerticalAlignment="Top" Width="475" ItemsSource="{Binding}">
             <ListView.View>
@@ -34,8 +63,6 @@
                     <GridViewColumn Header="Apparatus Name" Width="150" DisplayMemberBinding="{Binding inventName}"/>
                     <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
                     <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
-
-
                 </GridView>
             </ListView.View>
         </ListView>

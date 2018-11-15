@@ -70,6 +70,11 @@ namespace AdU_Pharmacy_Inventory_System
             return items;
         }
 
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.NavigationService.Navigate(new GenerateIssuanceForm());
+        }
+
     }
 
 

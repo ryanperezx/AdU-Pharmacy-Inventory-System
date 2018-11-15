@@ -24,6 +24,8 @@ namespace AdU_Pharmacy_Inventory_System
         public ApparatusStockOut()
         {
             InitializeComponent();
+            stack.DataContext = new ExpanderListViewModel();
+
             fillInventory();
         }
 
@@ -106,25 +108,46 @@ namespace AdU_Pharmacy_Inventory_System
             }
         }
 
-        private void btnStockOut_Click(object sender, RoutedEventArgs e)
+        private void btnStockOut_Click(object sender, RoutedEventArgs e) //NOT CHECKED
         {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
-            conn.Open();
             if(lvAppaStockOut.Items.Count == 0)
             {
                 MessageBox.Show("There are no apparatus(es) to be stock out");
             }
             else
             {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
                 foreach (LVApparatusStockOut row in lvAppaStockOut.Items) {
-                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE InventoryStock set qty = qty - @qty where name = @inventType"))
+                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE InventoryStock set qty = qty - @qty where name = @inventType and manuf = @manuf",conn))
                     {
                         cmd.Parameters.AddWithValue("@qty",row.qty);
                         cmd.Parameters.AddWithValue("@inventType",row.inventName);
+                        cmd.Parameters.AddWithValue("@manuf", row.manuf);
                         try
                         {
                             cmd.ExecuteNonQuery();
+                            lvAppaStockOut.Items.Clear();
                             MessageBox.Show("Stock Out Successfully");
+                            using(SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (studentNo, fullName, groupID, subject, borrowedInventName, manuf, qty) VALUES (@studentNo, @fullName, @groupID, @subject, @borrowedInventName, @manuf, @qty)", conn))
+                            {
+                                cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                                cmd1.Parameters.AddWithValue("@fullName", txtBName.Text);
+                                cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
+                                cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
+                                cmd1.Parameters.AddWithValue("@borrowedInventName", row.inventName);
+                                cmd1.Parameters.AddWithValue("@manuf", row.manuf);
+                                cmd1.Parameters.AddWithValue("@qty", row.qty);
+                                try
+                                {
+                                    cmd1.ExecuteNonQuery();
+                                }
+                                catch
+                                {
+                                    MessageBox.Show("Error! Log has been updated with the error");
+                                }
+                            }
+
                         }
                         catch (SqlException ex)
                         {
@@ -179,6 +202,11 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                 }
             }
+        }
+
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.NavigationService.Navigate(new ApparatusStockOut());
         }
     }
 
