@@ -17,9 +17,11 @@
     <Grid>
         <Label Content="Username :" HorizontalAlignment="Left" Margin="190,115,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtUser" HorizontalAlignment="Left" Height="37" Margin="304,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
+        <StackPanel Margin="519,115,0,0">
         <TextBlock>
-            <iconPacks:PackIconMaterial x:Name="searchUser" Kind="Magnify" Height="37" Width="35" Margin="519,115,0,0" Cursor="Hand" MouseLeftButtonUp="searchUser_MouseLeftButtonUp"/>
+            <iconPacks:PackIconMaterial x:Name="searchUser" Kind="Magnify" Height="37" Width="35" Cursor="Hand" MouseLeftButtonUp="searchUser_MouseLeftButtonUp"/>
         </TextBlock>
+        </StackPanel>
         <Label Content="Last Name :" HorizontalAlignment="Left" Margin="186,175,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtLastName" HorizontalAlignment="Left" Height="37" Margin="304,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
         <Label Content="First Name :" HorizontalAlignment="Left" Margin="184,240,0,0" VerticalAlignment="Top"/>

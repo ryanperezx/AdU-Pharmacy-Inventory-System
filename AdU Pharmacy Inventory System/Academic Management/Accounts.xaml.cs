@@ -79,7 +79,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             if (string.IsNullOrEmpty(txtUser.Text) || string.IsNullOrEmpty(txtFirstName.Text) || string.IsNullOrEmpty(txtLastName.Text) || string.IsNullOrEmpty(cmbQuestion.Text) || string.IsNullOrEmpty(txtAns.Password) || string.IsNullOrEmpty(txtConfirmPass.Password) || string.IsNullOrEmpty(txtPass.Password) || string.IsNullOrEmpty(txtPass.Password))
             {
-                MessageBox.Show("");
+                MessageBox.Show("One or more fields are empty!");
             }
             else
             {
@@ -107,7 +107,7 @@ namespace AdU_Pharmacy_Inventory_System
                             switch (dr)
                             {
                                 case MessageBoxResult.Yes:
-                                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into Accounts (firstName, lastName, username, password, securityQuestion, ans, tries) VALUES (@firstName, @lastName, @username, @password, @securityQuestion, @answer, 0)", conn))
+                                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into Accounts (firstName, lastName, username, password, securityQuestion, answer, tries) VALUES (@firstName, @lastName, @username, @password, @securityQuestion, @answer, 0)", conn))
                                     {
                                         cmd1.Parameters.AddWithValue("@firstName", txtFirstName.Text);
                                         cmd1.Parameters.AddWithValue("@lastName", txtLastName.Text);
@@ -119,6 +119,8 @@ namespace AdU_Pharmacy_Inventory_System
                                         {
                                             cmd1.ExecuteNonQuery();
                                             MessageBox.Show("Registered successfully");
+                                            emptyFields();
+
                                         }
                                         catch (SqlCeException ex)
                                         {
@@ -176,6 +178,7 @@ namespace AdU_Pharmacy_Inventory_System
                                             command.Parameters.AddWithValue("@username", txtUser.Text);
                                             int query = command.ExecuteNonQuery();
                                             MessageBox.Show("Account has been deleted!");
+                                            emptyFields();
                                         }
                                     }
                                     catch(SqlCeException ex)
@@ -195,6 +198,17 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                 }
             }
+        }
+
+        private void emptyFields()
+        {
+            txtFirstName.Text = null;
+            txtLastName.Text = null;
+            txtUser.Text = null;
+            txtPass.Password = null;
+            txtConfirmPass.Password = null;
+            cmbQuestion.SelectedIndex = -1;
+            txtAns.Password = null;
         }
     }
 }
