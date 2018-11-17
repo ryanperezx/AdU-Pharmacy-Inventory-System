@@ -15,5 +15,19 @@
 
     <Grid>
         
+        <ListView x:Name="lvList" HorizontalAlignment="Left" Height="435" Margin="85,65,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Date" Width="120" DisplayMemberBinding="{Binding date}"/>
+                    <GridViewColumn Header="Student No" Width="120" DisplayMemberBinding="{Binding studentNo}"/>
+                    <GridViewColumn Header="Full Name" Width="200" DisplayMemberBinding="{Binding fullName}"/>
+                    <GridViewColumn Header="Subject" Width="250" DisplayMemberBinding="{Binding subj}"/>
+                    <GridViewColumn Header="Group ID" Width="100" DisplayMemberBinding="{Binding grpID}"/>
+                    <GridViewColumn Header="Apparatus Name" Width="200" DisplayMemberBinding="{Binding appaName}"/>
+                    <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
+                    <GridViewColumn Header="Quantity" Width="100" DisplayMemberBinding="{Binding qty}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Page>

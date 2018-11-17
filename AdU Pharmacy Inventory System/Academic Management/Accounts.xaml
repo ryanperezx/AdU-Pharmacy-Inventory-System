@@ -31,8 +31,13 @@
         <PasswordBox x:Name="txtConfirmPass" HorizontalAlignment="Left" VerticalAlignment="Top" Width="210" Margin="304,429,0,0"/>
 
         <Label Content="Security Question :" HorizontalAlignment="Left" Margin="730,115,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Margin="910,115,0,0">
-            <ComboBoxItem>Test</ComboBoxItem>
+        <ComboBox x:Name="cmbQuestion" materialDesign:HintAssist.Hint="Select Security Question" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Margin="910,115,0,0">
+            <ComboBoxItem Content="What is the name of your pet?"/>
+            <ComboBoxItem Content="What is your father's middle name?"/>
+            <ComboBoxItem Content="What is your mother's maiden name?"/>
+            <ComboBoxItem Content="What is your favorite color?"/>
+            <ComboBoxItem Content="What is your favorite food?"/>
+            <ComboBoxItem Content="What city were you born in?"/>
         </ComboBox>
         <Label Content="Answer :" HorizontalAlignment="Left" Margin="821,175,0,0" VerticalAlignment="Top"/>
         <PasswordBox x:Name="txtAns" HorizontalAlignment="Left" VerticalAlignment="Top" Width="295" Margin="910,176,0,0"/>

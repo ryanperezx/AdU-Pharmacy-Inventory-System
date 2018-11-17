@@ -92,6 +92,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DailyLogMonitoring.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Report Management\BorrowersList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,6 +147,10 @@
     <Compile Include="Academic Management\Accounts.xaml.cs">
       <DependentUpon>Accounts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DailyLogMonitoring.xaml.cs">
+      <DependentUpon>DailyLogMonitoring.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LVBorrower.cs" />
     <Compile Include="Report Management\BorrowersList.xaml.cs">
       <DependentUpon>BorrowersList.xaml</DependentUpon>
     </Compile>

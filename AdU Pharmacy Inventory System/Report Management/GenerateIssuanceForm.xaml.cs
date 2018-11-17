@@ -23,6 +23,7 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class GenerateIssuanceForm : Page
     {
+        int i = 1;
         public GenerateIssuanceForm()
         {
             InitializeComponent();
@@ -33,7 +34,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT subjName from Subjects", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT subjName from Subjects", conn))
             {
                 using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
@@ -57,16 +58,39 @@ namespace AdU_Pharmacy_Inventory_System
         private List<LVApparatusStockOut> LoadCollectionData()
         {
             List<LVApparatusStockOut> items = new List<LVApparatusStockOut>();
-            items.Add(new LVApparatusStockOut()
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from Subjects where subjName = @subjName", conn))
             {
-                i = 1,
-                inventName = "hotdog",
-                manuf = "purefoods",
-                qty = 5,
-                size = "jumbo",
-                unit = "g",
-                remarks = "yummy"
-            });
+                cmd.Parameters.AddWithValue("@subjName", txtSubject.Text);
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    if (reader.HasRows)
+                    {
+                        dgSubject.Items.Clear();
+                        while (reader.Read())
+                        {
+                            int inventNameIndex = reader.GetOrdinal("inventName");
+                            string inventName = Convert.ToString(reader.GetValue(inventNameIndex));
+
+                            int manufIndex = reader.GetOrdinal("manuf");
+                            string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                            int qtyIndex = reader.GetOrdinal("qty");
+                            int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+
+                            items.Add(new LVApparatusStockOut()
+                            {
+                                i = i,
+                                inventName = inventName,
+                                manuf = manuf,
+                                qty = qty
+                            });
+                            i++;
+                        }
+                    }
+                }
+            }
             return items;
         }
 

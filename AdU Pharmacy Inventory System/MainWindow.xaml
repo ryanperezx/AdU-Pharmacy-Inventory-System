@@ -94,9 +94,10 @@
                     <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Width="285" Header="Report Management">
                         <StackPanel>
                             <TextBlock x:Name="tbGenerateIsuForm" HorizontalAlignment="Right" Text="Issuance Form"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbGenerateIsuForm_MouseLeftButtonUp" MouseEnter="tbGenerateIsuForm_MouseEnter" MouseLeave="tbGenerateIsuForm_MouseLeave" Cursor="Hand" />
-                            <TextBlock x:Name="tbChemStock" HorizontalAlignment="Right" Text="Chemical Stocks"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbGenerateChemMon_MouseLeftButtonUp" MouseEnter="tbGenerateChemMon_MouseEnter" MouseLeave="tbGenerateChemMon_MouseLeave" Cursor="Hand" />
+                            <TextBlock x:Name="tbChemStock" HorizontalAlignment="Right" Text="Chemical Inventory Summary"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbGenerateChemMon_MouseLeftButtonUp" MouseEnter="tbGenerateChemMon_MouseEnter" MouseLeave="tbGenerateChemMon_MouseLeave" Cursor="Hand" />
                             <TextBlock x:Name="tbApparatusInventSum" HorizontalAlignment="Right" Text="Apparatus Inventory Summary"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbApparatusInventSum_MouseLeftButtonUp" MouseEnter="tbApparatusInventSum_MouseEnter" MouseLeave="tbApparatusInventSum_MouseLeave" Cursor="Hand" />
                             <TextBlock x:Name="tbBorrowerList" HorizontalAlignment="Right" Text="Borrower List"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbBorrowerList_MouseLeftButtonUp" MouseEnter="tbBorrowerList_MouseEnter" MouseLeave="tbBorrowerList_MouseLeave" Cursor="Hand" />
+                            <TextBlock x:Name="tbChemDaily" HorizontalAlignment="Right" Text="Chemical Daily Monitoring" Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbChemDaily_MouseLeftButtonUp" MouseEnter="tbChemDaily_MouseEnter" MouseLeave="tbChemDaily_MouseLeave" Cursor="Hand"/>
 
                         </StackPanel>
                     </Expander>

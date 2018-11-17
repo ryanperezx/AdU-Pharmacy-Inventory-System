@@ -27,6 +27,7 @@ namespace AdU_Pharmacy_Inventory_System
             stack.DataContext = new ExpanderListViewModel();
 
             fillInventory();
+            fillSubjects();
         }
 
         private void fillInventory()
@@ -44,6 +45,27 @@ namespace AdU_Pharmacy_Inventory_System
                         {
                             string appaName = reader["name"].ToString();
                             cmbInventName.Items.Add(appaName);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void fillSubjects()
+        {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT subjName from Subjects", conn))
+            {
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    if (reader.HasRows)
+                    {
+                        cmbSubject.Items.Clear();
+                        while (reader.Read())
+                        {
+                            string subject = reader["subjName"].ToString();
+                            cmbSubject.Items.Add(subject);
                         }
                     }
                 }
@@ -94,10 +116,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 i = i,
                                 inventName = cmbInventName.Text,
                                 qty = reqQty,
-                                manuf = manuf,
-                                size = size,
-                                unit = unit,
-                                remarks = remarks
+                                manuf = manuf
                             });
                             i++;
                             emptyFields();
@@ -127,12 +146,12 @@ namespace AdU_Pharmacy_Inventory_System
                         try
                         {
                             cmd.ExecuteNonQuery();
-                            lvAppaStockOut.Items.Clear();
                             MessageBox.Show("Stock Out Successfully");
-                            using(SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (studentNo, fullName, groupID, subject, borrowedInventName, manuf, qty) VALUES (@studentNo, @fullName, @groupID, @subject, @borrowedInventName, @manuf, @qty)", conn))
+                            using(SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (studentNo, fullName, date, groupID, subject, borrowedInventName, manuf, qty) VALUES (@studentNo, @fullName, @date, @groupID, @subject, @borrowedInventName, @manuf, @qty)", conn))
                             {
                                 cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                 cmd1.Parameters.AddWithValue("@fullName", txtBName.Text);
+                                cmd1.Parameters.AddWithValue("@date", txtDate.Text);
                                 cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
                                 cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
                                 cmd1.Parameters.AddWithValue("@borrowedInventName", row.inventName);
@@ -155,6 +174,9 @@ namespace AdU_Pharmacy_Inventory_System
                         }
                     }
                 }
+                lvAppaStockOut.Items.Clear();
+                emptyFields();
+
             }
         }
 
@@ -171,6 +193,12 @@ namespace AdU_Pharmacy_Inventory_System
             cmbInventName.SelectedIndex = -1;
             cmbManuf.SelectedIndex = -1;
             txtQty.Text = null;
+
+            txtDate.Text = null;
+            txtBName.Text = null;
+            txtGroup.Text = null;
+            txtStudNo.Text = null;
+            cmbSubject.SelectedIndex = -1;
         }
 
         private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
@@ -208,6 +236,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             this.NavigationService.Navigate(new ApparatusStockOut());
         }
+
     }
 
 }

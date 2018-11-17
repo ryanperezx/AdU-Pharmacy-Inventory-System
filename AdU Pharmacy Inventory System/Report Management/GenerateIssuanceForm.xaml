@@ -35,9 +35,6 @@
                 <DataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Manufacturer" Binding="{Binding manuf}" Width="150" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
-                <DataGridTextColumn Header="Size" Binding="{Binding size}" Width="100" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Unit" Binding="{Binding unit}" Width="70" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Remarks" Binding="{Binding remarks}" Width="150" IsReadOnly="True"/>
 
             </DataGrid.Columns>
         </DataGrid>

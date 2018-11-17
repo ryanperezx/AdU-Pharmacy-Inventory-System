@@ -79,7 +79,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(cmbInventType.Text) || string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(cmbManuf.Text) || string.IsNullOrEmpty(txtQty.Text) || string.IsNullOrEmpty(txtSize.Text) || string.IsNullOrEmpty(cmbUnit.Text))
+            if (string.IsNullOrEmpty(cmbInventType.Text) || string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(cmbManuf.Text) || string.IsNullOrEmpty(txtQty.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
             }
@@ -259,12 +259,13 @@ namespace AdU_Pharmacy_Inventory_System
         {
             cmbInventType.SelectedIndex = -1;
             cmbInventType.Text = null;
+            cmbManuf.Text = null;
+            cmbManuf.SelectedIndex = -1;
             txtInventName.Text = null;
             txtQty.Text = null;
             txtSize.Text = null;
             cmbUnit.SelectedIndex = -1;
             txtRemarks.Text = null;
-            cmbManuf.SelectedIndex = -1;
         }
 
         private void disableFields()

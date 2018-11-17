@@ -23,12 +23,12 @@ namespace AdU_Pharmacy_Inventory_System
         //REPORT MANAGEMENT
         GenerateIssuanceForm gif = new GenerateIssuanceForm();
         ChemicalStocks cs = new ChemicalStocks();
-        BorrowersList bl = new BorrowersList();
         //STOCK MANAGEMENT
         Stock_In si = new Stock_In();
         Add_Inventory ai = new Add_Inventory();
         ApparatusStockOut aso = new ApparatusStockOut();
         ChemicalStockOut cso = new ChemicalStockOut();
+        DailyLogMonitoring dlm = new DailyLogMonitoring();
         //ACADEMIC MANAGEMENT
         AddSubject ads = new AddSubject();
         Accounts a = new Accounts();
@@ -233,7 +233,22 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbBorrowerList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Frame.Navigate(bl);
+            Frame.Navigate(new BorrowersList());
+        }
+
+        private void tbChemDaily_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Frame.Navigate(dlm);
+        }
+
+        private void tbChemDaily_MouseEnter(object sender, MouseEventArgs e)
+        {
+            tbChemDaily.TextDecorations = TextDecorations.Underline;
+        }
+
+        private void tbChemDaily_MouseLeave(object sender, MouseEventArgs e)
+        {
+            tbChemDaily.TextDecorations = null;
         }
     }
 }

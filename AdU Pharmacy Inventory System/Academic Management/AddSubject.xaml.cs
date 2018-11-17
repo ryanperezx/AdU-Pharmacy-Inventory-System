@@ -9,6 +9,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Data.SqlServerCe;
+using System.Data.Common;
+using System.Text.RegularExpressions;
 
 
 namespace AdU_Pharmacy_Inventory_System
@@ -18,9 +20,13 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class AddSubject : Page
     {
+        int i = 1;
+        bool check = false;
         public AddSubject()
         {
             InitializeComponent();
+            stack.DataContext = new ExpanderListViewModel();
+            fillInventory();
         }
 
         private void searchCode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -41,10 +47,10 @@ namespace AdU_Pharmacy_Inventory_System
                     if (subjCount > 0)
                     {
                         string subjCode = txtSubjCode.Text;
-                        using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT * from Subjects where subjCode = @subjCode",conn))
+                        using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT * from Subjects where subjCode = @subjCode", conn))
                         {
                             cmd1.Parameters.AddWithValue("@subjCode", subjCode);
-                            using(SqlCeDataReader reader = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                            using (SqlCeDataReader reader = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                             {
                                 if (reader.HasRows)
                                 {
@@ -69,7 +75,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if(string.IsNullOrEmpty(txtSubjCode.Text) || string.IsNullOrEmpty(txtSubjName.Text))
+            if (string.IsNullOrEmpty(txtSubjCode.Text) || string.IsNullOrEmpty(txtSubjName.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
             }
@@ -89,22 +95,32 @@ namespace AdU_Pharmacy_Inventory_System
 
                         string subjCode = txtSubjCode.Text;
                         string subjName = txtSubjName.Text;
-
-                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName) VALUES (@subjCode, @subjName)", conn))
+                        foreach (LVApparatusStockOut row in lvApparatus.Items)
                         {
-                            cmd.Parameters.AddWithValue("@subjCode", subjCode);
-                            cmd.Parameters.AddWithValue("@subjName", subjName);
 
-                            try
+                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, inventName, manuf, qty) VALUES (@subjCode, @subjName, @inventName, @manuf, @qty)", conn))
                             {
-                                cmd.ExecuteNonQuery();
-                                MessageBox.Show("Subject Added!");
-                                emptyTextbox();
+                                cmd.Parameters.AddWithValue("@subjCode", subjCode);
+                                cmd.Parameters.AddWithValue("@subjName", subjName);
+                                cmd.Parameters.AddWithValue("@inventName", row.inventName);
+                                cmd.Parameters.AddWithValue("@manuf", row.manuf);
+                                cmd.Parameters.AddWithValue("@qty", row.qty);
+
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    check = true;
+                                }
+                                catch (SqlCeException ex)
+                                {
+                                    MessageBox.Show("Error! Log has been updated with the error.");
+                                }
                             }
-                            catch (SqlCeException ex)
-                            {
-                                MessageBox.Show("Error! Log has been updated with the error.");
-                            }
+                        }
+                        if (check == true)
+                        {
+                            MessageBox.Show("Subject Added!");
+                            emptyFields();
                         }
                         break;
                     case MessageBoxResult.No: break;
@@ -120,49 +136,190 @@ namespace AdU_Pharmacy_Inventory_System
             }
             else
             {
-                string sMessageBoxText = "Do you want to delete the subject?";
-                string sCaption = "Delete Subject";
-                MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
-                MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
-
-                MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
-                switch (dr)
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from Subjects where subjCode = @subjCode", conn))
                 {
-                    case MessageBoxResult.Yes:
-                        SqlCeConnection conn = DBUtils.GetDBConnection();
-                        conn.Open();
-                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchivedSubjects (subjCode, subjName) select subjCode, subjName from Subjects where subjCode = @subjCode",conn))
+                    cmd.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
+                    int subjCount;
+                    subjCount = (int)cmd.ExecuteScalar();
+                    if (subjCount > 0)
+                    {
+                        string sMessageBoxText = "Do you want to delete the subject?";
+                        string sCaption = "Delete Subject";
+                        MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                        MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+                        MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                        switch (dr)
                         {
-                            cmd.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
-                            int result = cmd.ExecuteNonQuery();
-                            if(result == 1)
-                            {
-                                using (SqlCeCommand command = new SqlCeCommand("DELETE from Subjects where subjCode= @subjCode", conn))
+                            case MessageBoxResult.Yes:
+                                using (SqlCeCommand cmd1= new SqlCeCommand("INSERT into ArchivedSubjects (subjCode, subjName) select subjCode, subjName from Subjects where subjCode = @subjCode", conn))
                                 {
-                                    command.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
-                                    int query = command.ExecuteNonQuery();
-                                    MessageBox.Show("Subject has been deleted!");
+                                    cmd1.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
+                                    int result = cmd1.ExecuteNonQuery();
+                                    if (result == 1)
+                                    {
+                                        using (SqlCeCommand command = new SqlCeCommand("DELETE from Subjects where subjCode= @subjCode", conn))
+                                        {
+                                            command.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
+                                            int query = command.ExecuteNonQuery();
+                                            MessageBox.Show("Subject has been deleted!");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Subject does not exist!");
+                                    }
+
                                 }
-                            }
-                            else
-                            {
-                                MessageBox.Show("Subject does not exist!");
-                            }
 
+                                emptyFields();
+                                break;
+
+                            case MessageBoxResult.No: break;
                         }
-
-                        emptyTextbox();
-                        break;
-
-                    case MessageBoxResult.No: break;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Subject does not exist!");
+                    }
                 }
             }
-            }
+        }
 
-        private void emptyTextbox()
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(cmbInventName.Text) || string.IsNullOrEmpty(txtQty.Text) || string.IsNullOrEmpty(cmbManuf.Text))
+            {
+                MessageBox.Show("One or more fields are empty!");
+            }
+            else
+            {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from inventoryStock where name = @inventName and manuf = @manuf", conn))
+                {
+                    cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
+                    cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        reader.Read();
+                        int qtyIndex = reader.GetOrdinal("qty");
+                        int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+
+                        int manufIndex = reader.GetOrdinal("manuf");
+                        string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                        int sizeIndex = reader.GetOrdinal("size");
+                        string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+                        int unitIndex = reader.GetOrdinal("unit");
+                        string unit = Convert.ToString(reader.GetValue(unitIndex));
+
+                        int remarksIndex = reader.GetOrdinal("remarks");
+                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+
+                        int reqQty = Convert.ToInt32(txtQty.Text);
+                        if (reqQty > qty)
+                        {
+                            MessageBox.Show("Requested quantity cannot be greater than the available quantity!");
+                            return;
+                        }
+                        else
+                        {
+                            lvApparatus.Items.Add(new LVApparatusStockOut
+                            {
+                                i = i,
+                                inventName = cmbInventName.Text,
+                                qty = reqQty,
+                                manuf = manuf,
+                            });
+                            i++;
+                            emptyAppa();
+                        }
+
+                    }
+                }
+            }
+        }
+
+        private void emptyFields()
         {
             txtSubjCode.Text = null;
             txtSubjName.Text = null;
+            check = false;
+            i = 1;
+        }
+
+        private void emptyAppa()
+        {
+            cmbInventName.SelectedIndex = -1;
+            cmbManuf.SelectedIndex = -1;
+            txtQty.Text = null;
+        }
+
+        private void txtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+        }
+
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.NavigationService.Navigate(new AddSubject());
+        }
+
+        private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            fillManufacturer();
+        }
+
+        private void fillInventory()
+        {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT name from inventoryStock where inventType = 'Apparatus'", conn))
+            {
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    if (reader.HasRows)
+                    {
+                        cmbInventName.Items.Clear();
+                        while (reader.Read())
+                        {
+                            string appaName = reader["name"].ToString();
+                            cmbInventName.Items.Add(appaName);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void fillManufacturer()
+        {
+            if (!string.IsNullOrEmpty(cmbInventName.Text))
+            {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                cmbManuf.Items.Clear();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT manuf from inventoryStock where name = @inventName", conn))
+                {
+                    cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                int manufIndex = reader.GetOrdinal("manuf");
+                                string manuf = Convert.ToString(reader.GetValue(manufIndex));
+                                cmbManuf.Items.Add(manuf);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
