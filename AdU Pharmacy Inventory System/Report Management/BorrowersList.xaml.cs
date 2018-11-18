@@ -45,7 +45,8 @@ namespace AdU_Pharmacy_Inventory_System
                         while (reader.Read())
                         {
                             int dateIndex = reader.GetOrdinal("date");
-                            string date = Convert.ToString(reader.GetValue(dateIndex));
+                            DateTime myDate = reader.GetDateTime(dateIndex);
+                            string date = myDate.ToString("MM/dd/yyyy");
 
                             int studentNoIndex = reader.GetOrdinal("studentNo");
                             string studentNo = Convert.ToString(reader.GetValue(studentNoIndex));

@@ -79,6 +79,10 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("One or more fields are empty!");
             }
+            else if(lvApparatus.Items.Count == 0)
+            {
+                MessageBox.Show("There are no apparatuses!");
+            }
             else
             {
                 string sMessageBoxText = "Are all fields correct?";
@@ -98,17 +102,26 @@ namespace AdU_Pharmacy_Inventory_System
                         foreach (LVApparatusStockOut row in lvApparatus.Items)
                         {
 
-                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, inventName, manuf, qty) VALUES (@subjCode, @subjName, @inventName, @manuf, @qty)", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, inventName, manuf, qty, size) VALUES (@subjCode, @subjName, @inventName, @manuf, @qty, @size)", conn))
                             {
                                 cmd.Parameters.AddWithValue("@subjCode", subjCode);
                                 cmd.Parameters.AddWithValue("@subjName", subjName);
                                 cmd.Parameters.AddWithValue("@inventName", row.inventName);
                                 cmd.Parameters.AddWithValue("@manuf", row.manuf);
                                 cmd.Parameters.AddWithValue("@qty", row.qty);
-
+                                if (!string.IsNullOrEmpty(row.size))
+                                {
+                                    cmd.Parameters.AddWithValue("@size", row.size);
+                                }
+                                else
+                                {
+                                    row.size = "";
+                                    cmd.Parameters.AddWithValue("@size", row.size);
+                                }
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    lvApparatus.Items.Clear();
                                     check = true;
                                 }
                                 catch (SqlCeException ex)
@@ -211,14 +224,15 @@ namespace AdU_Pharmacy_Inventory_System
                         int manufIndex = reader.GetOrdinal("manuf");
                         string manuf = Convert.ToString(reader.GetValue(manufIndex));
 
-                        int sizeIndex = reader.GetOrdinal("size");
-                        string size = Convert.ToString(reader.GetValue(sizeIndex));
-
-                        int unitIndex = reader.GetOrdinal("unit");
-                        string unit = Convert.ToString(reader.GetValue(unitIndex));
-
-                        int remarksIndex = reader.GetOrdinal("remarks");
-                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                        string size;
+                        if (!string.IsNullOrEmpty(cmbSize.Text)){
+                            int sizeIndex = reader.GetOrdinal("size");
+                            size = Convert.ToString(reader.GetValue(sizeIndex));
+                        }
+                        else
+                        {
+                            size = null;
+                        }
 
                         int reqQty = Convert.ToInt32(txtQty.Text);
                         if (reqQty > qty)
@@ -234,6 +248,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 inventName = cmbInventName.Text,
                                 qty = reqQty,
                                 manuf = manuf,
+                                size = size,
                             });
                             i++;
                             emptyAppa();
@@ -256,6 +271,9 @@ namespace AdU_Pharmacy_Inventory_System
         {
             cmbInventName.SelectedIndex = -1;
             cmbManuf.SelectedIndex = -1;
+            cmbManuf.Items.Clear();
+            cmbSize.SelectedIndex = -1;
+            cmbSize.Items.Clear();
             txtQty.Text = null;
         }
 
@@ -272,24 +290,60 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            fillSize();
+            if (string.IsNullOrEmpty(txtSize.Text))
+            {
+                fillManufacturer();
+            }
+        }
+
+        private void txtSize_TextChanged(object sender, TextChangedEventArgs e)
+        {
             fillManufacturer();
         }
 
         private void fillInventory()
-        {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
-            conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT name from inventoryStock where inventType = 'Apparatus'", conn))
             {
-                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT name from inventoryStock where inventType = 'Apparatus'", conn))
                 {
-                    if (reader.HasRows)
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
-                        cmbInventName.Items.Clear();
-                        while (reader.Read())
+                        if (reader.HasRows)
                         {
-                            string appaName = reader["name"].ToString();
-                            cmbInventName.Items.Add(appaName);
+                            cmbInventName.Items.Clear();
+                            while (reader.Read())
+                            {
+                                string appaName = reader["name"].ToString();
+                                cmbInventName.Items.Add(appaName);
+                            }
+                        }
+                    }
+                }
+            }
+
+        private void fillSize()
+        {
+            if (!string.IsNullOrEmpty(cmbInventName.Text))
+            {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                cmbSize.Items.Clear();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT size from inventoryStock where name = @inventName", conn))
+                {
+                    cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                int sizeIndex = reader.GetOrdinal("size");
+                                string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+                                cmbSize.Items.Add(size);
+                            }
                         }
                     }
                 }
@@ -298,12 +352,36 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void fillManufacturer()
         {
-            if (!string.IsNullOrEmpty(cmbInventName.Text))
+            if (!string.IsNullOrEmpty(cmbSize.Text))
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
                 cmbManuf.Items.Clear();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT manuf from inventoryStock where name = @inventName", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT manuf from inventoryStock where name = @inventName and size = @size", conn))
+                {
+                    cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
+                    cmd.Parameters.AddWithValue("@size", cmbSize.Text);
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                int manufIndex = reader.GetOrdinal("manuf");
+                                string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                                cmbManuf.Items.Add(manuf);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                cmbManuf.Items.Clear();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT manuf from inventoryStock where name = @inventName", conn))
                 {
                     cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -314,6 +392,7 @@ namespace AdU_Pharmacy_Inventory_System
                             {
                                 int manufIndex = reader.GetOrdinal("manuf");
                                 string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
                                 cmbManuf.Items.Add(manuf);
                             }
                         }
@@ -321,5 +400,6 @@ namespace AdU_Pharmacy_Inventory_System
                 }
             }
         }
+
     }
 }

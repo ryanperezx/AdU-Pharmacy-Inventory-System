@@ -14,18 +14,41 @@
       Title="ChemicalStockOut">
 
     <Grid>
-        <Label Content="Date: " HorizontalAlignment="Left" Margin="233,61,0,0" VerticalAlignment="Top"/>
-        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" Margin="289,61,0,0" VerticalAlignment="Top" Width="150"/>
-        <Label Content="Subject: " HorizontalAlignment="Left" Margin="215,143,0,0" VerticalAlignment="Top" Width="69"/>
-        <ComboBox x:Name="cmbSubj"  HorizontalAlignment="Left" Margin="289,142,0,0" VerticalAlignment="Top" Width="284" Height="32"/>
-        <Label Content="Chemical Name: " HorizontalAlignment="Left" Margin="155,181,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbChem"  HorizontalAlignment="Left" Margin="289,179,0,0" VerticalAlignment="Top" Width="284"/>
-        <Label Content="Amount: " HorizontalAlignment="Left" Margin="209,217,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtAmt" HorizontalAlignment="Left" Height="33" Margin="289,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Issued By: " HorizontalAlignment="Left" Margin="200,290,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="33" Margin="289,288,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="245"/>
+        <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="100,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel x:Name="stack">
+                <StackPanel.Resources>
+                    <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
+                </StackPanel.Resources>
+                <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=1, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Include Chemicals" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid Height="400">
+                        <Label Content="Date: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="154,10,0,0"/>
+                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="216,10,0,0" Width="150"/>
+                        <Label Content="Chemical Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="47,78,0,0"/>
+                        <ComboBox x:Name="cmbChem"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="284" Margin="181,76,0,0"/>
+                        <Label Content="Amount: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,114,0,0" Height="33"/>
+                        <TextBox x:Name="txtAmt" HorizontalAlignment="Left" Height="33" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="181,114,0,0"/>
+                        <Label Content="Issued By: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,193,0,0"/>
+                        <TextBox HorizontalAlignment="Left" Height="33" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="181,191,0,0"/>
 
-        <Button x:Name="btnAdd" Content="ADD" HorizontalAlignment="Left" Margin="289,435,0,0" VerticalAlignment="Top" Width="100" Height="75"/>
+                        <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="50" Click="btnAdd_Click" Margin="199,301,0,0"/>
+                    </Grid>
+                </Expander>
+                <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=2, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Borrower Form" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid Height="300">
+
+                        <Label Content="Borrower's Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="52,70,0,0"/>
+                        <TextBox x:Name="txtBName"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="254" Margin="197,70,0,0"/>
+                        <Label Content="Group No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,116,0,0"/>
+                        <TextBox x:Name="txtGroup"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="88" PreviewTextInput="txtQty_PreviewTextInput" Margin="199,116,0,0"/>
+                        <Label Content="Student No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="91,162,0,0" />
+                        <TextBox x:Name="txtStudNo"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="194,162,0,0"/>
+                        <Label Content="Subject: " HorizontalAlignment="Left"  VerticalAlignment="Top" Height="33" Margin="62,209,0,0"/>
+                        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" VerticalAlignment="Top" Width="364" Margin="137,209,0,0"/>
+                    </Grid>
+                </Expander>
+            </StackPanel>
+        </materialDesign:Card>
+
         <ListView x:Name="lvChemStockOut" HorizontalAlignment="Left" Height="413" Margin="780,62,0,0" VerticalAlignment="Top" Width="476" ItemsSource="{Binding}">
             <ListView.View>
                 <GridView>
@@ -35,5 +58,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button x:Name="btnStockOut" Content="STOCK OUT" HorizontalAlignment="Left" Margin="1110,525,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="btnStockOut_Click"/>
+
     </Grid>
 </Page>

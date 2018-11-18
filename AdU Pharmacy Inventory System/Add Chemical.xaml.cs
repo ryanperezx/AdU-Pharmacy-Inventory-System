@@ -16,19 +16,13 @@ using System.Windows.Shapes;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
-    /// Interaction logic for ChemicalStocks.xaml
+    /// Interaction logic for Add_Chemical.xaml
     /// </summary>
-    public partial class ChemicalStocks : Page
+    public partial class Add_Chemical : Page
     {
-        public ChemicalStocks()
+        public Add_Chemical()
         {
             InitializeComponent();
-            fillInventory();
-        }
-        
-        private void fillInventory()
-        {
-
         }
     }
 }
