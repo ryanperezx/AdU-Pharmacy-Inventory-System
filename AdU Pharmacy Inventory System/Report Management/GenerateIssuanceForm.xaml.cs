@@ -67,7 +67,7 @@ namespace AdU_Pharmacy_Inventory_System
                 {
                     if (reader.HasRows)
                     {
-                        dgSubject.Items.Clear();
+                        items.Clear();
                         while (reader.Read())
                         {
                             int inventNameIndex = reader.GetOrdinal("inventName");
