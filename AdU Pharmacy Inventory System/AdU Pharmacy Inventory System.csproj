@@ -108,6 +108,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Report Management\IssuanceForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Stock Management\Stock In.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -163,6 +167,9 @@
     <Compile Include="DBSQLServerUtils.cs" />
     <Compile Include="DBUtils.cs" />
     <Compile Include="LVApparatusStockOut.cs" />
+    <Compile Include="Report Management\IssuanceForm.xaml.cs">
+      <DependentUpon>IssuanceForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Stock Management\Stock In.xaml.cs">
       <DependentUpon>Stock In.xaml</DependentUpon>
     </Compile>

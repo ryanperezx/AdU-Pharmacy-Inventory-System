@@ -99,6 +99,10 @@ namespace AdU_Pharmacy_Inventory_System
             this.NavigationService.Navigate(new GenerateIssuanceForm());
         }
 
+        private void btnGenForm_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 
