@@ -18,6 +18,7 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class Add_Inventory : Page
     {
+        int process = 0;
         public Add_Inventory()
         {
             InitializeComponent();
@@ -30,50 +31,53 @@ namespace AdU_Pharmacy_Inventory_System
                 MessageBox.Show("Inventory name field is empty!");
                 txtInventName.Focus();
             }
-            else if (string.IsNullOrEmpty(txtSize.Text))
-            {
-                MessageBox.Show("size field is empty!");
-                txtSize.Focus();
-            }
             else
             {
-                string sMessageBoxText = "Do you want to update the record?";
-                string sCaption = "Edit Record";
-                MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
-                MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
-
-                MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
-                switch (dr)
+                if (process == 1)
                 {
-                    case MessageBoxResult.Yes:
-                        SqlCeConnection conn = DBUtils.GetDBConnection();
-                        conn.Open();
-                        using (SqlCeCommand cmd = new SqlCeCommand("UPDATE InventoryStock set size = @size, unit = @unit, remarks = @remarks where name = @inventName and manuf = @manuf", conn))
-                        {
-                            cmd.Parameters.AddWithValue("@size", txtSize.Text);
-                            cmd.Parameters.AddWithValue("@unit", cmbUnit.Text);
-                            cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
-                            cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                            cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                    string sMessageBoxText = "Do you want to update the record?";
+                    string sCaption = "Edit Record";
+                    MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                    MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
 
-                            try
+                    MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                    switch (dr)
+                    {
+                        case MessageBoxResult.Yes:
+                            SqlCeConnection conn = DBUtils.GetDBConnection();
+                            conn.Open();
+                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE InventoryStock set size = @size, unit = @unit, remarks = @remarks where name = @inventName and manuf = @manuf", conn))
                             {
-                                cmd.ExecuteNonQuery();
-                                MessageBox.Show("Updated Successfully");
-                                emptyFields();
-                                enableFields();
-                                cmbManuf.Items.Clear();
+                                cmd.Parameters.AddWithValue("@size", txtSize.Text);
+                                cmd.Parameters.AddWithValue("@unit", cmbUnit.Text);
+                                cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
+                                cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
+                                cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    MessageBox.Show("Updated Successfully");
+                                    emptyFields();
+                                    enableFields();
+                                    cmbManuf.Items.Clear();
+
+                                }
+                                catch (SqlException ex)
+                                {
+                                    MessageBox.Show("Error! Log has been updated with the error.");
+                                }
 
                             }
-                            catch (SqlException ex)
-                            {
-                                MessageBox.Show("Error! Log has been updated with the error.");
-                            }
-
-                        }
-                        break;
-                    case MessageBoxResult.No: break;
+                            break;
+                        case MessageBoxResult.No: break;
+                    }
                 }
+                else
+                {
+                    MessageBox.Show("Please search the inventory item first before editing any record!");
+                }
+
             }
         }
 
@@ -82,6 +86,10 @@ namespace AdU_Pharmacy_Inventory_System
             if (string.IsNullOrEmpty(cmbInventType.Text) || string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(cmbManuf.Text) || string.IsNullOrEmpty(txtQty.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
+            }
+            else if (process == 1)
+            {
+                MessageBox.Show("Search only works in junction with Edit and Delete Record, please press the reset button if you're trying to add new inventory record!");
             }
             else
             {
@@ -138,44 +146,52 @@ namespace AdU_Pharmacy_Inventory_System
             }
             else
             {
-                string sMessageBoxText = "Do you want to delete this record?";
-                string sCaption = "Delete Inventory record";
-                MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
-                MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
-
-                MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
-                switch (dr)
+                if (process == 1)
                 {
-                    case MessageBoxResult.Yes:
-                        SqlCeConnection conn = DBUtils.GetDBConnection();
-                        conn.Open();
-                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchivedInventoryStock (inventType, name, qty, size, unit, remarks, manuf) SELECT inventType, name, qty, size, unit, remarks, manuf from InventoryStock where name = @inventName and manuf = @manuf", conn))
-                        {
-                            cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                            cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
-                            int result = cmd.ExecuteNonQuery();
-                            if (result > 0)
+                    string sMessageBoxText = "Do you want to delete this record?";
+                    string sCaption = "Delete Inventory record";
+                    MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                    MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+                    MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                    switch (dr)
+                    {
+                        case MessageBoxResult.Yes:
+                            SqlCeConnection conn = DBUtils.GetDBConnection();
+                            conn.Open();
+                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchivedInventoryStock (inventType, name, qty, size, unit, remarks, manuf) SELECT inventType, name, qty, size, unit, remarks, manuf from InventoryStock where name = @inventName and manuf = @manuf", conn))
                             {
-                                using (SqlCeCommand command = new SqlCeCommand("DELETE from InventoryStock where name = @inventName and manuf = @manuf", conn))
+                                cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
+                                cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                                int result = cmd.ExecuteNonQuery();
+                                if (result > 0)
                                 {
-                                    command.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                                    command.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                                    using (SqlCeCommand command = new SqlCeCommand("DELETE from InventoryStock where name = @inventName and manuf = @manuf", conn))
+                                    {
+                                        command.Parameters.AddWithValue("@inventName", txtInventName.Text);
+                                        command.Parameters.AddWithValue("@manuf", cmbManuf.Text);
 
-                                    int query = command.ExecuteNonQuery();
-                                    MessageBox.Show("Item has been deleted!");
-                                    emptyFields();
-                                    enableFields();
+                                        int query = command.ExecuteNonQuery();
+                                        MessageBox.Show("Item has been deleted!");
+                                        emptyFields();
+                                        enableFields();
+                                        process = 0;
 
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Item does not exist!");
                                 }
                             }
-                            else
-                            {
-                                MessageBox.Show("Item does not exist!");
-                            }
-                        }
-                        break;
-                    case MessageBoxResult.No:
-                        break;
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please search the inventory item first before deleting any record!");
                 }
             }
         }
@@ -241,6 +257,7 @@ namespace AdU_Pharmacy_Inventory_System
                                         txtSize.IsEnabled = true;
                                         txtRemarks.IsEnabled = true;
                                         cmbUnit.IsEnabled = true;
+                                        process = 1;
                                     }
                                 }
                             }
@@ -294,35 +311,38 @@ namespace AdU_Pharmacy_Inventory_System
         {
             if (!string.IsNullOrEmpty(txtManuf.Text))
             {
-                SqlCeConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT * from inventoryStock where name = @inventName and manuf = @manuf", conn))
+                if (process == 1)
                 {
-                    cmd1.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                    cmd1.Parameters.AddWithValue("@manuf", cmbManuf.Text);
-                    using (DbDataReader reader = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    SqlCeConnection conn = DBUtils.GetDBConnection();
+                    conn.Open();
+                    using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT * from inventoryStock where name = @inventName and manuf = @manuf", conn))
                     {
-                        if (reader.HasRows)
+                        cmd1.Parameters.AddWithValue("@inventName", txtInventName.Text);
+                        cmd1.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                        using (DbDataReader reader = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                         {
-                            while (reader.Read())
+                            if (reader.HasRows)
                             {
+                                while (reader.Read())
+                                {
 
-                                int sizeIndex = reader.GetOrdinal("size");
-                                string size = Convert.ToString(reader.GetValue(sizeIndex));
+                                    int sizeIndex = reader.GetOrdinal("size");
+                                    string size = Convert.ToString(reader.GetValue(sizeIndex));
 
-                                int unitIndex = reader.GetOrdinal("unit");
-                                string unit = Convert.ToString(reader.GetValue(unitIndex));
+                                    int unitIndex = reader.GetOrdinal("unit");
+                                    string unit = Convert.ToString(reader.GetValue(unitIndex));
 
-                                int remarksIndex = reader.GetOrdinal("remarks");
-                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                    int remarksIndex = reader.GetOrdinal("remarks");
+                                    string remarks = Convert.ToString(reader.GetValue(remarksIndex));
 
-                                txtSize.Text = size;
-                                cmbUnit.Text = unit;
-                                txtRemarks.Text = remarks;
-                                disableFields();
-                                txtSize.IsEnabled = true;
-                                txtRemarks.IsEnabled = true;
-                                cmbUnit.IsEnabled = true;
+                                    txtSize.Text = size;
+                                    cmbUnit.Text = unit;
+                                    txtRemarks.Text = remarks;
+                                    disableFields();
+                                    txtSize.IsEnabled = true;
+                                    txtRemarks.IsEnabled = true;
+                                    cmbUnit.IsEnabled = true;
+                                }
                             }
                         }
                     }
