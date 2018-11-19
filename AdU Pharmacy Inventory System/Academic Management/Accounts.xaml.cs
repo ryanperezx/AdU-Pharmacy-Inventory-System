@@ -63,6 +63,10 @@ namespace AdU_Pharmacy_Inventory_System
 
                                     int securityQuestionIndex = reader.GetOrdinal("securityQuestion");
                                     string securityQuestion = Convert.ToString(reader.GetValue(securityQuestionIndex));
+
+                                    txtFirstName.Text = firstName;
+                                    txtLastName.Text = lastName;
+                                    cmbQuestion.Text = securityQuestion;
                                 }
                             }
                         }
@@ -209,6 +213,11 @@ namespace AdU_Pharmacy_Inventory_System
             txtConfirmPass.Password = null;
             cmbQuestion.SelectedIndex = -1;
             txtAns.Password = null;
+        }
+
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.NavigationService.Navigate(new Accounts());
         }
     }
 }

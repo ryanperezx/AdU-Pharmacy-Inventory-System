@@ -73,6 +73,12 @@ namespace AdU_Pharmacy_Inventory_System
             }
         }
 
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.NavigationService.Navigate(new AddSubject());
+        }
+
+
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txtSubjCode.Text) || string.IsNullOrEmpty(txtSubjName.Text))
@@ -283,10 +289,6 @@ namespace AdU_Pharmacy_Inventory_System
             e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
         }
 
-        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.NavigationService.Navigate(new AddSubject());
-        }
 
         private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -392,7 +394,6 @@ namespace AdU_Pharmacy_Inventory_System
                             {
                                 int manufIndex = reader.GetOrdinal("manuf");
                                 string manuf = Convert.ToString(reader.GetValue(manufIndex));
-
                                 cmbManuf.Items.Add(manuf);
                             }
                         }

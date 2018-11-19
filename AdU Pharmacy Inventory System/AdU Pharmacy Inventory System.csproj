@@ -92,11 +92,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Add Chemical.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DailyLogMonitoring.xaml">
+    <Page Include="Report Management\DailyLogMonitoring.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -151,10 +147,7 @@
     <Compile Include="Academic Management\Accounts.xaml.cs">
       <DependentUpon>Accounts.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Add Chemical.xaml.cs">
-      <DependentUpon>Add Chemical.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DailyLogMonitoring.xaml.cs">
+    <Compile Include="Report Management\DailyLogMonitoring.xaml.cs">
       <DependentUpon>DailyLogMonitoring.xaml</DependentUpon>
     </Compile>
     <Compile Include="LVBorrower.cs" />

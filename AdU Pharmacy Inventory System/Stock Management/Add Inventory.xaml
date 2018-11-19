@@ -15,10 +15,11 @@
       Title="Add_Inventory">
 
     <Grid>
-        
-        <iconPacks:PackIconMaterial Kind="Refresh"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" Margin="1300,10,0,0" Height="50" Width="50"/>
-        
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Add New Inventory Item" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
+
+        <Label HorizontalAlignment="Left"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" VerticalAlignment="Top" Height="50" Width="50" Margin="1300,10,0,0" Cursor="Hand">
+            <iconPacks:PackIconMaterial Kind="Refresh" Height="40" Width="40" Foreground="#DD7605FF" HorizontalAlignment="Left"/>
+        </Label>
 
         <Label Content="Inventory Type:" HorizontalAlignment="Left" Margin="500,59,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbInventType" HorizontalAlignment="Left" Margin="630,59,0,0" VerticalAlignment="Top" Width="165">
@@ -49,8 +50,9 @@
         <TextBox x:Name="txtRemarks" HorizontalAlignment="Left" Height="31" Margin="630,359,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
 
         <Button x:Name="btnEdit" Content="UPDATE RECORD" HorizontalAlignment="Left" Margin="615,450,0,0" VerticalAlignment="Top" Width="150" Height="75" Click="btnEdit_Click"/>
-        <iconPacks:PackIconMaterial x:Name="searchInName" Kind="Magnify" Height="31" Width="20" Margin="800,109,0,0" Cursor="Hand" MouseLeftButtonUp="searchInName_MouseLeftButtonUp"/>
-
+        <Label Margin="800,105,0,0" Cursor="Hand" MouseLeftButtonUp="searchInName_MouseLeftButtonUp" Height="35" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" >
+            <iconPacks:PackIconMaterial x:Name="searchInName" Kind="Magnify" Height="24" Width="23"/>
+        </Label>
         <Button x:Name="btnSave" Content="NEW RECORD" HorizontalAlignment="Left" Margin="387,450,0,0" VerticalAlignment="Top" Width="129" Height="75" Click="btnSave_Click"/>
         <Button x:Name="btnDelete" Content="DELETE RECORD" HorizontalAlignment="Left" Margin="877,450,0,0" VerticalAlignment="Top" Width="150" Height="75" Click="btnDelete_Click"/>
     </Grid>

@@ -22,7 +22,6 @@ namespace AdU_Pharmacy_Inventory_System
     {
         //REPORT MANAGEMENT
         GenerateIssuanceForm gif = new GenerateIssuanceForm();
-        ChemicalStocks cs = new ChemicalStocks();
         //STOCK MANAGEMENT
         Stock_In si = new Stock_In();
         Add_Inventory ai = new Add_Inventory();
@@ -98,7 +97,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbGenerateChemMon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Frame.Navigate(cs);
+            Frame.Navigate(new ChemicalStocks());
         }
 
         private void tbGenerateChemMon_MouseEnter(object sender, MouseEventArgs e)
