@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Data.SqlServerCe;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Threading;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -23,6 +24,11 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class GenerateIssuanceForm : Page
     {
+        public static string profName;
+        public static string schedule;
+        public static string lockerNumber;
+        public static string subjAndSect;
+
         int i = 1;
         public GenerateIssuanceForm()
         {
@@ -53,6 +59,7 @@ namespace AdU_Pharmacy_Inventory_System
         private void txtSubject_TextChanged(object sender, TextChangedEventArgs e)
         {
             dgSubject.ItemsSource = LoadCollectionData();
+            subjAndSect = txtSubject.Text;
         }
 
         private List<LVApparatusStockOut> LoadCollectionData()
@@ -130,6 +137,28 @@ namespace AdU_Pharmacy_Inventory_System
             this.NavigationService.Navigate(new GenerateIssuanceForm());
         }
 
+        private void btnGenForm_Click(object sender, RoutedEventArgs e)
+        {
+            
+            Report_Management.IssuanceForm issuanceForm = new Report_Management.IssuanceForm();
+            issuanceForm.Show();            
+               
+        }
+
+        private void txtProf_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            profName = txtProf.Text;
+        }
+
+        private void txtSched_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            schedule = txtSched.Text;
+        }
+
+        private void txtLock_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            lockerNumber = txtLock.Text;
+        }
     }
 
 
