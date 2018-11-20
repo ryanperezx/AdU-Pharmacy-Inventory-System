@@ -27,6 +27,7 @@ namespace AdU_Pharmacy_Inventory_System
         public static string profName;
         public static string schedule;
         public static string lockerNumber;
+        public static string subjAndSect;
 
         int i = 1;
         public GenerateIssuanceForm()
@@ -58,6 +59,7 @@ namespace AdU_Pharmacy_Inventory_System
         private void txtSubject_TextChanged(object sender, TextChangedEventArgs e)
         {
             dgSubject.ItemsSource = LoadCollectionData();
+            subjAndSect = txtSubject.Text;
         }
 
         private List<LVApparatusStockOut> LoadCollectionData()

@@ -34,6 +34,17 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
             }
         }
 
+        public string subjAndSect;
+        public string SubjAndSect
+        {
+            get { return subjAndSect; }
+            set
+            {
+                subjAndSect = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string schedule;
         public string Schedule
         {
@@ -48,7 +59,7 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
         public string lockerNumber;
         public string LockerNumber
         {
-            get { return lockerNumber ; }
+            get { return lockerNumber; }
             set
             {
                 lockerNumber = value;
@@ -57,7 +68,7 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
+ 
         protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
             PropertyChangedEventHandler handler = this.PropertyChanged;
@@ -74,6 +85,7 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
             lblProf.Content = GenerateIssuanceForm.profName;
             lblSchedule.Content = GenerateIssuanceForm.schedule;
             lblLockerNumber.Content = GenerateIssuanceForm.lockerNumber;
+            lblSubject.Content = GenerateIssuanceForm.subjAndSect;
             Console.WriteLine(profName);
         }
 
@@ -103,7 +115,6 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
 
         }
 
-
         Dictionary<string, string> GetReplaceDictionary()
         {
             Dictionary<string, string> replaceDict = new Dictionary<string, string>();
@@ -118,7 +129,5 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
         {
             this.Hide();
         }
-
-        
     }
 }
