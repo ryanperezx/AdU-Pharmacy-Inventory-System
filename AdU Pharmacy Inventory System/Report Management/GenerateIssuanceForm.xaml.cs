@@ -79,13 +79,44 @@ namespace AdU_Pharmacy_Inventory_System
                             int qtyIndex = reader.GetOrdinal("qty");
                             int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
-                            items.Add(new LVApparatusStockOut()
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty from InventoryStock where name = @inventName and manuf = @manuf and qty = @qty"))
                             {
-                                i = i,
-                                inventName = inventName,
-                                manuf = manuf,
-                                qty = qty
-                            });
+                                cmd1.Parameters.AddWithValue("@inventName", inventName);
+                                cmd1.Parameters.AddWithValue("@manuf", manuf);
+                                cmd1.Parameters.AddWithValue("@qty", qty);
+                                using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        dr.Read();
+
+                                        int countQtyIndex = dr.GetOrdinal("qty");
+                                        int countQty = Convert.ToInt32(reader.GetValue(countQtyIndex));
+                                        if (qty > countQty)
+                                        {
+                                            MessageBox.Show("Item: " + inventName + "has low stocks, please stock in as soon as possible!");
+                                            items.Add(new LVApparatusStockOut()
+                                            {
+                                                i = i,
+                                                inventName = inventName,
+                                                manuf = manuf,
+                                                qty = countQty
+                                            });
+                                        }
+                                        else
+                                        {
+                                            items.Add(new LVApparatusStockOut()
+                                            {
+                                                i = i,
+                                                inventName = inventName,
+                                                manuf = manuf,
+                                                qty = qty
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+
                             i++;
                         }
                     }

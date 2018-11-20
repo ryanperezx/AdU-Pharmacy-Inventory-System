@@ -42,10 +42,13 @@
                         <ComboBox x:Name="cmbInventName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="201" Height="31" Margin="245,38,0,0"/>
                         <TextBox x:Name="txtInventName" Text="{Binding Text, ElementName=cmbInventName}" Visibility="Collapsed" TextChanged="txtInventName_TextChanged"/>
 
-                        <Label Content="Size:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="185,89,0,0"/>
+                        <Label x:Name="lblSize" Content="Size:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="185,89,0,0"/>
                         <ComboBox x:Name="cmbSize" HorizontalAlignment="Left" Height="31" VerticalAlignment="Top" Width="130" Margin="245,89,0,0"/>
                         <TextBox x:Name="txtSize" Text="{Binding Text, ElementName=cmbSize}" Visibility="Collapsed" TextChanged="txtSize_TextChanged"/>
 
+                        <Label x:Name="lblMaterial" Content="Material:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="175,89,0,0"/>
+                        <ComboBox x:Name="cmbMaterial" HorizontalAlignment="Left" Height="31" VerticalAlignment="Top" Width="130" Margin="245,89,0,0"/>
+                        
                         <Label Content="Manufacturer:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="119,138,0,0"/>
                         <ComboBox x:Name="cmbManuf" HorizontalAlignment="Left" Height="31" VerticalAlignment="Top" Width="201" Margin="245,138,0,0"/>
 

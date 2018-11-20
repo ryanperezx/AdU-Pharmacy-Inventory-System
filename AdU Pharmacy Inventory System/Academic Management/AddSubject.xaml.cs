@@ -85,7 +85,7 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("One or more fields are empty!");
             }
-            else if(lvApparatus.Items.Count == 0)
+            else if (lvApparatus.Items.Count == 0)
             {
                 MessageBox.Show("There are no apparatuses!");
             }
@@ -173,7 +173,7 @@ namespace AdU_Pharmacy_Inventory_System
                         switch (dr)
                         {
                             case MessageBoxResult.Yes:
-                                using (SqlCeCommand cmd1= new SqlCeCommand("INSERT into ArchivedSubjects (subjCode, subjName) select subjCode, subjName from Subjects where subjCode = @subjCode", conn))
+                                using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into ArchivedSubjects (subjCode, subjName) select subjCode, subjName from Subjects where subjCode = @subjCode", conn))
                                 {
                                     cmd1.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
                                     int result = cmd1.ExecuteNonQuery();
@@ -231,7 +231,8 @@ namespace AdU_Pharmacy_Inventory_System
                         string manuf = Convert.ToString(reader.GetValue(manufIndex));
 
                         string size;
-                        if (!string.IsNullOrEmpty(cmbSize.Text)){
+                        if (!string.IsNullOrEmpty(cmbSize.Text))
+                        {
                             int sizeIndex = reader.GetOrdinal("size");
                             size = Convert.ToString(reader.GetValue(sizeIndex));
                         }
@@ -240,25 +241,16 @@ namespace AdU_Pharmacy_Inventory_System
                             size = null;
                         }
 
-                        int reqQty = Convert.ToInt32(txtQty.Text);
-                        if (reqQty > qty)
+                        lvApparatus.Items.Add(new LVApparatusStockOut
                         {
-                            MessageBox.Show("Requested quantity cannot be greater than the available quantity!");
-                            return;
-                        }
-                        else
-                        {
-                            lvApparatus.Items.Add(new LVApparatusStockOut
-                            {
-                                i = i,
-                                inventName = cmbInventName.Text,
-                                qty = reqQty,
-                                manuf = manuf,
-                                size = size,
-                            });
-                            i++;
-                            emptyAppa();
-                        }
+                            i = i,
+                            inventName = cmbInventName.Text,
+                            qty = qty,
+                            manuf = manuf,
+                            size = size,
+                        });
+                        i++;
+                        emptyAppa();
 
                     }
                 }
@@ -292,8 +284,10 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            cmbManuf.Items.Clear();
+            cmbSize.Items.Clear();
             fillSize();
-            if (string.IsNullOrEmpty(txtSize.Text))
+            if (cmbSize.Items.Count == 0)
             {
                 fillManufacturer();
             }
@@ -305,25 +299,25 @@ namespace AdU_Pharmacy_Inventory_System
         }
 
         private void fillInventory()
+        {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT name from inventoryStock where inventType = 'Apparatus'", conn))
             {
-                SqlCeConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT name from inventoryStock where inventType = 'Apparatus'", conn))
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
-                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    if (reader.HasRows)
                     {
-                        if (reader.HasRows)
+                        cmbInventName.Items.Clear();
+                        while (reader.Read())
                         {
-                            cmbInventName.Items.Clear();
-                            while (reader.Read())
-                            {
-                                string appaName = reader["name"].ToString();
-                                cmbInventName.Items.Add(appaName);
-                            }
+                            string appaName = reader["name"].ToString();
+                            cmbInventName.Items.Add(appaName);
                         }
                     }
                 }
             }
+        }
 
         private void fillSize()
         {
@@ -383,7 +377,7 @@ namespace AdU_Pharmacy_Inventory_System
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
                 cmbManuf.Items.Clear();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT manuf from inventoryStock where name = @inventName", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT manuf, remarks from inventoryStock where name = @inventName", conn))
                 {
                     cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))

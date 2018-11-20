@@ -159,58 +159,73 @@ namespace AdU_Pharmacy_Inventory_System
             }
             else
             {
-                SqlCeConnection conn = DBUtils.GetDBConnection();
-                conn.Open();
-                foreach (var row in stockOut)
+
+                string sMessageBoxText = "Are all fields correct?";
+                string sCaption = "Stock Out";
+                MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+                MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                switch (dr)
                 {
-                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE InventoryStock set qty = qty - @qty where name = @inventType and size = @size and manuf = @manuf", conn))
-                    {
-                        cmd.Parameters.AddWithValue("@qty", row.qty);
-                        cmd.Parameters.AddWithValue("@inventType", row.inventName);
-                        cmd.Parameters.AddWithValue("@manuf", row.manuf);
-                        if (!string.IsNullOrEmpty(row.size))
+                    case MessageBoxResult.Yes:
+
+                        SqlCeConnection conn = DBUtils.GetDBConnection();
+                        conn.Open();
+                        foreach (var row in stockOut)
                         {
-                            cmd.Parameters.AddWithValue("@size", row.size);
-                        }
-                        else
-                        {
-                            row.size = "";
-                            cmd.Parameters.AddWithValue("@size", row.size);
-                        }
-                        try
-                        {
-                            cmd.ExecuteNonQuery();
-                            MessageBox.Show("Stock Out Successfully");
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (studentNo, fullName, date, groupID, subject, borrowedInventName, manuf, qty) VALUES (@studentNo, @fullName, @date, @groupID, @subject, @borrowedInventName, @manuf, @qty)", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE InventoryStock set qty = qty - @qty where name = @inventType and size = @size and manuf = @manuf", conn))
                             {
-                                cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                                cmd1.Parameters.AddWithValue("@fullName", txtBName.Text);
-                                cmd1.Parameters.AddWithValue("@date", txtDate.Text);
-                                cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
-                                cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
-                                cmd1.Parameters.AddWithValue("@borrowedInventName", row.inventName);
-                                cmd1.Parameters.AddWithValue("@manuf", row.manuf);
-                                cmd1.Parameters.AddWithValue("@qty", row.qty);
+                                cmd.Parameters.AddWithValue("@qty", row.qty);
+                                cmd.Parameters.AddWithValue("@inventType", row.inventName);
+                                cmd.Parameters.AddWithValue("@manuf", row.manuf);
+                                if (!string.IsNullOrEmpty(row.size))
+                                {
+                                    cmd.Parameters.AddWithValue("@size", row.size);
+                                }
+                                else
+                                {
+                                    row.size = "";
+                                    cmd.Parameters.AddWithValue("@size", row.size);
+                                }
                                 try
                                 {
-                                    cmd1.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
+                                    MessageBox.Show("Stock Out Successfully");
+                                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (studentNo, fullName, date, groupID, subject, borrowedInventName, manuf, qty) VALUES (@studentNo, @fullName, @date, @groupID, @subject, @borrowedInventName, @manuf, @qty)", conn))
+                                    {
+                                        cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                                        cmd1.Parameters.AddWithValue("@fullName", txtBName.Text);
+                                        cmd1.Parameters.AddWithValue("@date", txtDate.Text);
+                                        cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
+                                        cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
+                                        cmd1.Parameters.AddWithValue("@borrowedInventName", row.inventName);
+                                        cmd1.Parameters.AddWithValue("@manuf", row.manuf);
+                                        cmd1.Parameters.AddWithValue("@qty", row.qty);
+                                        try
+                                        {
+                                            cmd1.ExecuteNonQuery();
+                                        }
+                                        catch
+                                        {
+                                            MessageBox.Show("Error! Log has been updated with the error");
+                                        }
+                                    }
+
                                 }
-                                catch
+                                catch (SqlException ex)
                                 {
                                     MessageBox.Show("Error! Log has been updated with the error");
                                 }
                             }
+                        }
+                        stockOut.Clear();
+                        i = 1;
+                        emptyFields();
+                        break;
+                    case MessageBoxResult.No: break;
 
-                        }
-                        catch (SqlException ex)
-                        {
-                            MessageBox.Show("Error! Log has been updated with the error");
-                        }
-                    }
                 }
-                stockOut.Clear();
-                i = 1;
-                emptyFields();
 
             }
         }
