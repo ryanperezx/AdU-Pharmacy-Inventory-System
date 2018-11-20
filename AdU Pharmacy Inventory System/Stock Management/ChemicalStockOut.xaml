@@ -14,6 +14,8 @@
       Title="ChemicalStockOut">
 
     <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Chemical Stock Out" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
+
         <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="100,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
             <StackPanel x:Name="stack">
                 <StackPanel.Resources>
@@ -21,8 +23,8 @@
                 </StackPanel.Resources>
                 <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=1, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Include Chemicals" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid Height="400">
-                        <Label Content="Date: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="154,10,0,0"/>
-                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="216,10,0,0" Width="150"/>
+                        <Label Content="Date: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="119,27,0,0"/>
+                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="181,27,0,0" Width="150"/>
                         <Label Content="Chemical Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="47,78,0,0"/>
                         <ComboBox x:Name="cmbChem"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="284" Margin="181,76,0,0"/>
                         <Label Content="Amount: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,114,0,0" Height="33"/>

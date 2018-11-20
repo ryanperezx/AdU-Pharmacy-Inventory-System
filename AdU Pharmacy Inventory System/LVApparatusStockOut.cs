@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace AdU_Pharmacy_Inventory_System
 {
-    class LVApparatusStockOut
+    class LVApparatusStockOut : INotifyPropertyChanged
     {
         public int i
         {
@@ -38,10 +39,12 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
+        private int _qty;
+
         public int qty
         {
-            get;
-            set;
+            get { return _qty; }
+            set { _qty = value; OnPropertyChanged("qty"); }
         }
 
         public string remarks
@@ -49,5 +52,13 @@ namespace AdU_Pharmacy_Inventory_System
             get;
             set;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

@@ -28,6 +28,7 @@ namespace AdU_Pharmacy_Inventory_System
         public BorrowersList()
         {
             InitializeComponent();
+            date.Text = DateTime.Now.ToString("dd MMMM yyyy");
             fillList();
         }
 
