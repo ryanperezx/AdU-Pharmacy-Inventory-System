@@ -22,12 +22,13 @@ namespace AdU_Pharmacy_Inventory_System
     {
         //REPORT MANAGEMENT
         GenerateIssuanceForm gif = new GenerateIssuanceForm();
+        DailyLogMonitoring dlm = new DailyLogMonitoring();
         //STOCK MANAGEMENT
         Stock_In si = new Stock_In();
         Add_Inventory ai = new Add_Inventory();
         ApparatusStockOut aso = new ApparatusStockOut();
+        Add_Chemicals ac = new Add_Chemicals();
         ChemicalStockOut cso = new ChemicalStockOut();
-        DailyLogMonitoring dlm = new DailyLogMonitoring();
         //ACADEMIC MANAGEMENT
         AddSubject ads = new AddSubject();
         Accounts a = new Accounts();
@@ -248,6 +249,21 @@ namespace AdU_Pharmacy_Inventory_System
         private void tbChemDaily_MouseLeave(object sender, MouseEventArgs e)
         {
             tbChemDaily.TextDecorations = null;
+        }
+
+        private void tbAddChem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Frame.Navigate(ac);
+        }
+
+        private void tbAddChem_MouseEnter(object sender, MouseEventArgs e)
+        {
+            tbAddChem.TextDecorations = TextDecorations.Underline;
+        }
+
+        private void tbAddChem_MouseLeave(object sender, MouseEventArgs e)
+        {
+            tbAddChem.TextDecorations = null;
         }
     }
 }

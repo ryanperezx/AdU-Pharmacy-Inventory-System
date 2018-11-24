@@ -33,13 +33,16 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from inventoryStock where inventType = 'Apparatus'", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from ApparatusInventory", conn))
             {
                 lvInvent.Items.Clear();
                 using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
                     while (reader.Read())
                     {
+                        int prodCodeIndex = reader.GetOrdinal("prodCode");
+                        string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+
                         int inventNameIndex = reader.GetOrdinal("name");
                         string inventName = Convert.ToString(reader.GetValue(inventNameIndex));
 
@@ -61,6 +64,7 @@ namespace AdU_Pharmacy_Inventory_System
                         lvInvent.Items.Add(new LVApparatusStockOut
                         {
                             i = i,
+                            prodCode = prodCode,
                             inventName = inventName,
                             manuf = manuf,
                             qty = qty,

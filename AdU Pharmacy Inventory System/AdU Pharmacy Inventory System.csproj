@@ -58,11 +58,17 @@
     <Reference Include="ShowMeTheXAML, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ShowMeTheXAML.1.0.10\lib\net45\ShowMeTheXAML.dll</HintPath>
     </Reference>
+    <Reference Include="Spire.Doc, Version=6.11.7.4040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.11.7\lib\net40\Spire.Doc.dll</HintPath>
+    </Reference>
     <Reference Include="Spire.Doc.Wpf">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\e-iceblue\spire.doc\Bin\WPF4.0\Spire.Doc.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.License">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\e-iceblue\spire.doc\Bin\WPF4.0\Spire.License.dll</HintPath>
+    <Reference Include="Spire.License, Version=1.3.7.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.11.7\lib\net40\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=4.11.6.2040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.11.7\lib\net40\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -100,6 +106,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="BorrowRecord.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stock Management\Add Chemicals.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Report Management\DailyLogMonitoring.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -120,11 +134,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Stock Management\Stock In.xaml">
+    <Page Include="Stock Management\Apparatus Stock In.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Stock Management\Add Inventory.xaml">
+    <Page Include="Stock Management\Add Apparatus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -159,6 +173,12 @@
     <Compile Include="Academic Management\Accounts.xaml.cs">
       <DependentUpon>Accounts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BorrowRecord.xaml.cs">
+      <DependentUpon>BorrowRecord.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stock Management\Add Chemicals.xaml.cs">
+      <DependentUpon>Add Chemicals.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Report Management\DailyLogMonitoring.xaml.cs">
       <DependentUpon>DailyLogMonitoring.xaml</DependentUpon>
     </Compile>
@@ -178,11 +198,11 @@
     <Compile Include="Report Management\IssuanceForm.xaml.cs">
       <DependentUpon>IssuanceForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Stock Management\Stock In.xaml.cs">
-      <DependentUpon>Stock In.xaml</DependentUpon>
+    <Compile Include="Stock Management\Apparatus Stock In.xaml.cs">
+      <DependentUpon>Apparatus Stock In.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Stock Management\Add Inventory.xaml.cs">
-      <DependentUpon>Add Inventory.xaml</DependentUpon>
+    <Compile Include="Stock Management\Add Apparatus.xaml.cs">
+      <DependentUpon>Add Apparatus.xaml</DependentUpon>
     </Compile>
     <Compile Include="Stock Management\ApparatusStockOut.xaml.cs">
       <DependentUpon>ApparatusStockOut.xaml</DependentUpon>

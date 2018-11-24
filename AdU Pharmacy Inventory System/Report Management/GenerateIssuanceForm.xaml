@@ -33,7 +33,7 @@
         <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding subjects}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Manufacturer" Binding="{Binding manuf}" Width="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
 
             </DataGrid.Columns>
