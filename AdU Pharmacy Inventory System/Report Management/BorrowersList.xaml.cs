@@ -13,8 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlServerCe;
-using System.Data.SqlClient;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 
 namespace AdU_Pharmacy_Inventory_System

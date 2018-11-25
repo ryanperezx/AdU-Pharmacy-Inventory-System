@@ -106,7 +106,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BorrowRecord.xaml">
+    <Page Include="Academic Management\List of Subjects.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -173,9 +173,10 @@
     <Compile Include="Academic Management\Accounts.xaml.cs">
       <DependentUpon>Accounts.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BorrowRecord.xaml.cs">
-      <DependentUpon>BorrowRecord.xaml</DependentUpon>
+    <Compile Include="Academic Management\List of Subjects.xaml.cs">
+      <DependentUpon>List of Subjects.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LVSubject.cs" />
     <Compile Include="Stock Management\Add Chemicals.xaml.cs">
       <DependentUpon>Add Chemicals.xaml</DependentUpon>
     </Compile>

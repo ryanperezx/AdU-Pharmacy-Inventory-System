@@ -28,9 +28,9 @@
                     <Grid Height="300">
                         <Label Content="Subject Code:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,73,0,0"/>
                         <TextBox x:Name="txtSubjCode" HorizontalAlignment="Left" Height="37" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" Margin="166,70,0,0"/>
-                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Height="35" Width="45" Margin="380,70,0,0">
-                            <iconPacks:PackIconMaterial x:Name="searchCode" HorizontalAlignment="Left" VerticalAlignment="Top" Kind="Magnify" Height="35" Width="45" MouseLeftButtonUp="searchCode_MouseLeftButtonUp" />
-                        </TextBlock>
+                        <Label HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Height="35" Width="45" Margin="380,70,0,0"  MouseLeftButtonUp="searchCode_MouseLeftButtonUp">
+                            <iconPacks:PackIconMaterial x:Name="searchCode" HorizontalAlignment="Left" VerticalAlignment="Top" Kind="Magnify" Height="25" Width="35"/>
+                        </Label>
                         <Label Content="Subject Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,118,0,0"/>
                         <TextBox x:Name="txtSubjName" HorizontalAlignment="Left" Height="36" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" Margin="165,116,0,0"/>
                         <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="75" Click="btnDelete_Click" Margin="202,194,0,0"/>

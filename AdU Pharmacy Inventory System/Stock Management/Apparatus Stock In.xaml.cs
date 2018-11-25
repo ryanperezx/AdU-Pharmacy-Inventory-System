@@ -29,6 +29,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             InitializeComponent();
             fillInventoryList();
+            dateStockIn.Text = DateTime.Now.ToString("dd MMMM yyyy");
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)

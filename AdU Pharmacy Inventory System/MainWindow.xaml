@@ -104,7 +104,8 @@
                     </Expander>
                     <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" x:Name="expManagement" Width="285" Header="Academic Management">
                         <StackPanel>
-                            <TextBlock x:Name="tbSubjects" Text="Subjects" HorizontalAlignment="Right" Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbSubjects_MouseLeftButtonUp" MouseEnter="tbSubjects_MouseEnter" MouseLeave="tbSubjects_MouseLeave" Cursor="Hand"/>
+                            <TextBlock x:Name="tbSubjects" Text="Subjects Record" HorizontalAlignment="Right" Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbSubjects_MouseLeftButtonUp" MouseEnter="tbSubjects_MouseEnter" MouseLeave="tbSubjects_MouseLeave" Cursor="Hand"/>
+                            <TextBlock x:Name="tbListofSubjects" Text="List of Subjects" HorizontalAlignment="Right" Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbListofSubjects_MouseLeftButtonUp" MouseEnter="tbListofSubjects_MouseEnter" MouseLeave="tbListofSubjects_MouseLeave" Cursor="Hand"/>
                             <TextBlock x:Name="tbAccounts" Text="Accounts" HorizontalAlignment="Right" Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbAccounts_MouseLeftButtonUp" MouseEnter="tbAccounts_MouseEnter" MouseLeave="tbAccounts_MouseLeave" Cursor="Hand"/>
                         </StackPanel>
                     </Expander>

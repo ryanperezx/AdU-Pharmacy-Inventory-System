@@ -24,6 +24,7 @@ namespace AdU_Pharmacy_Inventory_System
         public Add_Chemicals()
         {
             InitializeComponent();
+            txtDate.Text = DateTime.Now.ToString("dd MMMM yyyy");
         }
 
 

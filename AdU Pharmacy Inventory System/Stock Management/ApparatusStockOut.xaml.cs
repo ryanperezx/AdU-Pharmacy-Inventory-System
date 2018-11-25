@@ -27,6 +27,7 @@ namespace AdU_Pharmacy_Inventory_System
         public ApparatusStockOut()
         {
             InitializeComponent();
+            txtDate.Text = DateTime.Now.ToString("dd MMMM yyyy");
             stack.DataContext = new ExpanderListViewModel();
             view.Source = stockOut;
             lvAppaStockOut.DataContext = view;
