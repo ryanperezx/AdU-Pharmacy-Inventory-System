@@ -64,6 +64,19 @@ namespace AdU_Pharmacy_Inventory_System
                             int prodCodeIndex = reader.GetOrdinal("prodCode");
                             string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
 
+                            string prodName;
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT name from ApparatusInventory where prodCode = @prodCode", conn))
+                            {
+                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
+                                using(DbDataReader rd = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                {
+                                    rd.Read();
+                                    int prodNameIndex = rd.GetOrdinal("name");
+                                    prodName = Convert.ToString(rd.GetValue(prodNameIndex));
+                                }
+                            }
+
+
                             int qtyIndex = reader.GetOrdinal("qty");
                             int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
@@ -78,7 +91,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 fullName = fullName,
                                 subj = subj,
                                 grpID = grpID,
-                                prodCode = prodCode,
+                                prodName = prodName,
                                 manuf = manuf,
                                 qty = qty,
                             });
@@ -87,6 +100,12 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                 }
             }
+        }
+
+        private void lvList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            LVBorrower borrower = lvList.SelectedItem as LVBorrower;
+            this.NavigationService.Navigate(new BorrowerRecord(borrower.date, borrower.studentNo, borrower.subj, borrower.grpID));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
-        public string prodCode
+        public string prodName
         {
             get;
             set;
@@ -56,5 +57,11 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
+
+        public static ObservableCollection<LVBorrower> getList()
+        {
+            var list = new ObservableCollection<LVBorrower>();
+            return list;
+        }
     }
 }

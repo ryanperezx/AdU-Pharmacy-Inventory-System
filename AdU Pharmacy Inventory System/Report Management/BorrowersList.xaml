@@ -17,7 +17,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="List of student who has borrowed apparatuses as of " FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <TextBlock x:Name="date" FontWeight="Bold" HorizontalAlignment="Left" Margin="862,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Width="446"/>
 
-        <ListView x:Name="lvList" HorizontalAlignment="Left" Height="405" Margin="85,95,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}">
+        <ListView x:Name="lvList" HorizontalAlignment="Left" Height="405" Margin="85,95,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}" MouseDoubleClick="lvList_MouseDoubleClick" SelectedIndex="0" SelectionMode="Single">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Date" Width="120" DisplayMemberBinding="{Binding date}"/>
@@ -25,7 +25,7 @@
                     <GridViewColumn Header="Full Name" Width="200" DisplayMemberBinding="{Binding fullName}"/>
                     <GridViewColumn Header="Subject" Width="250" DisplayMemberBinding="{Binding subj}"/>
                     <GridViewColumn Header="Group ID" Width="100" DisplayMemberBinding="{Binding grpID}"/>
-                    <GridViewColumn Header="Apparatus Name" Width="200" DisplayMemberBinding="{Binding prodCode}"/>
+                    <GridViewColumn Header="Apparatus Name" Width="200" DisplayMemberBinding="{Binding prodName}"/>
                     <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
                     <GridViewColumn Header="Quantity" Width="100" DisplayMemberBinding="{Binding qty}"/>
                 </GridView>
