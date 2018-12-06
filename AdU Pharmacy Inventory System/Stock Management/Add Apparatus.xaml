@@ -15,31 +15,32 @@
       Title="Add_Inventory">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Add New Inventory Item" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Apparatus Record" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
 
         <Label HorizontalAlignment="Left"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" VerticalAlignment="Top" Height="50" Width="50" Margin="1300,10,0,0" Cursor="Hand">
             <iconPacks:PackIconMaterial Kind="Refresh" Height="40" Width="40" Foreground="#DD7605FF" HorizontalAlignment="Left"/>
         </Label>
 
-        <Label Content="Inventory Type:" HorizontalAlignment="Left" Margin="500,59,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbInventType" HorizontalAlignment="Left" Margin="630,59,0,0" VerticalAlignment="Top" Width="165">
-            <ComboBoxItem Content="Apparatus"/>
-            <ComboBoxItem Content="Chemical"/>
-        </ComboBox>
+        <Label Content="Product Code:" HorizontalAlignment="Left" Margin="515,63,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtProdCode" HorizontalAlignment="Left" Height="31" Margin="630,63,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
+        <Label Margin="800,59,0,0" Cursor="Hand" MouseLeftButtonUp="searchInName_MouseLeftButtonUp" Height="35" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" >
+            <iconPacks:PackIconMaterial x:Name="searchInName" Kind="Magnify" Height="24" Width="23"/>
+        </Label>
 
-        <Label Content="Inventory Name:" HorizontalAlignment="Left" Margin="493,109,0,0" VerticalAlignment="Top"/>
+        <Label Content="Apparatus Name:" HorizontalAlignment="Left" Margin="493,109,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtInventName" HorizontalAlignment="Left" Height="31" Margin="630,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
+
 
         <Label Content="Manufacturer:" HorizontalAlignment="Left" Margin="511,162,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbManuf" IsEditable="True" HorizontalAlignment="Left" Height="31" Margin="630,162,0,0"  VerticalAlignment="Top" Width="165"/>
-        <TextBox x:Name="txtManuf" Text="{Binding Text, ElementName=cmbManuf}" Visibility="Collapsed" TextChanged="txtManuf_TextChanged"/>
+        <TextBox x:Name="txtManuf" Text="{Binding Text, ElementName=cmbManuf}" Visibility="Collapsed"/>
 
 
         <Label Content="Qty:" HorizontalAlignment="Left" Margin="581,209,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="630,209,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="45" PreviewTextInput="txtQty_PreviewTextInput"/>
 
         <Label Content="Size:" HorizontalAlignment="Left" Margin="579,259,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSize" HorizontalAlignment="Left" Height="31" Margin="630,259,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtSize" materialDesign:HintAssist.Hint="Optional" HorizontalAlignment="Left" Height="31" Margin="630,259,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="cmbUnit" HorizontalAlignment="Left" Margin="630,311,0,0" VerticalAlignment="Top" Width="72" Height="31">
             <ComboBoxItem Content="N/A"/>
             <ComboBoxItem Content="mL"/>
@@ -47,12 +48,9 @@
         </ComboBox>
         <Label Content="Unit:" HorizontalAlignment="Left" Margin="577,311,0,0" VerticalAlignment="Top"/>
         <Label Content="Remarks:" HorizontalAlignment="Left" Margin="552,359,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtRemarks" HorizontalAlignment="Left" Height="31" Margin="630,359,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
+        <TextBox x:Name="txtRemarks" materialDesign:HintAssist.Hint="Optional" HorizontalAlignment="Left" Height="31" Margin="630,359,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165"/>
 
         <Button x:Name="btnEdit" Content="UPDATE RECORD" HorizontalAlignment="Left" Margin="615,450,0,0" VerticalAlignment="Top" Width="150" Height="75" Click="btnEdit_Click"/>
-        <Label Margin="800,105,0,0" Cursor="Hand" MouseLeftButtonUp="searchInName_MouseLeftButtonUp" Height="35" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" >
-            <iconPacks:PackIconMaterial x:Name="searchInName" Kind="Magnify" Height="24" Width="23"/>
-        </Label>
         <Button x:Name="btnSave" Content="NEW RECORD" HorizontalAlignment="Left" Margin="387,450,0,0" VerticalAlignment="Top" Width="129" Height="75" Click="btnSave_Click"/>
         <Button x:Name="btnDelete" Content="DELETE RECORD" HorizontalAlignment="Left" Margin="877,450,0,0" VerticalAlignment="Top" Width="150" Height="75" Click="btnDelete_Click"/>
     </Grid>

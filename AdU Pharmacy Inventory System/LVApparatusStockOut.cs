@@ -14,7 +14,11 @@ namespace AdU_Pharmacy_Inventory_System
             get;
             set;
         }
-
+        public string prodCode
+        {
+            get;
+            set;
+        }
         public string inventName
         {
             get;

@@ -13,8 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlServerCe;
-using System.Data.SqlClient;
 using System.Data.Common;
+using System.Data.SqlClient;
 
 
 namespace AdU_Pharmacy_Inventory_System
@@ -61,14 +61,16 @@ namespace AdU_Pharmacy_Inventory_System
                             int grpIDIndex = reader.GetOrdinal("groupID");
                             int grpID = Convert.ToInt32(reader.GetValue(grpIDIndex));
 
-                            int appaNameIndex = reader.GetOrdinal("borrowedInventName");
-                            string appaName = Convert.ToString(reader.GetValue(appaNameIndex));
+                            int prodCodeIndex = reader.GetOrdinal("prodCode");
+                            string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+
+                            int qtyIndex = reader.GetOrdinal("qty");
+                            int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
                             int manufIndex = reader.GetOrdinal("manuf");
                             string manuf = Convert.ToString(reader.GetValue(manufIndex));
 
-                            int qtyIndex = reader.GetOrdinal("qty");
-                            int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+
                             lvList.Items.Add(new LVBorrower
                             {
                                 date = date,
@@ -76,9 +78,9 @@ namespace AdU_Pharmacy_Inventory_System
                                 fullName = fullName,
                                 subj = subj,
                                 grpID = grpID,
-                                appaName = appaName,
+                                prodCode = prodCode,
                                 manuf = manuf,
-                                qty = qty
+                                qty = qty,
                             });
                             i++;
                         }

@@ -77,36 +77,37 @@ namespace AdU_Pharmacy_Inventory_System
                         items.Clear();
                         while (reader.Read())
                         {
-                            int inventNameIndex = reader.GetOrdinal("inventName");
-                            string inventName = Convert.ToString(reader.GetValue(inventNameIndex));
+                            int prodCodeIndex = reader.GetOrdinal("prodCode");
+                            string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
 
-                            int manufIndex = reader.GetOrdinal("manuf");
-                            string manuf = Convert.ToString(reader.GetValue(manufIndex));
+                            int sizeIndex = reader.GetOrdinal("size");
+                            string size = Convert.ToString(reader.GetValue(sizeIndex));
 
                             int qtyIndex = reader.GetOrdinal("qty");
                             int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty from InventoryStock where name = @inventName and manuf = @manuf and qty = @qty"))
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty, name from ApparatusInventory where prodCode = @prodCode and size = @size",conn))
                             {
-                                cmd1.Parameters.AddWithValue("@inventName", inventName);
-                                cmd1.Parameters.AddWithValue("@manuf", manuf);
-                                cmd1.Parameters.AddWithValue("@qty", qty);
+                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
+                                cmd1.Parameters.AddWithValue("@size", size);
                                 using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                                 {
-                                    if (reader.HasRows)
+                                    if (dr.HasRows)
                                     {
                                         dr.Read();
+                                        int nameIndex = dr.GetOrdinal("name");
+                                        string name = Convert.ToString(dr.GetValue(nameIndex));
 
                                         int countQtyIndex = dr.GetOrdinal("qty");
-                                        int countQty = Convert.ToInt32(reader.GetValue(countQtyIndex));
+                                        int countQty = Convert.ToInt32(dr.GetValue(countQtyIndex));
                                         if (qty > countQty)
                                         {
-                                            MessageBox.Show("Item: " + inventName + "has low stocks, please stock in as soon as possible!");
+                                            MessageBox.Show("Item: " + prodCode + "has low stocks, please stock in as soon as possible!");
                                             items.Add(new LVApparatusStockOut()
                                             {
                                                 i = i,
-                                                inventName = inventName,
-                                                manuf = manuf,
+                                                inventName = name,
+                                                size = size,
                                                 qty = countQty
                                             });
                                         }
@@ -115,8 +116,8 @@ namespace AdU_Pharmacy_Inventory_System
                                             items.Add(new LVApparatusStockOut()
                                             {
                                                 i = i,
-                                                inventName = inventName,
-                                                manuf = manuf,
+                                                inventName = name,
+                                                size = size,
                                                 qty = qty
                                             });
                                         }

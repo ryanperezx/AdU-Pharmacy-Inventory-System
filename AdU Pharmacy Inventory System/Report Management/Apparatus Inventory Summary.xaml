@@ -20,6 +20,7 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="No." Width="70" DisplayMemberBinding="{Binding i}"/>
+                    <GridViewColumn Header="Product Code" Width="120" DisplayMemberBinding="{Binding prodCode}"/>
                     <GridViewColumn Header="Apparatus Name" Width="200" DisplayMemberBinding="{Binding inventName}"/>
                     <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
                     <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>

@@ -38,7 +38,7 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
-        public string appaName
+        public string prodCode
         {
             get;
             set;
@@ -55,5 +55,6 @@ namespace AdU_Pharmacy_Inventory_System
             get;
             set;
         }
+
     }
 }
