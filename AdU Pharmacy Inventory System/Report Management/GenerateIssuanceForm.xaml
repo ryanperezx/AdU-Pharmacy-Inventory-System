@@ -35,7 +35,6 @@
                 <DataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
-
             </DataGrid.Columns>
         </DataGrid>
 

@@ -32,7 +32,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT subjCode, subjName from Subjects", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT subjName, subjCode from Subjects", conn))
             {
                 using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {

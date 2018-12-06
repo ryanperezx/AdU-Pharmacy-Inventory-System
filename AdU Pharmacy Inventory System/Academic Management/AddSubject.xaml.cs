@@ -203,7 +203,7 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
-                using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from Subjects where subjCode = @subjCode", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT COUNT(1) from Subjects where subjCode = @subjCode", conn))
                 {
                     cmd.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
                     int subjCount;
@@ -219,7 +219,7 @@ namespace AdU_Pharmacy_Inventory_System
                         switch (dr)
                         {
                             case MessageBoxResult.Yes:
-                                using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into ArchivedSubjects (subjCode, subjName) select subjCode, subjName from Subjects where subjCode = @subjCode", conn))
+                                using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into ArchivedSubjects (subjCode, subjName) select TOP 1 subjCode, subjName from Subjects where subjCode = @subjCode", conn))
                                 {
                                     cmd1.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
                                     int result = cmd1.ExecuteNonQuery();
@@ -234,7 +234,7 @@ namespace AdU_Pharmacy_Inventory_System
                                     }
                                     else
                                     {
-                                        MessageBox.Show("Subject does not exist!");
+                                        MessageBox.Show("Subject does not exist1!");
                                     }
 
                                 }
