@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Spire.Doc;
+using System.Data.SqlServerCe;
+using System.Data.Common;
+//using Spire.Doc;
 
 
 namespace AdU_Pharmacy_Inventory_System.Report_Management
@@ -79,6 +81,7 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
             }
         }
 
+        int i = 0;
         public IssuanceForm()
         {
             InitializeComponent();
@@ -87,42 +90,79 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
             lblLockerNumber.Content = GenerateIssuanceForm.lockerNumber;
             lblSubject.Content = GenerateIssuanceForm.subjAndSect;
             Console.WriteLine(profName);
+            fillList();
+        }
+
+        private void fillList()
+        {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+
+            string prodCode = "";
+            string subjName = lblSubject.Content.ToString();
+
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode FROM Subjects WHERE subjName = '" + subjName + "'", conn))
+            {
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            int prodCodeIndex = reader.GetOrdinal("prodCode");
+                            prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+                        }
+                    }
+                }
+            }
+
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT Subjects.qty, ApparatusInventory.name, ApparatusInventory.size, ApparatusInventory.manuf, ApparatusInventory.remarks from Subjects INNER JOIN ApparatusInventory ON Subjects.prodCode = '" + prodCode + "'", conn))
+            {
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    if (reader.HasRows)
+                    {
+                        lvList.Items.Clear();
+                        while (reader.Read())
+                        {
+                            int quantityIndex = reader.GetOrdinal("qty");
+                            int quantity = Convert.ToInt32(reader.GetValue(quantityIndex));
+
+                            int apparatusIndex = reader.GetOrdinal("name");
+                            string apparatusName = Convert.ToString(reader.GetValue(apparatusIndex));
+
+                            string sizeBrandRemarks = "";
+
+                            int sizeIndex = reader.GetOrdinal("size");
+                            string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+                            int manufIndex = reader.GetOrdinal("manuf");
+                            string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                            int remarksIndex = reader.GetOrdinal("remarks");
+                            string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+
+                            sizeBrandRemarks = size + " / " + manuf + " / " + remarks;
+
+                            lvList.Items.Add(new LVIssuance
+                            {
+                                qty = quantity,
+                                apparatusName = apparatusName,
+                                sizeBrandRemarks = sizeBrandRemarks,
+                                breakages = null,
+
+                            });
+                            i++;
+                        }
+                    }
+                }
+            }
         }
 
         private void btnPrintIssuance_Click(object sender, RoutedEventArgs e)
         {
-            /*sv.ScrollToHome();
-            PrintDialog printDlg = new PrintDialog();
-            printDlg.PrintVisual(this, "Window Printing");*/
+            
 
-            //initialize word object  
-            Document document = new Document();
-            string samplePath = "C:\\Users\\James\\Desktop\\ISSUANCEFORM.docx";
-            string fileName = "Report.docx";
-            document.LoadFromFile(samplePath);
-            //get strings to replace  
-            Dictionary<string, string> dictReplace = GetReplaceDictionary();
-            //Replace text  
-            foreach (KeyValuePair<string, string> kvp in dictReplace)
-            {
-                document.Replace(kvp.Key, kvp.Value, true, true);
-                Console.WriteLine(kvp.Key);
-            }
-            //Save doc file.  
-            document.SaveToFile(fileName, FileFormat.Docx);        
-            MessageBox.Show("All tasks are finished.");
-            document.Close();
-
-        }
-
-        Dictionary<string, string> GetReplaceDictionary()
-        {
-            Dictionary<string, string> replaceDict = new Dictionary<string, string>();
-            replaceDict.Add("#prof#", lblProf.Content.ToString());
-            replaceDict.Add("#sched#", lblSchedule.Content.ToString());
-            replaceDict.Add("#lockerNo#", lblLockerNumber.Content.ToString());
-           
-            return replaceDict;
         }
 
         private void btnPrintCancel_Click(object sender, RoutedEventArgs e)
