@@ -32,9 +32,9 @@
         <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,510,0,0" VerticalAlignment="Top" Width="165" Click="btnGenForm_Click"/>
         <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding subjects}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Manufacturer" Binding="{Binding manuf}" Width="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Apparatus Name" Binding="{Binding manuf}" Width="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Size/Brand/R" Binding="{Binding qty}" Width="100"/>
 
             </DataGrid.Columns>
         </DataGrid>
