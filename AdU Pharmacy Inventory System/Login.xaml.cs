@@ -37,6 +37,7 @@ namespace AdU_Pharmacy_Inventory_System
             if (string.IsNullOrEmpty(txtUsername.Text) || string.IsNullOrEmpty(txtPassword.Password))
             {
                 MessageBox.Show("One or more fields are empty!");
+                return;
             }
             else
             {

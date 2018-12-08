@@ -28,9 +28,9 @@
                         <Label Content="Chemical Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="47,78,0,0"/>
                         <ComboBox x:Name="cmbChem"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="284" Margin="181,76,0,0"/>
                         <Label Content="Amount: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,114,0,0" Height="33"/>
-                        <TextBox x:Name="txtAmt" HorizontalAlignment="Left" Height="33" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="181,114,0,0"/>
+                        <TextBox x:Name="txtAmt" HorizontalAlignment="Left" Height="33" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="181,114,0,0" MaxLength="8"/>
                         <Label Content="Issued By: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,193,0,0"/>
-                        <TextBox HorizontalAlignment="Left" Height="33" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="181,191,0,0"/>
+                        <TextBox HorizontalAlignment="Left" Height="33" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="181,191,0,0" MaxLength="20"/>
 
                         <Button x:Name="btnAdd" Content="ADD TO LIST" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="50" Click="btnAdd_Click" Margin="199,301,0,0"/>
                     </Grid>

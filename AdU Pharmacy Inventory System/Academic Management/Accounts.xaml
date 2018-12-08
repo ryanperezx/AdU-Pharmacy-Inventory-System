@@ -21,20 +21,20 @@
             <iconPacks:PackIconMaterial Kind="Refresh" Height="40" Width="40" Foreground="#DD7605FF" HorizontalAlignment="Left"/>
         </Label>
         <Label Content="Username :" HorizontalAlignment="Left" Margin="190,115,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtUser" HorizontalAlignment="Left" Height="37" Margin="304,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
+        <TextBox x:Name="txtUser" HorizontalAlignment="Left" Height="37" Margin="304,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" MaxLength="15"/>
         <Label Margin="519,115,821,461" Height="37" Width="35" Cursor="Hand" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonUp="searchUser_MouseLeftButtonUp">
             <iconPacks:PackIconMaterial x:Name="searchUser" Kind="Magnify" Height="27" Width="25"/>
         </Label>
 
         <Label Content="Last Name :" HorizontalAlignment="Left" Margin="186,175,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtLastName" HorizontalAlignment="Left" Height="37" Margin="304,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
+        <TextBox x:Name="txtLastName" HorizontalAlignment="Left" Height="37" Margin="304,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" MaxLength="15"/>
         <Label Content="First Name :" HorizontalAlignment="Left" Margin="184,240,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtFirstName" HorizontalAlignment="Left" Height="37" Margin="304,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210"/>
+        <TextBox x:Name="txtFirstName" HorizontalAlignment="Left" Height="37" Margin="304,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" MaxLength="20"/>
 
         <Label Content="Password :" HorizontalAlignment="Left" Margin="197,362,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="txtPass" HorizontalAlignment="Left" VerticalAlignment="Top" Width="210" Margin="304,363,0,0" PasswordChanged="txtPass_PasswordChanged"/>
+        <PasswordBox x:Name="txtPass" HorizontalAlignment="Left" VerticalAlignment="Top" Width="210" Margin="304,363,0,0" PasswordChanged="txtPass_PasswordChanged" MaxLength="15"/>
         <Label Content="Confirm Password :" HorizontalAlignment="Left" Margin="120,428,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="txtConfirmPass" HorizontalAlignment="Left" VerticalAlignment="Top" Width="210" Margin="304,429,0,0"/>
+        <PasswordBox x:Name="txtConfirmPass" HorizontalAlignment="Left" VerticalAlignment="Top" Width="210" Margin="304,429,0,0" MaxLength="15"/>
 
         <Label x:Name="lblPassword" Content="{Binding PasswordStatus}" HorizontalAlignment="Left" Margin="544,363,0,0" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.2,2"/>
 
@@ -48,7 +48,7 @@
             <ComboBoxItem Content="What city were you born in?"/>
         </ComboBox>
         <Label Content="Answer :" HorizontalAlignment="Left" Margin="821,175,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="txtAns" HorizontalAlignment="Left" VerticalAlignment="Top" Width="295" Margin="910,176,0,0"/>
+        <PasswordBox x:Name="txtAns" HorizontalAlignment="Left" VerticalAlignment="Top" Width="295" Margin="910,176,0,0" MaxLength="20"/>
 
         <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="860,399,0,0" VerticalAlignment="Top" Height="50" Width="100" Click="btnSave_Click"/>
         <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="1105,399,0,0" VerticalAlignment="Top" Height="50" Width="100" Click="btnDelete_Click"/>

@@ -264,6 +264,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void txtPass_PasswordChanged(object sender, RoutedEventArgs e)
         {
+            //Password must contain at least 8 characters, 1 uppercase, 1 numeric
             Regex reg = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
             bool result = reg.IsMatch(txtPass.Password.ToString());
 
@@ -278,6 +279,10 @@ namespace AdU_Pharmacy_Inventory_System
                 passwordStatus = "Password is Invalid";
                 lblPassword.Content = passwordStatus;
                 lblPassword.Foreground = Brushes.Red;
+            }
+            if (string.IsNullOrEmpty(txtPass.Password))
+            {
+                lblPassword.Content = null;
             }
         }
     }

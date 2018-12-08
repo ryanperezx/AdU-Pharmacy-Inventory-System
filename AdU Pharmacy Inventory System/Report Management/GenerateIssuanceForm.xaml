@@ -22,13 +22,13 @@
         </StackPanel>
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Issuance form" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <Label Content="Locker Number : " Margin="39,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="175,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtLock_TextChanged"/>
+        <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="175,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtLock_TextChanged" MaxLength="5"/>
         <Label Content="Subject: " HorizontalAlignment="Left" Margin="100,184,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" Margin="175,184,0,0" VerticalAlignment="Top" Width="320"/>
         <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubject}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
 
         <Label Content="Schedule: " HorizontalAlignment="Left" Margin="88,234,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged"/>
+        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged" MaxLength="15"/>
         <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,510,0,0" VerticalAlignment="Top" Width="165" Click="btnGenForm_Click"/>
         <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding}" AutoGenerateColumns="False">
             <DataGrid.Columns>
@@ -38,11 +38,11 @@
             </DataGrid.Columns>
         </DataGrid>
         <Label Content="Professor: " HorizontalAlignment="Left" Margin="86,279,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" Margin="175,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtProf_TextChanged"/>
+        <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" Margin="175,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtProf_TextChanged" MaxLength="30"/>
         <Label Content="Issued On: " HorizontalAlignment="Left" Margin="82,325,0,0" VerticalAlignment="Top"/>
         <DatePicker x:Name="txtDate" HorizontalAlignment="Left" Margin="175,326,0,0" VerticalAlignment="Top" Width="195"/>
         <Label Content="Issued By: " HorizontalAlignment="Left" Margin="86,370,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31" Margin="175,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" IsReadOnly="True"/>
+        <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31" Margin="175,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" IsReadOnly="True" MaxLength="30"/>
 
     </Grid>
 </Page>
