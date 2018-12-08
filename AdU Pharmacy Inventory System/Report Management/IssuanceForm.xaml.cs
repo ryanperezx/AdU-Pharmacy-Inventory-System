@@ -15,7 +15,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Data.SqlServerCe;
 using System.Data.Common;
-//using Spire.Doc;
+using Spire.Doc;
+using Spire.Doc.Documents;
 
 
 namespace AdU_Pharmacy_Inventory_System.Report_Management
@@ -99,75 +100,98 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
             conn.Open();
 
             string prodCode = "";
-            string subjName = lblSubject.Content.ToString();
+            string subjName = "";
 
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode FROM Subjects WHERE subjName = '" + subjName + "'", conn))
+            try
             {
-                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
-                {
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            int prodCodeIndex = reader.GetOrdinal("prodCode");
-                            prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
-                        }
-                    }
-                }
+                subjName = lblSubject.Content.ToString();
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return;
             }
-
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT Subjects.qty, ApparatusInventory.name, ApparatusInventory.size, ApparatusInventory.manuf, ApparatusInventory.remarks from Subjects INNER JOIN ApparatusInventory ON Subjects.prodCode = '" + prodCode + "'", conn))
-            {
-                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+            
+           
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode FROM Subjects WHERE subjName = '" + subjName + "'", conn))
                 {
-                    if (reader.HasRows)
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
-                        lvList.Items.Clear();
-                        while (reader.Read())
+                        if (reader.HasRows)
                         {
-                            int quantityIndex = reader.GetOrdinal("qty");
-                            int quantity = Convert.ToInt32(reader.GetValue(quantityIndex));
-
-                            int apparatusIndex = reader.GetOrdinal("name");
-                            string apparatusName = Convert.ToString(reader.GetValue(apparatusIndex));
-
-                            string sizeBrandRemarks = "";
-
-                            int sizeIndex = reader.GetOrdinal("size");
-                            string size = Convert.ToString(reader.GetValue(sizeIndex));
-
-                            int manufIndex = reader.GetOrdinal("manuf");
-                            string manuf = Convert.ToString(reader.GetValue(manufIndex));
-
-                            int remarksIndex = reader.GetOrdinal("remarks");
-                            string remarks = Convert.ToString(reader.GetValue(remarksIndex));
-
-                            sizeBrandRemarks = size + " / " + manuf + " / " + remarks;
-
-                            lvList.Items.Add(new LVIssuance
+                            while (reader.Read())
                             {
-                                qty = quantity,
-                                apparatusName = apparatusName,
-                                sizeBrandRemarks = sizeBrandRemarks,
-                                breakages = null,
-
-                            });
-                            i++;
+                                int prodCodeIndex = reader.GetOrdinal("prodCode");
+                                prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+                            }
                         }
                     }
                 }
-            }
+
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT Subjects.qty, ApparatusInventory.name, ApparatusInventory.size, ApparatusInventory.manuf, ApparatusInventory.remarks from Subjects INNER JOIN ApparatusInventory ON Subjects.prodCode = '" + prodCode + "'", conn))
+                {
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        if (reader.HasRows)
+                        {
+                            lvList.Items.Clear();
+                            while (reader.Read())
+                            {
+                                int quantityIndex = reader.GetOrdinal("qty");
+                                int quantity = Convert.ToInt32(reader.GetValue(quantityIndex));
+
+                                int apparatusIndex = reader.GetOrdinal("name");
+                                string apparatusName = Convert.ToString(reader.GetValue(apparatusIndex));
+
+                                string sizeBrandRemarks = "";
+
+                                int sizeIndex = reader.GetOrdinal("size");
+                                string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+                                int manufIndex = reader.GetOrdinal("manuf");
+                                string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+
+                                sizeBrandRemarks = size + " / " + manuf + " / " + remarks;
+
+                                lvList.Items.Add(new LVIssuance
+                                {
+                                    qty = quantity,
+                                    apparatusName = apparatusName,
+                                    sizeBrandRemarks = sizeBrandRemarks,
+                                    breakages = null,
+
+                                });
+                                i++;
+                            }
+                        }
+                    }
+                }
         }
 
         private void btnPrintIssuance_Click(object sender, RoutedEventArgs e)
         {
-            
+            /*sv.ScrollToHome();
+            PrintDialog printDlg = new PrintDialog();
+            printDlg.PrintVisual(this, "Window Printing");*/
+        }
 
+        Dictionary<string, string> GetReplaceDictionary()
+        {
+            Dictionary<string, string> replaceDict = new Dictionary<string, string>();
+            replaceDict.Add("#prof#", lblProf.Content.ToString());
+            replaceDict.Add("#sched#", lblSchedule.Content.ToString());
+            replaceDict.Add("#lockerNo#", lblLockerNumber.Content.ToString());
+
+            return replaceDict;
         }
 
         private void btnPrintCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
         }
+
+
     }
 }
