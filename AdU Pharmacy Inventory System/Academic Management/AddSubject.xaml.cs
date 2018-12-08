@@ -63,16 +63,12 @@ namespace AdU_Pharmacy_Inventory_System
                                         int prodCodeIndex = reader.GetOrdinal("prodCode");
                                         string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
 
-                                        int sizeIndex = reader.GetOrdinal("size");
-                                        string size = Convert.ToString(reader.GetValue(sizeIndex));
-
                                         int qtyIndex = reader.GetOrdinal("qty");
                                         int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
-                                        using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT qty, name from ApparatusInventory where prodCode = @prodCode and size = @size", conn))
+                                        using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT name, size from ApparatusInventory where prodCode = @prodCode", conn))
                                         {
                                             cmd2.Parameters.AddWithValue("@prodCode", prodCode);
-                                            cmd2.Parameters.AddWithValue("@size", size);
                                             using (DbDataReader dr = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable))
                                             {
                                                 if (dr.HasRows)
@@ -81,12 +77,15 @@ namespace AdU_Pharmacy_Inventory_System
                                                     int nameIndex = dr.GetOrdinal("name");
                                                     string name = Convert.ToString(dr.GetValue(nameIndex));
 
+                                                    int sizeIndex = dr.GetOrdinal("size");
+                                                    string size = Convert.ToString(dr.GetValue(sizeIndex));
+
                                                     lvApparatus.Items.Add(new LVApparatusStockOut
                                                     {
                                                         i = i,
                                                         inventName = name,
-                                                        qty = qty,
                                                         size = size,
+                                                        qty = qty,
                                                     });
                                                 }
                                             }

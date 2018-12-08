@@ -24,7 +24,7 @@
         <Label Content="Locker Number : " Margin="39,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="175,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtLock_TextChanged"/>
         <Label Content="Subject: " HorizontalAlignment="Left" Margin="100,184,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" Margin="175,184,0,0" VerticalAlignment="Top" Width="320"/>
+        <ComboBox x:Name="cmbSubj" HorizontalAlignment="Left" Margin="175,184,0,0" VerticalAlignment="Top" Width="320"/>
         <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubject}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
 
         <Label Content="Schedule: " HorizontalAlignment="Left" Margin="88,234,0,0" VerticalAlignment="Top"/>
@@ -33,6 +33,7 @@
         <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <materialDesign:MaterialDataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
+                <materialDesign:MaterialDataGridComboBoxColumn Header="Manufacturer" ItemsSourceBinding="{Binding manuf}"/>
                 <materialDesign:MaterialDataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
                 <materialDesign:MaterialDataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
             </DataGrid.Columns>

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.SqlServerCe;
+using System.Data.Common;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -20,8 +22,8 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class MainWindow : Window
     {
+        string fullName, user = "";
         //REPORT MANAGEMENT
-        GenerateIssuanceForm gif = new GenerateIssuanceForm();
         DailyLogMonitoring dlm = new DailyLogMonitoring();
         //STOCK MANAGEMENT
         Stock_In si = new Stock_In();
@@ -32,11 +34,34 @@ namespace AdU_Pharmacy_Inventory_System
         //ACADEMIC MANAGEMENT
         AddSubject ads = new AddSubject();
         Accounts a = new Accounts();
-        public MainWindow()
+        public MainWindow(string user)
         {
             InitializeComponent();
             date.Content = DateTime.Now.ToString("D");
             stack.DataContext = new ExpanderListViewModel();
+            lblUser.Content = user;
+            this.user = user;
+            getFullName();
+        }
+
+        private void getFullName()
+        {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT firstName + ' ' + lastName as fullName from Accounts where username = @username", conn))
+            {
+                cmd.Parameters.AddWithValue("@username", user);
+                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        int fullNameIndex = reader.GetOrdinal("fullName");
+                        fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                    }
+
+                }
+            }
         }
 
         private void lblExit_Click(object sender, RoutedEventArgs e)
@@ -83,7 +108,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbGenerateIsuForm_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Frame.Navigate(gif);
+            Frame.Navigate(new GenerateIssuanceForm(fullName));
         }
 
         private void tbGenerateIsuForm_MouseEnter(object sender, MouseEventArgs e)
@@ -103,12 +128,12 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbGenerateChemMon_MouseEnter(object sender, MouseEventArgs e)
         {
-            tbChemStock.TextDecorations = TextDecorations.Underline;
+            //tbChemStock.TextDecorations = TextDecorations.Underline;
         }
 
         private void tbGenerateChemMon_MouseLeave(object sender, MouseEventArgs e)
         {
-            tbChemStock.TextDecorations = null;
+            //tbChemStock.TextDecorations = null;
         }
 
         private void tbSubjects_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -144,8 +169,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbChemStockOut_MouseEnter(object sender, MouseEventArgs e)
         {
-            tbChemStockOut.TextDecorations = TextDecorations.Underline;
-
+            //tbChemStockOut.TextDecorations = TextDecorations.Underline;
         }
 
         private void tbAppaStockOut_MouseLeave(object sender, MouseEventArgs e)
@@ -155,7 +179,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbChemStockOut_MouseLeave(object sender, MouseEventArgs e)
         {
-            tbChemStockOut.TextDecorations = null;
+            //tbChemStockOut.TextDecorations = null;
         }
 
         private void tbStockIn_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -243,12 +267,12 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbChemDaily_MouseEnter(object sender, MouseEventArgs e)
         {
-            tbChemDaily.TextDecorations = TextDecorations.Underline;
+            //tbChemDaily.TextDecorations = TextDecorations.Underline;
         }
 
         private void tbChemDaily_MouseLeave(object sender, MouseEventArgs e)
         {
-            tbChemDaily.TextDecorations = null;
+            //tbChemDaily.TextDecorations = null;
         }
 
         private void tbAddChem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -258,12 +282,12 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void tbAddChem_MouseEnter(object sender, MouseEventArgs e)
         {
-            tbAddChem.TextDecorations = TextDecorations.Underline;
+            //tbAddChem.TextDecorations = TextDecorations.Underline;
         }
 
         private void tbAddChem_MouseLeave(object sender, MouseEventArgs e)
         {
-            tbAddChem.TextDecorations = null;
+            //tbAddChem.TextDecorations = null;
         }
 
         private void tbListofSubjects_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

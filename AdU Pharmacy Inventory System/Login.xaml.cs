@@ -30,7 +30,6 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            /*
             if (string.IsNullOrEmpty(txtUsername.Text) || string.IsNullOrEmpty(txtPassword.Password))
             {
                 MessageBox.Show("One or more fields are empty!");
@@ -108,7 +107,7 @@ namespace AdU_Pharmacy_Inventory_System
                         }
                     }
                     Hide();
-                    new MainWindow().ShowDialog();
+                    new MainWindow(txtUsername.Text).ShowDialog();
                     ShowDialog();
                     txtPassword.Password = null;
                     txtUsername.Text = null;
@@ -135,12 +134,6 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                 }
             }
-            */
-            Hide();
-            new MainWindow().ShowDialog();
-            ShowDialog();
-            txtPassword.Password = null;
-            txtUsername.Text = null;
         }
 
         private void lblForgot_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

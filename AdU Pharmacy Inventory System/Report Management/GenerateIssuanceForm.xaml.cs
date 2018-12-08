@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlServerCe;
-using System.Data.SqlClient;
 using System.Data.Common;
 using System.Threading;
 using System.Collections.ObjectModel;
@@ -31,10 +30,11 @@ namespace AdU_Pharmacy_Inventory_System
         public static string subjAndSect;
 
         int i = 1;
-        public GenerateIssuanceForm()
+        public GenerateIssuanceForm(string fullName)
         {
             InitializeComponent();
             fillSubjects();
+            txtIssued.Text = fullName;
         }
 
         private void fillSubjects()
@@ -47,11 +47,11 @@ namespace AdU_Pharmacy_Inventory_System
                 {
                     if (reader.HasRows)
                     {
-                        cmbSubject.Items.Clear();
+                        cmbSubj.Items.Clear();
                         while (reader.Read())
                         {
                             string subjName = reader["subjName"].ToString();
-                            cmbSubject.Items.Add(subjName);
+                            cmbSubj.Items.Add(subjName);
                         }
                     }
                 }
@@ -173,12 +173,12 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.NavigationService.Navigate(new GenerateIssuanceForm());
+            this.NavigationService.Navigate(new GenerateIssuanceForm(txtIssued.Text));
         }
 
         private void btnGenForm_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(cmbSubject.Text))
+            if (string.IsNullOrEmpty(cmbSubj.Text))
             {
                 MessageBox.Show("Fill in the missing fields");
             }

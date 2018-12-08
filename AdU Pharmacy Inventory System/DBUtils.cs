@@ -9,8 +9,9 @@ namespace AdU_Pharmacy_Inventory_System
         public static SqlCeConnection GetDBConnection()
         {
             string user = Environment.UserName;
-            string datasource = @"C:\Users\" + user + @"\Source\Repos\ryanperezx\AdU-Pharmacy-Inventory-System\AdU Pharmacy Inventory System\bin\Debug\inventSystemDB.sdf";
-            //string datasource = @"C:\Users\" + user + @"\Desktop\aduph-is\inventSystemDB.sdf";
+            //string datasource = @"C:\Users\" + user + @"\Source\Repos\ryanperezx\AdU-Pharmacy-Inventory-System\AdU Pharmacy Inventory System\bin\Debug\inventSystemDB.sdf";
+            string datasource = @"C:\Users\" + user + @"\Desktop\aduph-is\inventSystemDB.sdf";
+            //string datasource = @"C:\Users\" + user + @"\Documents\Visual Studio 2017\Projects\AdU-Pharmacy-Inventory-System\AdU Pharmacy Inventory System\bin\Debug\inventSystemDB.sdf";
             return DBSQLServerUtils.GetDBConnection(datasource);
         }
     }
