@@ -46,17 +46,23 @@
                     </Grid>
                 </Expander>
                 <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=2, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Borrower Form" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Grid Height="300">
-                        <Label Content="Date: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="137,20,0,0"/>
-                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="199,20,0,0" Width="150"/>
-                        <Label Content="Borrower's Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="52,70,0,0"/>
-                        <TextBox x:Name="txtBName"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="254" Margin="197,70,0,0"/>
-                        <Label Content="Group No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="104,116,0,0"/>
-                        <TextBox x:Name="txtGroup"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="88" PreviewTextInput="txtQty_PreviewTextInput" Margin="199,116,0,0"/>
-                        <Label Content="Student No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="91,162,0,0" />
-                        <TextBox x:Name="txtStudNo"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="194,162,0,0"/>
-                        <Label Content="Subject: " HorizontalAlignment="Left"  VerticalAlignment="Top" Height="33" Margin="62,209,0,0"/>
-                        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" VerticalAlignment="Top" Width="364" Margin="137,209,0,0"/>
+                    <Grid Height="362">
+                        <Label Content="Request Date: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="131,22,0,0"/>
+                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,22,0,0" Width="150"/>
+                        <Label Content="Date of Experiment: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,58,0,0"/>
+                        <DatePicker x:Name="txtDateExp" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,58,0,0" Width="150"/>
+                        <Label Content="Borrower's Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="70,104,0,0"/>
+                        <TextBox x:Name="txtBName"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="254" Margin="215,104,0,0"/>
+                        <Label Content="Group No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="97,149,0,0"/>
+                        <TextBox x:Name="txtGroup"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="51" PreviewTextInput="txtQty_PreviewTextInput" Margin="192,149,0,0"/>
+                        <Label Content="Student No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,194,0,0" />
+                        <TextBox x:Name="txtStudNo"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="235,194,0,0"/>
+                        <Label Content="Locker No:" HorizontalAlignment="Left" Margin="269,149,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtLocker" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="51" Margin="375,149,0,0"/>
+                        <Label Content="Subject: " HorizontalAlignment="Left"  VerticalAlignment="Top" Height="33" Margin="62,246,0,0"/>
+                        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" VerticalAlignment="Top" Width="364" Margin="137,246,0,0"/>
+                        <Label Content="Experiment Title:" HorizontalAlignment="Left" Margin="52,299,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtExperiment" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="302" Margin="199,299,0,0"/>
                     </Grid>
                 </Expander>
             </StackPanel>

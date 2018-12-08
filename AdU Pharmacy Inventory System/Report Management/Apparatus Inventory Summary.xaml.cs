@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlServerCe;
+using System.Collections.ObjectModel;
+
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -22,10 +24,14 @@ namespace AdU_Pharmacy_Inventory_System
     public partial class Apparatus_Inventory_Summary : Page
     {
         int i = 1;
+        CollectionViewSource view = new CollectionViewSource();
+        ObservableCollection<LVApparatusStockOut> summary = new ObservableCollection<LVApparatusStockOut>();
         public Apparatus_Inventory_Summary()
         {
             InitializeComponent();
             date.Text = DateTime.Now.ToString("dd MMMM yyyy");
+            view.Source = summary;
+            lvInvent.DataContext = view;
             updateListView();
         }
 
@@ -60,8 +66,7 @@ namespace AdU_Pharmacy_Inventory_System
 
                         int remarksIndex = reader.GetOrdinal("remarks");
                         string remarks = Convert.ToString(reader.GetValue(remarksIndex));
-
-                        lvInvent.Items.Add(new LVApparatusStockOut
+                        summary.Add(new LVApparatusStockOut
                         {
                             i = i,
                             prodCode = prodCode,
@@ -72,6 +77,10 @@ namespace AdU_Pharmacy_Inventory_System
                             unit = unit,
                             remarks = remarks
                         });
+                        if (qty < 3)
+                        {
+                            MessageBox.Show("Product: " + inventName + " quantity is at critical level! Restock as soon as possible");
+                        }
                         i++;
                     }
                 }

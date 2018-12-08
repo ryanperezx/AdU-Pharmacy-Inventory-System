@@ -11,19 +11,27 @@
       HorizontalAlignment="Stretch" 
       VerticalAlignment="Stretch"
       FontSize="16"
+      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+
       Title="BorrowerRecord">
 
     <Grid>
-        <Label Content="Date:" HorizontalAlignment="Left" Margin="318,134,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtDate" Height="31" Margin="379,134,866,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" IsReadOnly="True"/>
-        <Label Content="Full Name:" HorizontalAlignment="Left" Margin="280,195,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="379,195,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" IsReadOnly="True"/>
-        <Label Content="Student No:" HorizontalAlignment="Left" Margin="271,254,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtStudNo" HorizontalAlignment="Left" Height="31" Margin="379,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" IsReadOnly="True"/>
-        <Label Content="Group ID:" HorizontalAlignment="Left" Margin="287,310,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtGrpID"  HorizontalAlignment="Left" Height="31" Margin="379,310,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" IsReadOnly="True"/>
-        <Label Content="Subject:" HorizontalAlignment="Left" Margin="300,374,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSubj" HorizontalAlignment="Left" Height="31" Margin="379,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190"/>
+        <iconPacks:PackIconMaterial x:Name="imgBack" Kind="ArrowLeft" Height="50" Width="50" HorizontalAlignment="Left" Cursor="Hand" MouseLeftButtonUp="imgBack_MouseLeftButtonUp" Margin="30,10,0,0"/>
+
+        <Label Content="Date Request:" HorizontalAlignment="Left" Margin="133,85,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtDateReq" Height="31" Margin="255,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" IsReadOnly="True"/>
+        <Label Content="Date of Experiment:" HorizontalAlignment="Left" Margin="92,129,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtDateExp" Height="31" Margin="255,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" IsReadOnly="True"/>
+        <Label Content="Full Name:" HorizontalAlignment="Left" Margin="156,174,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtFullName" HorizontalAlignment="Left" Height="31" Margin="255,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" IsReadOnly="True"/>
+        <Label Content="Student No:" HorizontalAlignment="Left" Margin="147,221,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtStudNo" HorizontalAlignment="Left" Height="31" Margin="255,221,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" IsReadOnly="True"/>
+        <Label Content="Group ID:" HorizontalAlignment="Left" Margin="163,265,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtGrpID"  HorizontalAlignment="Left" Height="31" Margin="255,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
+        <Label Content="Subject:" HorizontalAlignment="Left" Margin="176,339,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSubj" HorizontalAlignment="Left" Height="31" Margin="255,339,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" IsReadOnly="True"/>
+        <Label Content="Experiment Name:" HorizontalAlignment="Left" Margin="102,389,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtExpName" HorizontalAlignment="Left" Height="31" Margin="255,389,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" IsReadOnly="True"/>
         <ListView x:Name="lvRecords" HorizontalAlignment="Left" Height="436" Margin="695,75,0,0" VerticalAlignment="Top" Width="565" ItemsSource="{Binding}">
             <ListView.View>
                 <GridView>
@@ -33,6 +41,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button x:Name="btnRemove" Content="REMOVE" HorizontalAlignment="Left" Margin="270,468,0,0" VerticalAlignment="Top" Width="100" Height="75" Click="btnRemove_Click"/>
+        <Label Content="Locker No:" HorizontalAlignment="Left" Margin="362,265,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtLockNo"  HorizontalAlignment="Left" Height="31" Margin="465,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
 
 
     </Grid>

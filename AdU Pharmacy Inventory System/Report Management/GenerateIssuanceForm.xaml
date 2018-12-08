@@ -30,25 +30,13 @@
         <Label Content="Schedule: " HorizontalAlignment="Left" Margin="88,234,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged"/>
         <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,510,0,0" VerticalAlignment="Top" Width="165" Click="btnGenForm_Click"/>
-        <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding subjects}" AutoGenerateColumns="False">
+        <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding}" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
             </DataGrid.Columns>
         </DataGrid>
-
-        <ListView Visibility="Collapsed" x:Name="lvSubject" HorizontalAlignment="Left" Height="463" Margin="750,42,0,0" VerticalAlignment="Top" Width="515" ItemsSource="{Binding}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Apparatus Name" Width="150" DisplayMemberBinding="{Binding apparatusName}"/>
-                    <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
-                    <GridViewColumn Header="Manufacturer" Width="150" DisplayMemberBinding="{Binding remarks}"/>
-                    <GridViewColumn Header="Size" Width="120" DisplayMemberBinding="{Binding remarks}"/>
-                    <GridViewColumn Header="Remarks" Width="200" DisplayMemberBinding="{Binding remarks}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
         <Label Content="Professor: " HorizontalAlignment="Left" Margin="86,279,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" Margin="175,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtProf_TextChanged"/>
         <Label Content="Issued On: " HorizontalAlignment="Left" Margin="82,325,0,0" VerticalAlignment="Top"/>

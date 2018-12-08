@@ -16,6 +16,7 @@ using System.Data.SqlServerCe;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -62,10 +63,12 @@ namespace AdU_Pharmacy_Inventory_System
             subjAndSect = txtSubject.Text;
         }
 
-        private List<LVApparatusStockOut> LoadCollectionData()
+        private ObservableCollection<LVApparatusStockOut> LoadCollectionData()
         {
-            List<LVApparatusStockOut> items = new List<LVApparatusStockOut>();
+            ObservableCollection<LVApparatusStockOut> items = new ObservableCollection<LVApparatusStockOut>();
+            //List<string> manufList = new List<string>();
             SqlCeConnection conn = DBUtils.GetDBConnection();
+            string name = "", size = "", manuf = "";
             conn.Open();
             using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from Subjects where subjName = @subjName", conn))
             {
@@ -80,51 +83,86 @@ namespace AdU_Pharmacy_Inventory_System
                             int prodCodeIndex = reader.GetOrdinal("prodCode");
                             string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
 
-                            int sizeIndex = reader.GetOrdinal("size");
-                            string size = Convert.ToString(reader.GetValue(sizeIndex));
-
                             int qtyIndex = reader.GetOrdinal("qty");
                             int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty, name from ApparatusInventory where prodCode = @prodCode and size = @size",conn))
+                            int countQty;
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT name, size from ApparatusInventory where prodCode = @prodCode",conn))
                             {
                                 cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                                cmd1.Parameters.AddWithValue("@size", size);
                                 using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                                 {
                                     if (dr.HasRows)
                                     {
                                         dr.Read();
-                                        int nameIndex = dr.GetOrdinal("name");
-                                        string name = Convert.ToString(dr.GetValue(nameIndex));
 
-                                        int countQtyIndex = dr.GetOrdinal("qty");
-                                        int countQty = Convert.ToInt32(dr.GetValue(countQtyIndex));
-                                        if (qty > countQty)
+                                        int nameIndex = dr.GetOrdinal("name");
+                                        name = Convert.ToString(dr.GetValue(nameIndex));
+
+                                        int sizeIndex = dr.GetOrdinal("size");
+                                        size = Convert.ToString(dr.GetValue(sizeIndex));
+
+                                    }
+                                }
+                            }
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT manuf from ApparatusInventory where prodCode = @prodCode", conn))
+                            {
+                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
+                                using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                {
+                                    if (dr.HasRows)
+                                    {
+                                        while (dr.Read())
                                         {
-                                            MessageBox.Show("Item: " + prodCode + "has low stocks, please stock in as soon as possible!");
-                                            items.Add(new LVApparatusStockOut()
-                                            {
-                                                i = i,
-                                                inventName = name,
-                                                size = size,
-                                                qty = countQty
-                                            });
-                                        }
-                                        else
-                                        {
-                                            items.Add(new LVApparatusStockOut()
-                                            {
-                                                i = i,
-                                                inventName = name,
-                                                size = size,
-                                                qty = qty
-                                            });
+                                            int manufIndex = dr.GetOrdinal("manuf");
+                                            manuf = Convert.ToString(dr.GetValue(manufIndex));
+
+                                            
+                                            //manufList.Add(manuf);
+
+                                            //cmbManuf.ItemsSource = manufList;
                                         }
                                     }
                                 }
                             }
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty from ApparatusInventory where prodCode = @prodCode", conn))
+                            {
+                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
+                                using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                {
+                                    if (dr.HasRows)
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            int countQtyIndex = dr.GetOrdinal("qty");
+                                            countQty = Convert.ToInt32(dr.GetValue(countQtyIndex));
 
+                                            if (qty > countQty)
+                                            {
+                                                MessageBox.Show("Item: " + prodCode + "has low stocks, please stock in as soon as possible!");
+                                                items.Add(new LVApparatusStockOut()
+                                                {
+                                                    i = i,
+                                                    inventName = name,
+                                                    manuf = manuf,
+                                                    size = size,
+                                                    qty = countQty
+                                                });
+                                            }
+                                            else
+                                            {
+                                                items.Add(new LVApparatusStockOut()
+                                                {
+                                                    i = i,
+                                                    inventName = name,
+                                                    size = size,
+                                                    qty = qty
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             i++;
                         }
                     }

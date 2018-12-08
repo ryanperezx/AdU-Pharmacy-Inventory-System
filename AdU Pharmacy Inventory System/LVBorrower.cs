@@ -9,7 +9,13 @@ namespace AdU_Pharmacy_Inventory_System
 {
     class LVBorrower
     {
-        public string date
+        public string dateReq
+        {
+            get;
+            set;
+        }
+
+        public string dateExp
         {
             get;
             set;
@@ -34,6 +40,18 @@ namespace AdU_Pharmacy_Inventory_System
         }
 
         public int grpID
+        {
+            get;
+            set;
+        }
+
+        public string experiment
+        {
+            get;
+            set;
+        }
+
+        public string lockNo
         {
             get;
             set;

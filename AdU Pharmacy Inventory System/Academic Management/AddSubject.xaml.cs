@@ -145,9 +145,10 @@ namespace AdU_Pharmacy_Inventory_System
                         {
                             int ordinal = 0;
                             string prodCode = null;
-                            using(SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName",conn))
+                            using(SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName and size = @size",conn))
                             {
                                 cmd.Parameters.AddWithValue("@inventName", row.inventName);
+                                cmd.Parameters.AddWithValue("@size", row.size);
                                 DbDataReader result = cmd.ExecuteResultSet(ResultSetOptions.Scrollable);
                                 if (result.Read())
                                 {
@@ -156,21 +157,12 @@ namespace AdU_Pharmacy_Inventory_System
                                 }
 
                             }
-                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, prodCode, qty, size) VALUES (@subjCode, @subjName, @prodCode, @qty, @size)", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, prodCode, qty) VALUES (@subjCode, @subjName, @prodCode, @qty)", conn))
                             {
                                 cmd.Parameters.AddWithValue("@subjCode", subjCode);
                                 cmd.Parameters.AddWithValue("@subjName", subjName);
                                 cmd.Parameters.AddWithValue("@prodCode", prodCode);
                                 cmd.Parameters.AddWithValue("@qty", row.qty);
-                                if (!string.IsNullOrEmpty(row.size))
-                                {
-                                    cmd.Parameters.AddWithValue("@size", row.size);
-                                }
-                                else
-                                {
-                                    row.size = "";
-                                    cmd.Parameters.AddWithValue("@size", row.size);
-                                }
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
