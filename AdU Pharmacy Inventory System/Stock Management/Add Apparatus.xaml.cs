@@ -194,7 +194,7 @@ namespace AdU_Pharmacy_Inventory_System
                             }
                             catch (SqlCeException ex)
                             {
-                                MessageBox.Show("Error! Log has been updated with the error.");
+                                MessageBox.Show("Error! Log has been updated with the error. " + ex);
                             }
                         }
                         break;

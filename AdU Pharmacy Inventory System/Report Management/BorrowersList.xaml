@@ -20,14 +20,14 @@
         <ListView x:Name="lvList" HorizontalAlignment="Left" Height="405" Margin="85,95,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}" MouseDoubleClick="lvList_MouseDoubleClick" SelectedIndex="0" SelectionMode="Single">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Date" Width="120" DisplayMemberBinding="{Binding date}"/>
+                    <GridViewColumn Header="Date Request" Width="120" DisplayMemberBinding="{Binding dateReq}"/>
+                    <GridViewColumn Header="Date of Experiment" Width="150" DisplayMemberBinding="{Binding dateExp}"/>
                     <GridViewColumn Header="Student No" Width="120" DisplayMemberBinding="{Binding studentNo}"/>
                     <GridViewColumn Header="Full Name" Width="200" DisplayMemberBinding="{Binding fullName}"/>
                     <GridViewColumn Header="Subject" Width="250" DisplayMemberBinding="{Binding subj}"/>
+                    <GridViewColumn Header="Experiment Title" Width="250" DisplayMemberBinding="{Binding experiment}"/>
                     <GridViewColumn Header="Group ID" Width="100" DisplayMemberBinding="{Binding grpID}"/>
-                    <GridViewColumn Header="Apparatus Name" Width="200" DisplayMemberBinding="{Binding prodName}"/>
-                    <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
-                    <GridViewColumn Header="Quantity" Width="100" DisplayMemberBinding="{Binding qty}"/>
+                    <GridViewColumn Header="Locker No" Width="100" DisplayMemberBinding="{Binding lockNo}"/>
                 </GridView>
             </ListView.View>
         </ListView>

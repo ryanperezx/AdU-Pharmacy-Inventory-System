@@ -36,7 +36,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from BorrowerList", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT dateReq, dateExp, studentNo, fullName, groupID, lockNo, subject, expName from BorrowerList", conn))
             {
                 using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
@@ -45,9 +45,13 @@ namespace AdU_Pharmacy_Inventory_System
                         lvList.Items.Clear();
                         while (reader.Read())
                         {
-                            int dateIndex = reader.GetOrdinal("date");
-                            DateTime myDate = reader.GetDateTime(dateIndex);
-                            string date = myDate.ToString("MM/dd/yyyy");
+                            int dateReqIndex = reader.GetOrdinal("dateReq");
+                            DateTime myDate = reader.GetDateTime(dateReqIndex);
+                            string dateReq = myDate.ToString("MM/dd/yyyy");
+
+                            int dateExpIndex = reader.GetOrdinal("dateExp");
+                            myDate = reader.GetDateTime(dateExpIndex);
+                            string dateExp = myDate.ToString("MM/dd/yyyy");
 
                             int studentNoIndex = reader.GetOrdinal("studentNo");
                             string studentNo = Convert.ToString(reader.GetValue(studentNoIndex));
@@ -58,42 +62,26 @@ namespace AdU_Pharmacy_Inventory_System
                             int subjIndex = reader.GetOrdinal("subject");
                             string subj = Convert.ToString(reader.GetValue(subjIndex));
 
+                            int lockNoIndex = reader.GetOrdinal("lockNo");
+                            int lockNo = Convert.ToInt32(reader.GetValue(lockNoIndex));
+
+                            int expNameIndex = reader.GetOrdinal("expName");
+                            string expName = Convert.ToString(reader.GetValue(expNameIndex));
+
                             int grpIDIndex = reader.GetOrdinal("groupID");
                             int grpID = Convert.ToInt32(reader.GetValue(grpIDIndex));
-
-                            int prodCodeIndex = reader.GetOrdinal("prodCode");
-                            string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
-
-                            string prodName;
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT name from ApparatusInventory where prodCode = @prodCode", conn))
-                            {
-                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                                using(DbDataReader rd = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
-                                {
-                                    rd.Read();
-                                    int prodNameIndex = rd.GetOrdinal("name");
-                                    prodName = Convert.ToString(rd.GetValue(prodNameIndex));
-                                }
-                            }
-
-
-                            int qtyIndex = reader.GetOrdinal("qty");
-                            int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
-
-                            int manufIndex = reader.GetOrdinal("manuf");
-                            string manuf = Convert.ToString(reader.GetValue(manufIndex));
 
 
                             lvList.Items.Add(new LVBorrower
                             {
-                                date = date,
+                                dateReq = dateReq,
+                                dateExp = dateExp,
                                 studentNo = studentNo,
                                 fullName = fullName,
+                                lockNo = lockNo.ToString(),
                                 subj = subj,
                                 grpID = grpID,
-                                prodName = prodName,
-                                manuf = manuf,
-                                qty = qty,
+                                experiment = expName,
                             });
                             i++;
                         }
@@ -105,7 +93,7 @@ namespace AdU_Pharmacy_Inventory_System
         private void lvList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             LVBorrower borrower = lvList.SelectedItem as LVBorrower;
-            this.NavigationService.Navigate(new BorrowerRecord(borrower.date, borrower.studentNo, borrower.subj, borrower.grpID));
+            this.NavigationService.Navigate(new BorrowerRecord(borrower.fullName, borrower.dateReq, borrower.dateReq, borrower.studentNo, borrower.subj, borrower.grpID, borrower.experiment, borrower.lockNo));
         }
     }
 }

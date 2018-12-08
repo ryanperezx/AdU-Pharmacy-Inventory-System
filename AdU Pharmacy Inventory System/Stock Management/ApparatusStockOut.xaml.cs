@@ -231,7 +231,7 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("There are no apparatus(es) to be stock out");
             }
-            else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtBName.Text) || string.IsNullOrEmpty(txtGroup.Text) || string.IsNullOrEmpty(txtStudNo.Text) ||string.IsNullOrEmpty(cmbSubject.Text))
+            else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtBName.Text) || string.IsNullOrEmpty(txtGroup.Text) || string.IsNullOrEmpty(txtStudNo.Text) ||string.IsNullOrEmpty(cmbSubject.Text) || string.IsNullOrEmpty(txtExperiment.Text) || string.IsNullOrEmpty(txtLocker.Text) || string.IsNullOrEmpty(txtDateExp.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
             }
@@ -250,6 +250,7 @@ namespace AdU_Pharmacy_Inventory_System
 
                         SqlCeConnection conn = DBUtils.GetDBConnection();
                         conn.Open();
+                        bool check = false;
                         foreach (var row in stockOut)
                         {
                             using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty - @qty where name = @inventName and size = @size and manuf = @manuf", conn))
@@ -269,7 +270,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
-                                    MessageBox.Show("Stock Out Successfully");
+                                    check = true;
                                     int ordinal = 0;
                                     string prodCode = null;
                                     using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName", conn))
@@ -283,17 +284,19 @@ namespace AdU_Pharmacy_Inventory_System
                                         }
 
                                     }
-                                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (date, studentNo, fullName, groupID, subject, prodCode, qty, manuf) VALUES (@date, @studentNo, @fullName, @groupID, @subject, @prodCode, @qty, @manuf)", conn))
+                                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, manuf) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, @manuf)", conn))
                                     {
-                                        cmd1.Parameters.AddWithValue("@date", txtDate.Text);
+                                        cmd1.Parameters.AddWithValue("@dateReq", txtDate.Text);
+                                        cmd1.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
                                         cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                         cmd1.Parameters.AddWithValue("@fullName", txtBName.Text);
                                         cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
                                         cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
+                                        cmd1.Parameters.AddWithValue("@lockNo", txtLocker.Text);
+                                        cmd1.Parameters.AddWithValue("@expName", txtExperiment.Text);
                                         cmd1.Parameters.AddWithValue("@prodCode", prodCode);
                                         cmd1.Parameters.AddWithValue("@qty", row.qty);
                                         cmd1.Parameters.AddWithValue("@manuf", row.manuf);
-
                                         try
                                         {
                                             cmd1.ExecuteNonQuery();
@@ -310,6 +313,10 @@ namespace AdU_Pharmacy_Inventory_System
                                     MessageBox.Show("Error! Log has been updated with the error    " + ex);
                                 }
                             }
+                        }
+                        if(check == true)
+                        {
+                            MessageBox.Show("Stock Out Successfully");
                         }
                         stockOut.Clear();
                         i = 1;
@@ -342,6 +349,8 @@ namespace AdU_Pharmacy_Inventory_System
             txtBName.Text = null;
             txtGroup.Text = null;
             txtStudNo.Text = null;
+            txtExperiment.Text = null;
+            txtLocker.Text = null;
             cmbSubject.SelectedIndex = -1;
 
         }

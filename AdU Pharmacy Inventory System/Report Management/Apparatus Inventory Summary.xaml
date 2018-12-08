@@ -16,7 +16,7 @@
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Outstanding Inventory as of " FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <TextBlock x:Name="date" FontWeight="Bold" HorizontalAlignment="Left" Margin="484,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Width="446"/>
-        <ListView x:Name="lvInvent" HorizontalAlignment="Left" Height="435" Margin="85,65,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}">
+        <ListView x:Name="lvInvent" HorizontalAlignment="Left" Height="510" Margin="85,65,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="No." Width="70" DisplayMemberBinding="{Binding i}"/>
