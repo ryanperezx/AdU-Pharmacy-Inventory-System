@@ -32,11 +32,15 @@ namespace AdU_Pharmacy_Inventory_System
         //ACADEMIC MANAGEMENT
         AddSubject ads = new AddSubject();
         Accounts a = new Accounts();
+
         public MainWindow()
         {
             InitializeComponent();
             date.Content = DateTime.Now.ToString("D");
             stack.DataContext = new ExpanderListViewModel();
+
+            if (Login.userLevel == 1)
+                tbAccounts.Visibility = Visibility.Hidden;
         }
 
         private void lblExit_Click(object sender, RoutedEventArgs e)

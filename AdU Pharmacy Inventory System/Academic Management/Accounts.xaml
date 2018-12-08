@@ -52,5 +52,11 @@
 
         <Button x:Name="btnSave" Content="SAVE" HorizontalAlignment="Left" Margin="860,399,0,0" VerticalAlignment="Top" Height="50" Width="100" Click="btnSave_Click"/>
         <Button x:Name="btnDelete" Content="DELETE" HorizontalAlignment="Left" Margin="1105,399,0,0" VerticalAlignment="Top" Height="50" Width="100" Click="btnDelete_Click"/>
+        
+        <Label x:Name= "lblUserLvl" Content ="User Level :" HorizontalAlignment="Left" Margin="197,302,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cmbUserLevel" HorizontalAlignment="Left" Margin="312,300,0,0" VerticalAlignment="Top" Width="320">
+            <ComboBoxItem Content="Administrator"/>
+            <ComboBoxItem Content="Student Assistant"/>
+        </ComboBox>
     </Grid>
 </Page>
