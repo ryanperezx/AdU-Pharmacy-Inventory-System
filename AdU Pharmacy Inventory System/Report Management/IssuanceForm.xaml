@@ -42,23 +42,25 @@
             <TextBlock HorizontalAlignment="Left" Margin="966,110,0,0" FontSize ="12" TextWrapping="Wrap" Text="LOCKER NUMBER" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Height="29"/>
             <Label x:Name="lblLockerNumber" Content="{Binding LockerNumber}" HorizontalAlignment="Left" Margin="987,79,0,0" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.2,2"/>
 
-            <DataGrid x:Name="dgApparatus" HorizontalAlignment="Left" Height="424" Margin="268,211,0,0" VerticalAlignment="Top" Width="839" ItemsSource="{Binding subjects}" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding inventName}" Width="120" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Apparatus Name" Binding="{Binding manuf}" Width="160" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Size/Brand/Remarks" Binding="{Binding qty}" Width="160" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Return Check" Binding="{Binding qty}" Width="120" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Breakages" Binding="{Binding qty}" Width="140" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Amount Charge" Binding="{Binding qty}" Width="140" IsReadOnly="True"/>
-                </DataGrid.Columns>
-            </DataGrid>
+            <ListView x:Name="lvList" HorizontalAlignment="Left" Height="405" Margin="268,211,0,0" VerticalAlignment="Top" Width="839" ItemsSource="{Binding}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Quantity" Width="120" DisplayMemberBinding="{Binding qty}"/>
+                        <GridViewColumn Header="Apparatus Name" Width="160" DisplayMemberBinding="{Binding apparatusName}"/>
+                        <GridViewColumn Header="Size/Brand/Remarks" Width="160" DisplayMemberBinding="{Binding sizeBrandRemarks}"/>
+                        <GridViewColumn Header="Return Check" Width="120" DisplayMemberBinding="{Binding rtnCheck}"/>
+                        <GridViewColumn Header="Breakages" Width="140" DisplayMemberBinding="{Binding breakages}"/>
+                        <GridViewColumn Header="Amount Charge" Width="140" DisplayMemberBinding="{Binding amountCharge}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
             <TextBlock HorizontalAlignment="Left" Margin="268,658,0,0" FontSize ="12" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Height="29" RenderTransformOrigin="0.422,1.172"><Run Text="ISSUED ON:"/></TextBlock>
             <TextBlock HorizontalAlignment="Left" Margin="268,692,0,0" FontSize ="12" TextWrapping="Wrap" Text="ISSUED BY:" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Height="29" RenderTransformOrigin="0.422,1.172"/>
 
             <Button x:Name="btnPrintIssuance" Content="GENERATE WORD FILE" HorizontalAlignment="Left" Margin="583,900,0,0" VerticalAlignment="Top" Width="189" Click="btnPrintIssuance_Click" Height="35"/>
             <Button x:Name="btnPrintCancel" Content="CANCEL" HorizontalAlignment="Left" Margin="630,860,0,0" VerticalAlignment="Top" Width="93" Click="btnPrintCancel_Click" Height="35" RenderTransformOrigin="0.71,0.457"/>
-            
+
             <TextBlock HorizontalAlignment="Left" Margin="355,658,0,0" FontSize ="12" TextWrapping="Wrap" Text="_____________________________________" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
             <TextBlock HorizontalAlignment="Left" Margin="355,692,0,0" FontSize ="12" TextWrapping="Wrap" Text="_____________________________________" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
             <TextBlock HorizontalAlignment="Left" Margin="923,658,0,0" FontSize ="12" TextWrapping="Wrap" Text="_____________________________________" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>

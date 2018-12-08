@@ -178,9 +178,15 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void btnGenForm_Click(object sender, RoutedEventArgs e)
         {
-            
-            Report_Management.IssuanceForm issuanceForm = new Report_Management.IssuanceForm();
-            issuanceForm.Show();            
+            if (string.IsNullOrEmpty(cmbSubject.Text))
+            {
+                MessageBox.Show("Fill in the missing fields");
+            }
+            else
+            {
+                Report_Management.IssuanceForm issuanceForm = new Report_Management.IssuanceForm();
+                issuanceForm.Show();
+            }
                
         }
 

@@ -15,6 +15,9 @@ using System.Windows.Shapes;
 using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -26,6 +29,29 @@ namespace AdU_Pharmacy_Inventory_System
         public Accounts()
         {
             InitializeComponent();
+        }
+
+        public string passwordStatus;
+        public string PasswordStatus
+        {
+            get { return passwordStatus; }
+            set
+            {
+                passwordStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
         }
 
         private void searchUser_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -81,68 +107,79 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtUser.Text) || string.IsNullOrEmpty(txtFirstName.Text) || string.IsNullOrEmpty(txtLastName.Text) || string.IsNullOrEmpty(cmbQuestion.Text) || string.IsNullOrEmpty(txtAns.Password) || string.IsNullOrEmpty(txtConfirmPass.Password) || string.IsNullOrEmpty(txtPass.Password) || string.IsNullOrEmpty(txtPass.Password))
+            Regex reg = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
+            bool result = reg.IsMatch(txtPass.Password.ToString());
+
+            if (result)
             {
-                MessageBox.Show("One or more fields are empty!");
-            }
-            else
-            {
-                if (txtPass.Password.Equals(txtConfirmPass.Password))
+                if (string.IsNullOrEmpty(txtUser.Text) || string.IsNullOrEmpty(txtFirstName.Text) || string.IsNullOrEmpty(txtLastName.Text) || string.IsNullOrEmpty(cmbQuestion.Text) || string.IsNullOrEmpty(txtAns.Password) || string.IsNullOrEmpty(txtConfirmPass.Password) || string.IsNullOrEmpty(txtPass.Password) || string.IsNullOrEmpty(txtPass.Password))
                 {
-                    SqlCeConnection conn = DBUtils.GetDBConnection();
-                    conn.Open();
-                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from Accounts where username = @username", conn))
-                    {
-                        cmd.Parameters.AddWithValue("@username", txtUser.Text);
-                        int userCount;
-                        userCount = (int)cmd.ExecuteScalar();
-                        if (userCount > 0)
-                        {
-                            MessageBox.Show("User already exist!");
-                        }
-                        else
-                        {
-                            string sMessageBoxText = "Are all fields correct?";
-                            string sCaption = "Add Account";
-                            MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
-                            MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
-
-                            MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
-                            switch (dr)
-                            {
-                                case MessageBoxResult.Yes:
-                                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into Accounts (firstName, lastName, username, password, securityQuestion, answer, tries) VALUES (@firstName, @lastName, @username, @password, @securityQuestion, @answer, 0)", conn))
-                                    {
-                                        cmd1.Parameters.AddWithValue("@firstName", txtFirstName.Text);
-                                        cmd1.Parameters.AddWithValue("@lastName", txtLastName.Text);
-                                        cmd1.Parameters.AddWithValue("@username", txtUser.Text);
-                                        cmd1.Parameters.AddWithValue("@password", txtPass.Password);
-                                        cmd1.Parameters.AddWithValue("@securityQuestion", cmbQuestion.Text);
-                                        cmd1.Parameters.AddWithValue("@answer", txtAns.Password);
-                                        try
-                                        {
-                                            cmd1.ExecuteNonQuery();
-                                            MessageBox.Show("Registered successfully");
-                                            emptyFields();
-
-                                        }
-                                        catch (SqlCeException ex)
-                                        {
-                                            MessageBox.Show("Error! Log has been updated with the error!");
-                                        }
-                                    }
-                                    break;
-                                case MessageBoxResult.No:
-                                    break;
-                            }
-                        }
-                    }
+                    MessageBox.Show("One or more fields are empty!");
                 }
                 else
                 {
-                    MessageBox.Show("Your password and confirmation password do not match.");
+                    if (txtPass.Password.Equals(txtConfirmPass.Password))
+                    {
+                        SqlCeConnection conn = DBUtils.GetDBConnection();
+                        conn.Open();
+                        using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from Accounts where username = @username", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@username", txtUser.Text);
+                            int userCount;
+                            userCount = (int)cmd.ExecuteScalar();
+                            if (userCount > 0)
+                            {
+                                MessageBox.Show("User already exist!");
+                            }
+                            else
+                            {
+                                string sMessageBoxText = "Are all fields correct?";
+                                string sCaption = "Add Account";
+                                MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                                MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+                                MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                                switch (dr)
+                                {
+                                    case MessageBoxResult.Yes:
+                                        using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into Accounts (firstName, lastName, username, password, securityQuestion, answer, tries) VALUES (@firstName, @lastName, @username, @password, @securityQuestion, @answer, 0)", conn))
+                                        {
+                                            cmd1.Parameters.AddWithValue("@firstName", txtFirstName.Text);
+                                            cmd1.Parameters.AddWithValue("@lastName", txtLastName.Text);
+                                            cmd1.Parameters.AddWithValue("@username", txtUser.Text);
+                                            cmd1.Parameters.AddWithValue("@password", txtPass.Password);
+                                            cmd1.Parameters.AddWithValue("@securityQuestion", cmbQuestion.Text);
+                                            cmd1.Parameters.AddWithValue("@answer", txtAns.Password);
+                                            try
+                                            {
+                                                cmd1.ExecuteNonQuery();
+                                                MessageBox.Show("Registered successfully");
+                                                emptyFields();
+
+                                            }
+                                            catch (SqlCeException ex)
+                                            {
+                                                MessageBox.Show("Error! Log has been updated with the error!");
+                                            }
+                                        }
+                                        break;
+                                    case MessageBoxResult.No:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Your password and confirmation password do not match.");
+                    }
                 }
             }
+            else
+            {
+                MessageBox.Show("Password is Invalid");
+            }
+            
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -218,6 +255,25 @@ namespace AdU_Pharmacy_Inventory_System
         private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.NavigationService.Navigate(new Accounts());
+        }
+
+        private void txtPass_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            Regex reg = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
+            bool result = reg.IsMatch(txtPass.Password.ToString());
+
+            if (result)
+            {
+                passwordStatus = "Password is Valid";
+                lblPassword.Content = passwordStatus;
+                lblPassword.Foreground = Brushes.Green;
+            }
+            else
+            {
+                passwordStatus = "Password is Invalid";
+                lblPassword.Content = passwordStatus;
+                lblPassword.Foreground = Brushes.Red;
+            }
         }
     }
 }

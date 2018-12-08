@@ -183,6 +183,7 @@
     <Compile Include="BorrowerRecord.xaml.cs">
       <DependentUpon>BorrowerRecord.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LVIssuance.cs" />
     <Compile Include="LVSubject.cs" />
     <Compile Include="Stock Management\Add Chemicals.xaml.cs">
       <DependentUpon>Add Chemicals.xaml</DependentUpon>
