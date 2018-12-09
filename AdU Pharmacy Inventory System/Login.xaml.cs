@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using System.Data.SqlServerCe;
 using System.Data.Common;
+using System.Diagnostics;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -23,6 +24,8 @@ namespace AdU_Pharmacy_Inventory_System
     public partial class Login : MetroWindow
     {
         string user;
+        public static int userLevel;
+
         public Login()
         {
             InitializeComponent();
@@ -30,9 +33,11 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            ///*
             if (string.IsNullOrEmpty(txtUsername.Text) || string.IsNullOrEmpty(txtPassword.Password))
             {
                 MessageBox.Show("One or more fields are empty!");
+                return;
             }
             else
             {
@@ -61,6 +66,9 @@ namespace AdU_Pharmacy_Inventory_System
                             lName = dr.GetString(2);
                             fName = dr.GetString(3);
                             mName = dr.GetString(4);
+                            int userLevelIndex = dr.GetOrdinal("userLevel");
+                            userLevel = dr.GetInt32(userLevelIndex);
+                            Debug.WriteLine(userLevel);
 
                             using (SqlCeCommand cmd2 = new SqlCeCommand("UPDATE Accounts SET tries = 0", conn))
                             {
@@ -107,7 +115,7 @@ namespace AdU_Pharmacy_Inventory_System
                         }
                     }
                     Hide();
-                    new MainWindow(txtUsername.Text).ShowDialog();
+                    new MainWindow().ShowDialog();
                     ShowDialog();
                     txtPassword.Password = null;
                     txtUsername.Text = null;
@@ -134,6 +142,12 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                 }
             }
+            ///*
+            Hide();
+            new MainWindow().ShowDialog();
+            ShowDialog();
+            txtPassword.Password = null;
+            txtUsername.Text = null;
         }
 
         private void lblForgot_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

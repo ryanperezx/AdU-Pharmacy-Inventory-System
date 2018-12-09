@@ -142,7 +142,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 switch (dr)
                                 {
                                     case MessageBoxResult.Yes:
-                                        using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into Accounts (firstName, lastName, username, password, securityQuestion, answer, tries) VALUES (@firstName, @lastName, @username, @password, @securityQuestion, @answer, 0)", conn))
+                                        using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into Accounts (firstName, lastName, username, password, securityQuestion, answer, tries, userLevel) VALUES (@firstName, @lastName, @username, @password, @securityQuestion, @answer, 0, @userLevel)", conn))
                                         {
                                             cmd1.Parameters.AddWithValue("@firstName", txtFirstName.Text);
                                             cmd1.Parameters.AddWithValue("@lastName", txtLastName.Text);
@@ -150,6 +150,11 @@ namespace AdU_Pharmacy_Inventory_System
                                             cmd1.Parameters.AddWithValue("@password", txtPass.Password);
                                             cmd1.Parameters.AddWithValue("@securityQuestion", cmbQuestion.Text);
                                             cmd1.Parameters.AddWithValue("@answer", txtAns.Password);
+                                            if (cmbUserLevel.Text.Equals("Administrator"))
+                                                cmd1.Parameters.AddWithValue("@userLevel", 0);
+                                            else
+                                                cmd1.Parameters.AddWithValue("@userLevel", 1);
+
                                             try
                                             {
                                                 cmd1.ExecuteNonQuery();
@@ -259,6 +264,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void txtPass_PasswordChanged(object sender, RoutedEventArgs e)
         {
+            //Password must contain at least 8 characters, 1 uppercase, 1 numeric
             Regex reg = new Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
             bool result = reg.IsMatch(txtPass.Password.ToString());
 
@@ -273,6 +279,10 @@ namespace AdU_Pharmacy_Inventory_System
                 passwordStatus = "Password is Invalid";
                 lblPassword.Content = passwordStatus;
                 lblPassword.Foreground = Brushes.Red;
+            }
+            if (string.IsNullOrEmpty(txtPass.Password))
+            {
+                lblPassword.Content = null;
             }
         }
     }

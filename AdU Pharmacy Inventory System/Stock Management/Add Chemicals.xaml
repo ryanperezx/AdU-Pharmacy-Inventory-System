@@ -22,13 +22,13 @@
         <Label Content="Date: " HorizontalAlignment="Left" Margin="575,102,0,0" VerticalAlignment="Top"/>
         <DatePicker x:Name="txtDate" HorizontalAlignment="Left" Margin="655,104,0,0" VerticalAlignment="Top" Width="135"/>
         <Label Content="Chemical Name:" HorizontalAlignment="Left" Margin="501,192,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtChem" HorizontalAlignment="Left" Height="30" Margin="655,192,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234"/>
+        <TextBox x:Name="txtChem" HorizontalAlignment="Left" Height="30" Margin="655,192,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" MaxLength="15"/>
         <Label Content="Qty: " HorizontalAlignment="Left" Margin="583,244,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="30" Margin="655,244,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64" PreviewTextInput="txtQty_PreviewTextInput"/>
+        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="30" Margin="655,244,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64" PreviewTextInput="txtQty_PreviewTextInput" MaxLength="3"/>
         <Label Content="Received from: " HorizontalAlignment="Left" Margin="507,292,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtReceivedFrom" HorizontalAlignment="Left" Height="30" Margin="655,292,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234"/>
+        <TextBox x:Name="txtReceivedFrom" HorizontalAlignment="Left" Height="30" Margin="655,292,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" MaxLength="20"/>
         <Label Content="Receipt: " HorizontalAlignment="Left" Margin="507,338,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtReceipt" HorizontalAlignment="Left" Height="30" Margin="655,338,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234"/>
+        <TextBox x:Name="txtReceipt" HorizontalAlignment="Left" Height="30" Margin="655,338,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" MaxLength="20"/>
 
         <Button x:Name="btnEdit" Content="UPDATE RECORD" HorizontalAlignment="Left" Margin="615,450,0,0" VerticalAlignment="Top" Width="150" Height="75" Click="btnEdit_Click"/>
         <Button x:Name="btnSave" Content="NEW RECORD" HorizontalAlignment="Left" Margin="387,450,0,0" VerticalAlignment="Top" Width="129" Height="75" Click="btnSave_Click"/>

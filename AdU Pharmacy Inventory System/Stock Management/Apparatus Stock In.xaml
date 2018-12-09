@@ -28,7 +28,7 @@
         <TextBox x:Name="txtSize" Text="{Binding Text, ElementName=cmbSize}" Visibility="Collapsed" TextChanged="txtSize_TextChanged"/>
         
         <Label Content="Qty:" HorizontalAlignment="Left" Margin="594,294,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="644,294,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="44" PreviewTextInput="txtQty_PreviewTextInput"/>
+        <TextBox x:Name="txtQty" HorizontalAlignment="Left" Height="31" Margin="644,294,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="44" PreviewTextInput="txtQty_PreviewTextInput" MaxLength="5"/>
 
         <Label Content="Manufacturer:" HorizontalAlignment="Left" Margin="524,249,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbManuf" HorizontalAlignment="Left" Margin="644,249,0,0" VerticalAlignment="Top" Width="164" Height="31"/>
