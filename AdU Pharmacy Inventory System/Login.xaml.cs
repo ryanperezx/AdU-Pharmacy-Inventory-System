@@ -115,7 +115,7 @@ namespace AdU_Pharmacy_Inventory_System
                         }
                     }
                     Hide();
-                    new MainWindow().ShowDialog();
+                    new MainWindow(user).ShowDialog();
                     ShowDialog();
                     txtPassword.Password = null;
                     txtUsername.Text = null;
@@ -144,7 +144,7 @@ namespace AdU_Pharmacy_Inventory_System
             }
             ///*
             Hide();
-            new MainWindow().ShowDialog();
+            new MainWindow(user).ShowDialog();
             ShowDialog();
             txtPassword.Password = null;
             txtUsername.Text = null;

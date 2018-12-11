@@ -25,7 +25,7 @@
         <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="175,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtLock_TextChanged" MaxLength="5"/>
         <Label Content="Subject: " HorizontalAlignment="Left" Margin="100,184,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cmbSubj" HorizontalAlignment="Left" Margin="175,184,0,0" VerticalAlignment="Top" Width="320"/>
-        <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubject}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
+        <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubj}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
 
         <Label Content="Schedule: " HorizontalAlignment="Left" Margin="88,234,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged" MaxLength="15"/>
