@@ -349,6 +349,7 @@ namespace AdU_Pharmacy_Inventory_System
             txtBName.Text = null;
             txtGroup.Text = null;
             txtStudNo.Text = null;
+            txtDateExp.Text = null;
             txtExperiment.Text = null;
             txtLocker.Text = null;
             cmbSubject.SelectedIndex = -1;
@@ -378,6 +379,24 @@ namespace AdU_Pharmacy_Inventory_System
             this.NavigationService.Navigate(new ApparatusStockOut());
         }
 
+        private void txtDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DateTime dateToday = DateTime.Now.Date;
+            DateTime? dateReq = txtDate.SelectedDate;
+            DateTime? dateExp = txtDateExp.SelectedDate;
+
+            if(dateReq < dateToday)
+            {
+                MessageBox.Show("Date request should be less than date today!");
+                txtDate.SelectedDate = dateToday;
+            }
+            if(dateExp < dateToday)
+            {
+                MessageBox.Show("Date of experiment should be less than date today!");
+                txtDateExp.SelectedDate = dateToday;
+
+            }
+        }
     }
 
 }

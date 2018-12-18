@@ -126,10 +126,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Report Management\Apparatus Inventory Summary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Report Management\ChemicalStocks.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -194,9 +190,6 @@
     <Compile Include="LVBorrower.cs" />
     <Compile Include="Report Management\BorrowersList.xaml.cs">
       <DependentUpon>BorrowersList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Report Management\Apparatus Inventory Summary.xaml.cs">
-      <DependentUpon>Apparatus Inventory Summary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Report Management\ChemicalStocks.xaml.cs">
       <DependentUpon>ChemicalStocks.xaml</DependentUpon>

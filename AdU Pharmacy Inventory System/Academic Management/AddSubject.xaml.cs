@@ -147,7 +147,15 @@ namespace AdU_Pharmacy_Inventory_System
                             using(SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName and size = @size",conn))
                             {
                                 cmd.Parameters.AddWithValue("@inventName", row.inventName);
-                                cmd.Parameters.AddWithValue("@size", row.size);
+                                if (row.size == null)
+                                {
+                                    cmd.Parameters.AddWithValue("@size", "");
+
+                                }
+                                else
+                                {
+                                    cmd.Parameters.AddWithValue("@size", row.size);
+                                }
                                 DbDataReader result = cmd.ExecuteResultSet(ResultSetOptions.Scrollable);
                                 if (result.Read())
                                 {

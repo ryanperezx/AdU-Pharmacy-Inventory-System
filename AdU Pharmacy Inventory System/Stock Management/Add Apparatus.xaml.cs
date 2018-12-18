@@ -10,6 +10,8 @@ using System.Data.SqlClient;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 using System.Data.Common;
+using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -19,10 +21,18 @@ namespace AdU_Pharmacy_Inventory_System
     public partial class Add_Inventory : Page
     {
         int process = 0;
+        int i = 1;
+        CollectionViewSource view = new CollectionViewSource();
+        ObservableCollection<LVApparatusStockOut> summary = new ObservableCollection<LVApparatusStockOut>();
         public Add_Inventory()
         {
             InitializeComponent();
+            date.Text = DateTime.Now.ToString("dd MMMM yyyy");
+            view.Source = summary;
+            lvInvent.DataContext = view;
+            updateListView();
         }
+
         private void searchInName_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (string.IsNullOrEmpty(txtProdCode.Text))
@@ -176,25 +186,38 @@ namespace AdU_Pharmacy_Inventory_System
                     case MessageBoxResult.Yes:
                         SqlCeConnection conn = DBUtils.GetDBConnection();
                         conn.Open();
-                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ApparatusInventory (prodCode, name, manuf, qty, size, unit, remarks) VALUES (@prodCode, @inventName, @manuf, @qty, @size, @unit, @remarks)", conn))
+                        using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT COUNT(1) from ApparatusInventory where prodCode = @prodCode", conn))
                         {
-                            cmd.Parameters.AddWithValue("@prodCode", txtProdCode.Text);
-                            cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                            cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
-                            cmd.Parameters.AddWithValue("@qty", txtQty.Text);
-                            cmd.Parameters.AddWithValue("@size", txtSize.Text);
-                            cmd.Parameters.AddWithValue("@unit", cmbUnit.Text);
-                            cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
-
-                            try
+                            cmd1.Parameters.AddWithValue("@prodCode", txtProdCode.Text);
+                            int count = (int)cmd1.ExecuteScalar();
+                            if (count > 0)
                             {
-                                cmd.ExecuteNonQuery();
-                                MessageBox.Show("Added Successfully");
-                                emptyFields();
+                                MessageBox.Show("Product code already exists! Cannot save to database!");
                             }
-                            catch (SqlCeException ex)
+                            else
                             {
-                                MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ApparatusInventory (prodCode, name, manuf, qty, size, unit, remarks) VALUES (@prodCode, @inventName, @manuf, @qty, @size, @unit, @remarks)", conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@prodCode", txtProdCode.Text);
+                                    cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
+                                    cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                                    cmd.Parameters.AddWithValue("@qty", txtQty.Text);
+                                    cmd.Parameters.AddWithValue("@size", txtSize.Text);
+                                    cmd.Parameters.AddWithValue("@unit", cmbUnit.Text);
+                                    cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
+
+                                    try
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        MessageBox.Show("Added Successfully");
+                                        updateListView();
+                                        emptyFields();
+                                    }
+                                    catch (SqlCeException ex)
+                                    {
+                                        MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                    }
+                                }
                             }
                         }
                         break;
@@ -311,6 +334,57 @@ namespace AdU_Pharmacy_Inventory_System
             this.NavigationService.Navigate(new Add_Inventory());
         }
 
+        private void updateListView()
+        {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from ApparatusInventory", conn))
+            {
+                lvInvent.Items.Clear();
+                using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    while (reader.Read())
+                    {
+                        int prodCodeIndex = reader.GetOrdinal("prodCode");
+                        string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+
+                        int inventNameIndex = reader.GetOrdinal("name");
+                        string inventName = Convert.ToString(reader.GetValue(inventNameIndex));
+
+                        int manufIndex = reader.GetOrdinal("manuf");
+                        string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                        int qtyIndex = reader.GetOrdinal("qty");
+                        int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+
+                        int sizeIndex = reader.GetOrdinal("size");
+                        string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+                        int unitIndex = reader.GetOrdinal("unit");
+                        string unit = Convert.ToString(reader.GetValue(unitIndex));
+
+                        int remarksIndex = reader.GetOrdinal("remarks");
+                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                        summary.Add(new LVApparatusStockOut
+                        {
+                            i = i,
+                            prodCode = prodCode,
+                            inventName = inventName,
+                            manuf = manuf,
+                            qty = qty,
+                            size = size,
+                            unit = unit,
+                            remarks = remarks
+                        });
+                        if (qty < 3)
+                        {
+                            MessageBox.Show("Product: " + inventName + " quantity is at critical level! Restock as soon as possible");
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
 
     }
 }

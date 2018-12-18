@@ -52,9 +52,9 @@
                 <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=2, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Borrower Form" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid Height="362">
                         <Label Content="Request Date: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="131,22,0,0"/>
-                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,22,0,0" Width="150"/>
+                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,22,0,0" Width="150" SelectedDateChanged="txtDate_SelectedDateChanged"/>
                         <Label Content="Date of Experiment: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,58,0,0"/>
-                        <DatePicker x:Name="txtDateExp" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,58,0,0" Width="150"/>
+                        <DatePicker x:Name="txtDateExp" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,58,0,0" Width="150" SelectedDateChanged="txtDate_SelectedDateChanged"/>
                         <Label Content="Borrower's Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="70,104,0,0"/>
                         <TextBox x:Name="txtBName"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="254" Margin="215,104,0,0" MaxLength="30"/>
                         <Label Content="Group No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="97,149,0,0"/>

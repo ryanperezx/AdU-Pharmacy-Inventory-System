@@ -212,23 +212,6 @@ namespace AdU_Pharmacy_Inventory_System
             tbAddInvent.TextDecorations = null;
         }
 
-        private void tbApparatusInventSum_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Frame.Navigate(new Apparatus_Inventory_Summary());
-        }
-
-        private void tbApparatusInventSum_MouseEnter(object sender, MouseEventArgs e)
-        {
-            tbApparatusInventSum.TextDecorations = TextDecorations.Underline;
-
-        }
-
-        private void tbApparatusInventSum_MouseLeave(object sender, MouseEventArgs e)
-        {
-            tbApparatusInventSum.TextDecorations = null;
-
-        }
-
         private void tbAccounts_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Frame.Navigate(a);
