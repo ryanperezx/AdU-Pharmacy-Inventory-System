@@ -15,11 +15,9 @@
       Title="GenerateIssuanceForm">
 
     <Grid>
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Height="50" Width="55" Margin="1300,10,0,0" Cursor="Hand">
-            <TextBlock>
-                <iconPacks:PackIconMaterial Kind="Refresh" PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" Height="50" Width="50"/>
-            </TextBlock>
-        </StackPanel>
+        <Label HorizontalAlignment="Left"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" VerticalAlignment="Top" Height="50" Width="50" Margin="1300,10,0,0" Cursor="Hand">
+            <iconPacks:PackIconMaterial Kind="Refresh" Height="40" Width="40" Foreground="#DD7605FF" HorizontalAlignment="Left"/>
+        </Label>
         <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Issuance form" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <Label Content="Locker Number : " Margin="39,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="175,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtLock_TextChanged" MaxLength="5"/>
@@ -30,13 +28,13 @@
         <Label Content="Schedule: " HorizontalAlignment="Left" Margin="88,234,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged" MaxLength="15"/>
         <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,510,0,0" VerticalAlignment="Top" Width="165" Click="btnGenForm_Click"/>
-        <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding}" AutoGenerateColumns="False">
+        <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False">
             <DataGrid.Columns>
                 <materialDesign:MaterialDataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
-                <materialDesign:MaterialDataGridComboBoxColumn Header="Manufacturer" ItemsSourceBinding="{Binding manuf}"/>
+                <materialDesign:MaterialDataGridComboBoxColumn Header="Manufacturer" ItemsSourceBinding="{Binding manufList}" SelectedItemBinding="{Binding manufacturer}"/>
                 <materialDesign:MaterialDataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
                 <materialDesign:MaterialDataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
-            </DataGrid.Columns>
+            </DataGrid.Columns>  
         </DataGrid>
         <Label Content="Professor: " HorizontalAlignment="Left" Margin="86,279,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" Margin="175,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtProf_TextChanged" MaxLength="30"/>

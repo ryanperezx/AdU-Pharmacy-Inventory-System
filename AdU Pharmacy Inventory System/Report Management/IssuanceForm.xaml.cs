@@ -158,8 +158,8 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
                                 lvList.Items.Add(new LVIssuance
                                 {
                                     qty = quantity,
-                                    apparatusName = apparatusName,
-                                    sizeBrandRemarks = sizeBrandRemarks,
+                                    inventName = apparatusName,
+                                    size = sizeBrandRemarks,
                                     breakages = null,
 
                                 });

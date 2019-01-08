@@ -36,7 +36,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT dateReq, dateExp, studentNo, fullName, groupID, lockNo, subject, expName from BorrowerList", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT dateReq, dateExp, groupID, lockNo, subject, expName from BorrowerList", conn))
             {
                 using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
@@ -53,12 +53,6 @@ namespace AdU_Pharmacy_Inventory_System
                             myDate = reader.GetDateTime(dateExpIndex);
                             string dateExp = myDate.ToString("MM/dd/yyyy");
 
-                            int studentNoIndex = reader.GetOrdinal("studentNo");
-                            string studentNo = Convert.ToString(reader.GetValue(studentNoIndex));
-
-                            int fullNameIndex = reader.GetOrdinal("fullName");
-                            string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
-
                             int subjIndex = reader.GetOrdinal("subject");
                             string subj = Convert.ToString(reader.GetValue(subjIndex));
 
@@ -71,19 +65,39 @@ namespace AdU_Pharmacy_Inventory_System
                             int grpIDIndex = reader.GetOrdinal("groupID");
                             int grpID = Convert.ToInt32(reader.GetValue(grpIDIndex));
 
-
-                            lvList.Items.Add(new LVBorrower
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT TOP 1 studentNo, fullName from BorrowerList where groupID = @groupID and subject = @subject and expName = @expName and DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and lockNo = @lockNo", conn))
                             {
-                                dateReq = dateReq,
-                                dateExp = dateExp,
-                                studentNo = studentNo,
-                                fullName = fullName,
-                                lockNo = lockNo.ToString(),
-                                subj = subj,
-                                grpID = grpID,
-                                experiment = expName,
-                            });
-                            i++;
+                                cmd1.Parameters.AddWithValue("@groupID", grpID);
+                                cmd1.Parameters.AddWithValue("@subject", subj);
+                                cmd1.Parameters.AddWithValue("@expName", expName);
+                                cmd1.Parameters.AddWithValue("@dateReq", dateReq);
+                                cmd1.Parameters.AddWithValue("@dateExp", dateExp);
+                                cmd1.Parameters.AddWithValue("@lockNo", lockNo);
+                                using (DbDataReader rd = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                {
+                                    rd.Read();
+                                    int studentNoIndex = rd.GetOrdinal("studentNo");
+                                    string studentNo = Convert.ToString(rd.GetValue(studentNoIndex));
+
+                                    int fullNameIndex = rd.GetOrdinal("fullName");
+                                    string fullName = Convert.ToString(rd.GetValue(fullNameIndex));
+
+                                    lvList.Items.Add(new LVBorrower
+                                    {
+                                        dateReq = dateReq,
+                                        dateExp = dateExp,
+                                        studentNo = studentNo,
+                                        fullName = fullName,
+                                        lockNo = lockNo.ToString(),
+                                        subj = subj,
+                                        grpID = grpID,
+                                        experiment = expName,
+                                    });
+                                    i++;
+
+                                }
+                            }
+
                         }
                     }
                 }
@@ -93,7 +107,7 @@ namespace AdU_Pharmacy_Inventory_System
         private void lvList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             LVBorrower borrower = lvList.SelectedItem as LVBorrower;
-            this.NavigationService.Navigate(new BorrowerRecord(borrower.fullName, borrower.dateReq, borrower.dateReq, borrower.studentNo, borrower.subj, borrower.grpID, borrower.experiment, borrower.lockNo));
+            this.NavigationService.Navigate(new BorrowerRecord(borrower.studentNo, borrower.dateReq, borrower.dateExp, borrower.subj, borrower.grpID, borrower.experiment, borrower.lockNo));
         }
     }
 }

@@ -23,7 +23,7 @@ namespace AdU_Pharmacy_Inventory_System
         int process = 0;
         int i = 1;
         CollectionViewSource view = new CollectionViewSource();
-        ObservableCollection<LVApparatusStockOut> summary = new ObservableCollection<LVApparatusStockOut>();
+        ObservableCollection<LVOutstanding> summary = new ObservableCollection<LVOutstanding>();
         public Add_Inventory()
         {
             InitializeComponent();
@@ -56,7 +56,6 @@ namespace AdU_Pharmacy_Inventory_System
                             {
                                 if (reader.HasRows)
                                 {
-                                    cmbManuf.Items.Clear();
                                     while (reader.Read())
                                     {
 
@@ -75,17 +74,17 @@ namespace AdU_Pharmacy_Inventory_System
                                         int sizeIndex = reader.GetOrdinal("size");
                                         string size = Convert.ToString(reader.GetValue(sizeIndex));
 
-                                        int unitIndex = reader.GetOrdinal("unit");
-                                        string unit = Convert.ToString(reader.GetValue(unitIndex));
-
                                         int remarksIndex = reader.GetOrdinal("remarks");
                                         string remarks = Convert.ToString(reader.GetValue(remarksIndex));
 
+                                        var unit = Regex.Replace(size, @"[\d-]", string.Empty);
+                                        string numberOnly = Regex.Replace(size, "[^0-9.]", "");
+
                                         txtProdCode.Text = prodCode;
                                         txtInventName.Text = appaName;
-                                        cmbManuf.Items.Add(manuf);
+                                        txtManuf.Text = manuf;
                                         txtQty.Text = qty.ToString();
-                                        txtSize.Text = size;
+                                        txtSize.Text = numberOnly;
                                         cmbUnit.Text = unit;
                                         txtRemarks.Text = remarks;
                                         disableFields();
@@ -134,7 +133,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 cmd.Parameters.AddWithValue("@unit", cmbUnit.Text);
                                 cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
                                 cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                                cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                                cmd.Parameters.AddWithValue("@manuf", txtManuf.Text);
                                 cmd.Parameters.AddWithValue("@prodCode", txtProdCode.Text);
 
                                 try
@@ -143,7 +142,6 @@ namespace AdU_Pharmacy_Inventory_System
                                     MessageBox.Show("Updated Successfully");
                                     emptyFields();
                                     enableFields();
-                                    cmbManuf.Items.Clear();
 
                                 }
                                 catch (SqlException ex)
@@ -165,7 +163,7 @@ namespace AdU_Pharmacy_Inventory_System
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(cmbManuf.Text) || string.IsNullOrEmpty(txtQty.Text))
+            if (string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(txtManuf.Text) || string.IsNullOrEmpty(txtQty.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
             }
@@ -196,21 +194,36 @@ namespace AdU_Pharmacy_Inventory_System
                             }
                             else
                             {
-                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ApparatusInventory (prodCode, name, manuf, qty, size, unit, remarks) VALUES (@prodCode, @inventName, @manuf, @qty, @size, @unit, @remarks)", conn))
+                                string unit = "";
+                                if(cmbUnit.Text == "N/A")
+                                {
+                                    unit = null;
+                                }
+                                else
+                                {
+                                    unit = cmbUnit.Text;
+                                }
+                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ApparatusInventory (prodCode, name, manuf, qty, size, remarks) VALUES (@prodCode, @inventName, @manuf, @qty, @size, @remarks)", conn))
                                 {
                                     cmd.Parameters.AddWithValue("@prodCode", txtProdCode.Text);
                                     cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                                    cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                                    cmd.Parameters.AddWithValue("@manuf", txtManuf.Text);
                                     cmd.Parameters.AddWithValue("@qty", txtQty.Text);
-                                    cmd.Parameters.AddWithValue("@size", txtSize.Text);
-                                    cmd.Parameters.AddWithValue("@unit", cmbUnit.Text);
+                                    if (!string.IsNullOrEmpty(txtSize.Text))
+                                    {
+                                        cmd.Parameters.AddWithValue("@size", txtSize.Text + unit);
+                                    }
+                                    else
+                                    {
+                                        cmd.Parameters.AddWithValue("@size", DBNull.Value);
+
+                                    }
                                     cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
 
                                     try
                                     {
                                         cmd.ExecuteNonQuery();
                                         MessageBox.Show("Added Successfully");
-                                        updateListView();
                                         emptyFields();
                                     }
                                     catch (SqlCeException ex)
@@ -233,10 +246,10 @@ namespace AdU_Pharmacy_Inventory_System
                 MessageBox.Show("Inventory name field is empty!");
                 txtInventName.Focus();
             }
-            else if (string.IsNullOrEmpty(cmbManuf.Text))
+            else if (string.IsNullOrEmpty(txtManuf.Text))
             {
                 MessageBox.Show("Manufacturer field is empty!");
-                cmbManuf.Focus();
+                txtManuf.Focus();
             }
             else
             {
@@ -253,17 +266,17 @@ namespace AdU_Pharmacy_Inventory_System
                         case MessageBoxResult.Yes:
                             SqlCeConnection conn = DBUtils.GetDBConnection();
                             conn.Open();
-                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveApparatusInventory (prodCode, name, qty, size, unit, remarks, manuf) SELECT prodCode, name, qty, size, unit, remarks, manuf from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveApparatusInventory (prodCode, name, qty, size, remarks, manuf) SELECT prodCode, name, qty, size, remarks, manuf from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
                             {
                                 cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                                cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                                cmd.Parameters.AddWithValue("@manuf", txtManuf.Text);
                                 int result = cmd.ExecuteNonQuery();
                                 if (result > 0)
                                 {
                                     using (SqlCeCommand command = new SqlCeCommand("DELETE from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
                                     {
                                         command.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                                        command.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                                        command.Parameters.AddWithValue("@manuf", txtManuf.Text);
 
                                         int query = command.ExecuteNonQuery();
                                         MessageBox.Show("Item has been deleted!");
@@ -295,19 +308,19 @@ namespace AdU_Pharmacy_Inventory_System
         private void emptyFields()
         {
             txtProdCode.Text = null;
-            cmbManuf.Text = null;
-            cmbManuf.SelectedIndex = -1;
+            txtManuf.Text = null;
             txtInventName.Text = null;
             txtQty.Text = null;
             txtSize.Text = null;
             cmbUnit.SelectedIndex = -1;
             txtRemarks.Text = null;
+            i = 1;
         }
         private void disableFields()
         {
             txtProdCode.IsEnabled = false;
             cmbUnit.IsEnabled = false;
-            cmbManuf.IsEditable = false;
+            txtManuf.IsEnabled = false;
 
             txtQty.IsEnabled = false;
             txtSize.IsEnabled = false;
@@ -317,30 +330,19 @@ namespace AdU_Pharmacy_Inventory_System
         {
             txtProdCode.IsEnabled = true;
             cmbUnit.IsEnabled = true;
-            cmbManuf.IsEditable = true;
+            txtManuf.IsEnabled = true;
 
             txtQty.IsEnabled = true;
             txtSize.IsEnabled = true;
             txtRemarks.IsEnabled = true;
         }
-
-        private void txtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
-        }
-        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.NavigationService.Navigate(new Add_Inventory());
-        }
-
         private void updateListView()
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from ApparatusInventory", conn))
             {
-                lvInvent.Items.Clear();
+                summary.Clear();
                 using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
                     while (reader.Read())
@@ -360,31 +362,137 @@ namespace AdU_Pharmacy_Inventory_System
                         int sizeIndex = reader.GetOrdinal("size");
                         string size = Convert.ToString(reader.GetValue(sizeIndex));
 
-                        int unitIndex = reader.GetOrdinal("unit");
-                        string unit = Convert.ToString(reader.GetValue(unitIndex));
-
                         int remarksIndex = reader.GetOrdinal("remarks");
                         string remarks = Convert.ToString(reader.GetValue(remarksIndex));
-                        summary.Add(new LVApparatusStockOut
+                        summary.Add(new LVOutstanding
                         {
                             i = i,
                             prodCode = prodCode,
                             inventName = inventName,
                             manuf = manuf,
-                            qty = qty,
+                            qty = qty.ToString(),
                             size = size,
-                            unit = unit,
                             remarks = remarks
                         });
-                        if (qty < 3)
-                        {
-                            MessageBox.Show("Product: " + inventName + " quantity is at critical level! Restock as soon as possible");
-                        }
                         i++;
                     }
                 }
             }
         }
+
+        private void txtQty_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+        }
+        private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtInventName.Text))
+            {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from ApparatusInventory", conn))
+                {
+                    i = 1;
+                    summary.Clear();
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        while (reader.Read())
+                        {
+                            int prodCodeIndex = reader.GetOrdinal("prodCode");
+                            string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+
+                            int inventNameIndex = reader.GetOrdinal("name");
+                            string inventName = Convert.ToString(reader.GetValue(inventNameIndex));
+
+                            int manufIndex = reader.GetOrdinal("manuf");
+                            string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                            int qtyIndex = reader.GetOrdinal("qty");
+                            int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+
+                            int sizeIndex = reader.GetOrdinal("size");
+                            string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+                            int remarksIndex = reader.GetOrdinal("remarks");
+                            string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                            summary.Add(new LVOutstanding
+                            {
+                                i = i,
+                                prodCode = prodCode,
+                                inventName = inventName,
+                                manuf = manuf,
+                                qty = qty.ToString(),
+                                size = size,
+                                remarks = remarks
+                            });
+                            if (qty < 3)
+                            {
+                                MessageBox.Show("Product: " + inventName + " quantity is at critical level! Restock as soon as possible");
+                            }
+                            i++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from ApparatusInventory where name LIKE @name", conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", "%" + txtInventName.Text + "%");
+                    i = 1;
+                    summary.Clear();
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        while (reader.Read())
+                        {
+                            int prodCodeIndex = reader.GetOrdinal("prodCode");
+                            string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+
+                            int inventNameIndex = reader.GetOrdinal("name");
+                            string inventName = Convert.ToString(reader.GetValue(inventNameIndex));
+
+                            int manufIndex = reader.GetOrdinal("manuf");
+                            string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                            int qtyIndex = reader.GetOrdinal("qty");
+                            int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+
+                            int sizeIndex = reader.GetOrdinal("size");
+                            string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+
+                            int remarksIndex = reader.GetOrdinal("remarks");
+                            string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                            summary.Add(new LVOutstanding
+                            {
+                                i = i,
+                                prodCode = prodCode,
+                                inventName = inventName,
+                                manuf = manuf,
+                                qty = qty.ToString(),
+                                size = size,
+                                remarks = remarks
+                            });
+                            if (qty < 3)
+                            {
+                                MessageBox.Show("Product: " + inventName + " quantity is at critical level! Restock as soon as possible");
+                            }
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            emptyFields();
+            enableFields();
+        }
+
 
     }
 }

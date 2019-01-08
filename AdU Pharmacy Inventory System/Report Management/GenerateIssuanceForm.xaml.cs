@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Data.SqlServerCe;
 using System.Data.Common;
 using System.Threading;
 using System.Collections.ObjectModel;
-
+using System.Diagnostics;
+using System.Reflection;
+using Xceed.Words.NET;
+using System.Threading.Tasks;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
     /// Interaction logic for GenerateIssuanceForm.xaml
     /// </summary>
-    public partial class GenerateIssuanceForm : Page
+    public partial class GenerateIssuanceForm : System.Windows.Controls.Page
     {
         public static string profName;
         public static string schedule;
         public static string lockerNumber;
         public static string subjAndSect;
+        ObservableCollection<LVIssuance> items = new ObservableCollection<LVIssuance>();
 
         int i = 1;
         public GenerateIssuanceForm(string fullName)
@@ -63,14 +59,12 @@ namespace AdU_Pharmacy_Inventory_System
             subjAndSect = txtSubject.Text;
         }
 
-        private ObservableCollection<LVApparatusStockOut> LoadCollectionData()
+        private ObservableCollection<LVIssuance> LoadCollectionData()
         {
-            ObservableCollection<LVApparatusStockOut> items = new ObservableCollection<LVApparatusStockOut>();
-            //List<string> manufList = new List<string>();
             SqlCeConnection conn = DBUtils.GetDBConnection();
             string name = "", size = "", manuf = "";
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from Subjects where subjName = @subjName", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT sub.qty, sub.prodCode, ai.name, ai.size from Subjects sub INNER JOIN ApparatusInventory ai on sub.prodCode = ai.prodCode where sub.subjName = @subjName", conn))
             {
                 cmd.Parameters.AddWithValue("@subjName", txtSubject.Text);
                 using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -86,28 +80,17 @@ namespace AdU_Pharmacy_Inventory_System
                             int qtyIndex = reader.GetOrdinal("qty");
                             int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
-                            int countQty;
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT name, size from ApparatusInventory where prodCode = @prodCode",conn))
+                            int nameIndex = reader.GetOrdinal("name");
+                            name = Convert.ToString(reader.GetValue(nameIndex));
+
+                            int sizeIndex = reader.GetOrdinal("size");
+                            size = Convert.ToString(reader.GetValue(sizeIndex));
+
+
+                            List<string> manufacturer = new List<string>();
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT manuf from ApparatusInventory where name = @name", conn))
                             {
-                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                                using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
-                                {
-                                    if (dr.HasRows)
-                                    {
-                                        dr.Read();
-
-                                        int nameIndex = dr.GetOrdinal("name");
-                                        name = Convert.ToString(dr.GetValue(nameIndex));
-
-                                        int sizeIndex = dr.GetOrdinal("size");
-                                        size = Convert.ToString(dr.GetValue(sizeIndex));
-
-                                    }
-                                }
-                            }
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT manuf from ApparatusInventory where prodCode = @prodCode", conn))
-                            {
-                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
+                                cmd1.Parameters.AddWithValue("@name", name);
                                 using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                                 {
                                     if (dr.HasRows)
@@ -117,14 +100,13 @@ namespace AdU_Pharmacy_Inventory_System
                                             int manufIndex = dr.GetOrdinal("manuf");
                                             manuf = Convert.ToString(dr.GetValue(manufIndex));
 
-                                            
-                                            //manufList.Add(manuf);
-
-                                            //cmbManuf.ItemsSource = manufList;
+                                            manufacturer.Add(manuf);
                                         }
                                     }
                                 }
                             }
+                            int countQty;
+
                             using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty from ApparatusInventory where prodCode = @prodCode", conn))
                             {
                                 cmd1.Parameters.AddWithValue("@prodCode", prodCode);
@@ -139,11 +121,12 @@ namespace AdU_Pharmacy_Inventory_System
 
                                             if (qty > countQty)
                                             {
-                                                MessageBox.Show("Item: " + prodCode + "has low stocks, please stock in as soon as possible!");
-                                                items.Add(new LVApparatusStockOut()
+                                                MessageBox.Show("Item: " + name + "has low stocks, please stock in as soon as possible!");
+                                                items.Add(new LVIssuance()
                                                 {
                                                     i = i,
                                                     inventName = name,
+                                                    manufList = manufacturer,
                                                     manuf = manuf,
                                                     size = size,
                                                     qty = countQty
@@ -151,10 +134,12 @@ namespace AdU_Pharmacy_Inventory_System
                                             }
                                             else
                                             {
-                                                items.Add(new LVApparatusStockOut()
+                                                items.Add(new LVIssuance()
                                                 {
                                                     i = i,
                                                     inventName = name,
+                                                    manufList = manufacturer,
+                                                    manuf = manuf,
                                                     size = size,
                                                     qty = qty
                                                 });
@@ -184,22 +169,55 @@ namespace AdU_Pharmacy_Inventory_System
             }
             else
             {
+                string user = Environment.UserName;
+                string filename = @"C:\Users\" + user + @"\Desktop\GENERATEDFORM.docx";
+
+                using (DocX document = DocX.Create(filename))
+                {
+                    Formatting titleFormat = new Formatting();
+                    titleFormat.FontFamily = new Font("Segoe UI");
+                    titleFormat.Bold = true;
+
+                    titleFormat.Size = 9;
+                    Paragraph text = document.InsertParagraph("ISSUANCE FORM", false, titleFormat);
+                    text.Alignment = Alignment.right;
+
+                    titleFormat.Size = 8;
+                    text = document.InsertParagraph("PHARMACY LABORATORY " + Environment.NewLine, false, titleFormat);
+                    text.Alignment = Alignment.right;
+
+                    titleFormat.Size = 9;
+                    text = document.InsertParagraph("_______________________", false, titleFormat);
+                    text.Alignment = Alignment.right;
+
+                    text = document.InsertParagraph("LOCKER NUMBER", false, titleFormat);
+                    text.Alignment = Alignment.right;
+
+                    foreach (var items in items)
+                    {
+                        document.InsertParagraph(items.inventName + " " + items.manuf + " " + items.prodCode);
+                    }
+                    document.Save();
+
+                    Process.Start("WINWORD.EXE", filename);
+                }
+
+                /*
                 Report_Management.IssuanceForm issuanceForm = new Report_Management.IssuanceForm();
                 issuanceForm.Show();
+                */
             }
-               
+
         }
 
         private void txtProf_TextChanged(object sender, TextChangedEventArgs e)
         {
             profName = txtProf.Text;
         }
-
         private void txtSched_TextChanged(object sender, TextChangedEventArgs e)
         {
             schedule = txtSched.Text;
         }
-
         private void txtLock_TextChanged(object sender, TextChangedEventArgs e)
         {
             lockerNumber = txtLock.Text;

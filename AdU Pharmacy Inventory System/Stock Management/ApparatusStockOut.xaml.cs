@@ -22,6 +22,8 @@ namespace AdU_Pharmacy_Inventory_System
     public partial class ApparatusStockOut : Page
     {
         int i = 1;
+        List<StudentInfo> studInfo = new List<StudentInfo>();
+
         CollectionViewSource view = new CollectionViewSource();
         ObservableCollection<LVApparatusStockOut> stockOut = new ObservableCollection<LVApparatusStockOut>();
         public ApparatusStockOut()
@@ -231,9 +233,13 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("There are no apparatus(es) to be stock out");
             }
-            else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtBName.Text) || string.IsNullOrEmpty(txtGroup.Text) || string.IsNullOrEmpty(txtStudNo.Text) ||string.IsNullOrEmpty(cmbSubject.Text) || string.IsNullOrEmpty(txtExperiment.Text) || string.IsNullOrEmpty(txtLocker.Text) || string.IsNullOrEmpty(txtDateExp.Text))
+            else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtGroup.Text) ||string.IsNullOrEmpty(cmbSubject.Text) || string.IsNullOrEmpty(txtExperiment.Text) || string.IsNullOrEmpty(txtLocker.Text) || string.IsNullOrEmpty(txtDateExp.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
+            }
+            else if(string.IsNullOrEmpty(txtStud1.Text) || String.IsNullOrEmpty(txtName1.Text))
+            {
+                MessageBox.Show("Student Info fields are empty!");
             }
             else
             {
@@ -251,6 +257,89 @@ namespace AdU_Pharmacy_Inventory_System
                         SqlCeConnection conn = DBUtils.GetDBConnection();
                         conn.Open();
                         bool check = false;
+
+                        studInfo.Add(new StudentInfo
+                        {
+                            studName = txtName1.Text,
+                            studNo = Convert.ToInt32(txtStud1.Text)
+                        });
+
+                        if(string.IsNullOrEmpty(txtStud2.Text) && txtName2.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtStud2.Focus();
+                        }
+                        else if(string.IsNullOrEmpty(txtName2.Text) && txtStud2.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtName2.Focus();
+                        }
+                        else if(txtName2.Text.Length > 0 && txtStud2.Text.Length > 0)
+                        {
+                            studInfo.Add(new StudentInfo
+                            {
+                                studName = txtName2.Text,
+                                studNo = Convert.ToInt32(txtStud2.Text)
+                            });
+                        }
+
+                        if (string.IsNullOrEmpty(txtStud3.Text) && txtName3.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtStud3.Focus();
+                        }
+                        else if (string.IsNullOrEmpty(txtName3.Text) && txtStud3.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtName3.Focus();
+                        }
+                        else if (txtName3.Text.Length > 0 && txtStud3.Text.Length > 0)
+                        {
+                            studInfo.Add(new StudentInfo
+                            {
+                                studName = txtName3.Text,
+                                studNo = Convert.ToInt32(txtStud3.Text)
+                            });
+                        }
+
+                        if (string.IsNullOrEmpty(txtStud4.Text) && txtName4.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtStud4.Focus();
+                        }
+                        else if (string.IsNullOrEmpty(txtName4.Text) && txtStud4.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtName4.Focus();
+                        }
+                        else if (txtName4.Text.Length > 0 && txtStud4.Text.Length > 0)
+                        {
+                            studInfo.Add(new StudentInfo
+                            {
+                                studName = txtName4.Text,
+                                studNo = Convert.ToInt32(txtStud4.Text)
+                            });
+                        }
+
+                        if (string.IsNullOrEmpty(txtStud5.Text) && txtName5.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtStud5.Focus();
+                        }
+                        else if (string.IsNullOrEmpty(txtName5.Text) && txtStud5.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtName5.Focus();
+                        }
+                        else if (txtName5.Text.Length > 0 && txtStud5.Text.Length > 0)
+                        {
+                            studInfo.Add(new StudentInfo
+                            {
+                                studName = txtName5.Text,
+                                studNo = Convert.ToInt32(txtStud5.Text)
+                            });
+                        }
+
                         foreach (var row in stockOut)
                         {
                             using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty - @qty where name = @inventName and size = @size and manuf = @manuf", conn))
@@ -284,26 +373,29 @@ namespace AdU_Pharmacy_Inventory_System
                                         }
 
                                     }
-                                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, manuf) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, @manuf)", conn))
+                                    foreach(var student in studInfo)
                                     {
-                                        cmd1.Parameters.AddWithValue("@dateReq", txtDate.Text);
-                                        cmd1.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
-                                        cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                                        cmd1.Parameters.AddWithValue("@fullName", txtBName.Text);
-                                        cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
-                                        cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
-                                        cmd1.Parameters.AddWithValue("@lockNo", txtLocker.Text);
-                                        cmd1.Parameters.AddWithValue("@expName", txtExperiment.Text);
-                                        cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                                        cmd1.Parameters.AddWithValue("@qty", row.qty);
-                                        cmd1.Parameters.AddWithValue("@manuf", row.manuf);
-                                        try
+                                        using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, manuf, breakage) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, @manuf, 0)", conn))
                                         {
-                                            cmd1.ExecuteNonQuery();
-                                        }
-                                        catch(SqlCeException ex)
-                                        {
-                                            MessageBox.Show("Error! Log has been updated with the error" + ex);
+                                            cmd1.Parameters.AddWithValue("@dateReq", txtDate.Text);
+                                            cmd1.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
+                                            cmd1.Parameters.AddWithValue("@studentNo", student.studNo);
+                                            cmd1.Parameters.AddWithValue("@fullName", student.studName);
+                                            cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
+                                            cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
+                                            cmd1.Parameters.AddWithValue("@lockNo", txtLocker.Text);
+                                            cmd1.Parameters.AddWithValue("@expName", txtExperiment.Text);
+                                            cmd1.Parameters.AddWithValue("@prodCode", prodCode);
+                                            cmd1.Parameters.AddWithValue("@qty", row.qty);
+                                            cmd1.Parameters.AddWithValue("@manuf", row.manuf);
+                                            try
+                                            {
+                                                cmd1.ExecuteNonQuery();
+                                            }
+                                            catch (SqlCeException ex)
+                                            {
+                                                MessageBox.Show("Error! Log has been updated with the error" + ex);
+                                            }
                                         }
                                     }
 
@@ -345,14 +437,25 @@ namespace AdU_Pharmacy_Inventory_System
             cmbSize.Items.Clear();
             txtQty.Text = null;
 
-            txtDate.Text = null;
-            txtBName.Text = null;
+            txtDate.Text = DateTime.Now.ToString("dd MMMM yyyy");
             txtGroup.Text = null;
-            txtStudNo.Text = null;
             txtDateExp.Text = null;
             txtExperiment.Text = null;
             txtLocker.Text = null;
             cmbSubject.SelectedIndex = -1;
+
+            txtStud1.Text = null;
+            txtStud2.Text = null;
+            txtStud3.Text = null;
+            txtStud4.Text = null;
+            txtStud5.Text = null;
+            txtName1.Text = null;
+            txtName2.Text = null;
+            txtName3.Text = null;
+            txtName4.Text = null;
+            txtName5.Text = null;
+
+            i = 1;
 
         }
 
@@ -376,7 +479,7 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.NavigationService.Navigate(new ApparatusStockOut());
+            emptyFields();
         }
 
         private void txtDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)

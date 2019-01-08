@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AdU_Pharmacy_Inventory_System
 {
-    class LVIssuance
+    class LVOutstanding
     {
         public int i
         {
@@ -20,12 +19,6 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
         public string inventName
-        {
-            get;
-            set;
-        }
-
-        public List<string> manufList
         {
             get;
             set;
@@ -49,36 +42,17 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
-        public int qty
+
+        public string qty
         {
             get;
             set;
         }
 
-        public string returnChk
+        public string remarks
         {
             get;
             set;
         }
-
-        public Nullable<int> breakages
-        {
-            get;
-            set;
-        }
-
-        public string amountCharge
-        {
-            get;
-            set;
-        }
-
-        public static ObservableCollection<LVBorrower> getList() //updates observablecollection
-        {
-            var list = new ObservableCollection<LVBorrower>();
-            return list;
-        }
-
-
     }
 }

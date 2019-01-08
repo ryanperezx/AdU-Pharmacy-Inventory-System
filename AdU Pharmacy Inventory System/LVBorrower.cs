@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+
 
 namespace AdU_Pharmacy_Inventory_System
 {
-    class LVBorrower
+    class LVBorrower : INotifyPropertyChanged
     {
         public string dateReq
         {
@@ -69,17 +71,37 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
+        public int _qty;
         public int qty
+        {
+            get { return _qty; }
+            set { _qty = value; OnPropertyChanged("qty"); }
+        }
+
+        public string size
         {
             get;
             set;
         }
 
+        private bool _breakage;
+        public bool breakage
+        {
+            get { return _breakage; }
+            set { _breakage = value; OnPropertyChanged("breakage"); }
+        }
 
-        public static ObservableCollection<LVBorrower> getList()
+        public static ObservableCollection<LVBorrower> getList() //updates observablecollection
         {
             var list = new ObservableCollection<LVBorrower>();
             return list;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -108,11 +108,6 @@ namespace AdU_Pharmacy_Inventory_System
             }
         }
 
-        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.NavigationService.Navigate(new AddSubject());
-        }
-
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -370,5 +365,10 @@ namespace AdU_Pharmacy_Inventory_System
             }
         }
 
+        private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            emptyAppa();
+            emptyFields();
+        }
     }
 }

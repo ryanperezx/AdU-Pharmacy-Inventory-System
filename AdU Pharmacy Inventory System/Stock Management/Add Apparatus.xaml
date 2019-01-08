@@ -37,12 +37,11 @@
         </Label>
 
         <Label Content="Apparatus Name:" HorizontalAlignment="Left" Margin="156,139,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtInventName" HorizontalAlignment="Left" Height="31" Margin="293,139,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165" MaxLength="25"/>
+        <TextBox x:Name="txtInventName" HorizontalAlignment="Left" Height="31" Margin="293,139,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165" MaxLength="25" TextChanged="txtInventName_TextChanged"/>
 
 
         <Label Content="Manufacturer:" HorizontalAlignment="Left" Margin="174,192,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbManuf" IsEditable="True" HorizontalAlignment="Left" Height="31" Margin="293,192,0,0"  VerticalAlignment="Top" Width="165" />
-        <TextBox x:Name="txtManuf" Text="{Binding Text, ElementName=cmbManuf}" Visibility="Collapsed"/>
+        <TextBox x:Name="txtManuf" Text="{Binding Text, ElementName=cmbManuf}" HorizontalAlignment="Left" Height="31" Margin="293,192,0,0"  VerticalAlignment="Top" Width="165"/>
 
 
         <Label Content="Qty:" HorizontalAlignment="Left" Margin="244,239,0,0" VerticalAlignment="Top"/>
@@ -63,6 +62,24 @@
         <TextBlock x:Name="date" FontWeight="Bold" HorizontalAlignment="Left" Margin="905,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336"/>
 
         <ListView x:Name="lvInvent" HorizontalAlignment="Left" Height="440" Margin="684,115,0,0" VerticalAlignment="Top" Width="601" ItemsSource="{Binding}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding qty}" Value="3">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding qty}" Value="2">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding qty}" Value="1">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding qty}" Value="0">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="No." Width="70" DisplayMemberBinding="{Binding i}"/>
@@ -71,7 +88,6 @@
                     <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
                     <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
                     <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding size}"/>
-                    <GridViewColumn Header="Unit" Width="100" DisplayMemberBinding="{Binding unit}"/>
                     <GridViewColumn Header="Remarks" Width="200" DisplayMemberBinding="{Binding remarks}"/>
                 </GridView>
             </ListView.View>
