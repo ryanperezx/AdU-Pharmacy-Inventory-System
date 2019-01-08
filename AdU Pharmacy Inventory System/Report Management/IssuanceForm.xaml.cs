@@ -17,7 +17,7 @@ using System.Data.SqlServerCe;
 using System.Data.Common;
 using Spire.Doc;
 using Spire.Doc.Documents;
-
+using System.Diagnostics;
 
 namespace AdU_Pharmacy_Inventory_System.Report_Management
 {
@@ -101,6 +101,7 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
 
             string prodCode = "";
             string subjName = "";
+            List<string> prodCodes = new List<string>(); 
 
             try
             {
@@ -122,18 +123,24 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
                             {
                                 int prodCodeIndex = reader.GetOrdinal("prodCode");
                                 prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+                                prodCodes.Add(prodCode);
                             }
                         }
                     }
                 }
 
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT Subjects.qty, ApparatusInventory.name, ApparatusInventory.size, ApparatusInventory.manuf, ApparatusInventory.remarks from Subjects INNER JOIN ApparatusInventory ON Subjects.prodCode = '" + prodCode + "'", conn))
+            lvList.Items.Clear();
+           
+            for (int j = 0; j < prodCodes.Count; j++)
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT TOP 1 Subjects.qty, ApparatusInventory.name, ApparatusInventory.size, ApparatusInventory.manuf, ApparatusInventory.remarks from Subjects INNER JOIN ApparatusInventory ON ApparatusInventory.prodCode = '" + prodCodes.ElementAt(j) + "' AND Subjects.subjName = '" + subjName + "'", conn))
                 {
+                    Debug.WriteLine(j + prodCodes.ElementAt(j));
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
                         if (reader.HasRows)
                         {
-                            lvList.Items.Clear();
+                            
                             while (reader.Read())
                             {
                                 int quantityIndex = reader.GetOrdinal("qty");
@@ -141,6 +148,7 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
 
                                 int apparatusIndex = reader.GetOrdinal("name");
                                 string apparatusName = Convert.ToString(reader.GetValue(apparatusIndex));
+                                Debug.WriteLine(apparatusName);
 
                                 string sizeBrandRemarks = "";
 
@@ -168,6 +176,7 @@ namespace AdU_Pharmacy_Inventory_System.Report_Management
                         }
                     }
                 }
+            }
         }
 
         private void btnPrintIssuance_Click(object sender, RoutedEventArgs e)
