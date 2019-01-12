@@ -60,12 +60,12 @@
             materialDesign:ShadowAssist.ShadowDepth="Depth2"
             materialDesign:ShadowAssist.ShadowEdges="Bottom" VerticalAlignment="Top" Height="75">
             <Grid Height="75" VerticalAlignment="Top">
-                <ToggleButton x:Name="ButtonMenu"  Width="Auto" Height="30"  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Left" Cursor="Hand" Margin="25,24,0,21"/>
+                <ToggleButton x:Name="ButtonMenu"  Width="Auto" Height="30"  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" HorizontalAlignment="Left" Cursor="Hand" Margin="25,24,0,21" Foreground="Purple"/>
                 <Label x:Name="date" FontSize="14" Content="00:00:00" Margin="0,24,1026,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="245"/>
 
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,20,13">
                     <Label x:Name="lblUser" Content="User" VerticalAlignment="Center" FontSize="16" Foreground="Black"/>
-                    <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Width="55" StaysOpen="False">
+                    <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Width="55" StaysOpen="False" Foreground="Purple">
                         <StackPanel>
                             <Button x:Name="ButtonPopUpLogout" Content="Logout" Click="lblLogOut_Click"/>
                             <Button x:Name="ButtonPopUpExit" Content="Exit" Click="lblExit_Click"/>
@@ -79,11 +79,11 @@
             <materialDesign:Card
             materialDesign:ShadowAssist.ShadowDepth="Depth3"
             materialDesign:ShadowAssist.ShadowEdges="Right" VerticalAlignment="Stretch">
-                <StackPanel x:Name="stack" TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+                <StackPanel x:Name="stack">
                     <StackPanel.Resources>
                         <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
                     </StackPanel.Resources>
-                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Width="285" Header="Stock Management">
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Width="285" Header="Stock Management" Background="White">
                         <StackPanel>
                             <TextBlock x:Name="tbAddInvent" HorizontalAlignment="Right" Text="Apparatus Record"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbAddInvent_MouseLeftButtonUp" MouseEnter="tbAddInvent_MouseEnter" MouseLeave="tbAddInvent_MouseLeave" Cursor="Hand" />
                             <TextBlock x:Name="tbStockIn" HorizontalAlignment="Right" Text="Apparatus Stock In"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbStockIn_MouseLeftButtonUp" MouseEnter="tbStockIn_MouseEnter" MouseLeave="tbStockIn_MouseLeave" Cursor="Hand" />
@@ -94,7 +94,7 @@
                             -->
                         </StackPanel>
                     </Expander>
-                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Width="285" Header="Report Management">
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Width="285" Header="Report Management" Background="White">
                         <StackPanel>
                             <TextBlock x:Name="tbGenerateIsuForm" HorizontalAlignment="Right" Text="Issuance Form"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbGenerateIsuForm_MouseLeftButtonUp" MouseEnter="tbGenerateIsuForm_MouseEnter" MouseLeave="tbGenerateIsuForm_MouseLeave" Cursor="Hand" />
                             <!-- <TextBlock x:Name="tbChemStock" HorizontalAlignment="Right" Text="Chemical Inventory Summary"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbGenerateChemMon_MouseLeftButtonUp" MouseEnter="tbGenerateChemMon_MouseEnter" MouseLeave="tbGenerateChemMon_MouseLeave" Cursor="Hand" />-->                            <TextBlock x:Name="tbBorrowerList" HorizontalAlignment="Right" Text="Borrower List"  Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbBorrowerList_MouseLeftButtonUp" MouseEnter="tbBorrowerList_MouseEnter" MouseLeave="tbBorrowerList_MouseLeave" Cursor="Hand" />
@@ -102,7 +102,7 @@
 
                         </StackPanel>
                     </Expander>
-                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" x:Name="expManagement" Width="285" Header="Academic Management">
+                    <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" x:Name="expManagement" Width="285" Header="Academic Management" Background="White">
                         <StackPanel>
                             <TextBlock x:Name="tbSubjects" Text="Subjects Record" HorizontalAlignment="Right" Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbSubjects_MouseLeftButtonUp" MouseEnter="tbSubjects_MouseEnter" MouseLeave="tbSubjects_MouseLeave" Cursor="Hand"/>
                             <TextBlock x:Name="tbListofSubjects" Text="List of Subjects" HorizontalAlignment="Right" Width="240" Height="25" FontSize="14" MouseLeftButtonUp="tbListofSubjects_MouseLeftButtonUp" MouseEnter="tbListofSubjects_MouseEnter" MouseLeave="tbListofSubjects_MouseLeave" Cursor="Hand"/>

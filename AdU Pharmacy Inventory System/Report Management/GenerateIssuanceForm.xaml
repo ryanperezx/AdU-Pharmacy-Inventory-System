@@ -26,7 +26,7 @@
         <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubj}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
 
         <Label Content="Schedule: " HorizontalAlignment="Left" Margin="88,234,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged" MaxLength="15"/>
+        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged" MaxLength="20"/>
         <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,510,0,0" VerticalAlignment="Top" Width="165" Click="btnGenForm_Click"/>
         <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False">
             <DataGrid.Columns>

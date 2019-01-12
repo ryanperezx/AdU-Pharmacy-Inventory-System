@@ -40,6 +40,9 @@ namespace AdU_Pharmacy_Inventory_System
             date.Content = DateTime.Now.ToString("D");
             stack.DataContext = new ExpanderListViewModel();
             lblUser.Content = user;
+            this.user = user;
+            getFullName();
+            Frame.Navigate(new WelcomePage());
             //this.user = user;
             //getFullName();
         }
