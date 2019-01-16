@@ -321,25 +321,6 @@ namespace AdU_Pharmacy_Inventory_System
                             });
                         }
 
-                        if (string.IsNullOrEmpty(txtStud5.Text) && txtName5.Text.Length > 0)
-                        {
-                            MessageBox.Show("Please fill up the missing student field!");
-                            txtStud5.Focus();
-                        }
-                        else if (string.IsNullOrEmpty(txtName5.Text) && txtStud5.Text.Length > 0)
-                        {
-                            MessageBox.Show("Please fill up the missing student field!");
-                            txtName5.Focus();
-                        }
-                        else if (txtName5.Text.Length > 0 && txtStud5.Text.Length > 0)
-                        {
-                            studInfo.Add(new StudentInfo
-                            {
-                                studName = txtName5.Text,
-                                studNo = Convert.ToInt32(txtStud5.Text)
-                            });
-                        }
-
                         foreach (var row in stockOut)
                         {
                             using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty - @qty where name = @inventName and size = @size and manuf = @manuf", conn))
@@ -448,14 +429,14 @@ namespace AdU_Pharmacy_Inventory_System
             txtStud2.Text = null;
             txtStud3.Text = null;
             txtStud4.Text = null;
-            txtStud5.Text = null;
             txtName1.Text = null;
             txtName2.Text = null;
             txtName3.Text = null;
             txtName4.Text = null;
-            txtName5.Text = null;
 
             i = 1;
+            studInfo.Clear();
+            stockOut.Clear();
 
         }
 

@@ -15,33 +15,63 @@
       Title="GenerateIssuanceForm">
 
     <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Issuance form" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
         <Label HorizontalAlignment="Left"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" VerticalAlignment="Top" Height="50" Width="50" Margin="1300,10,0,0" Cursor="Hand">
             <iconPacks:PackIconMaterial Kind="Refresh" Height="40" Width="40" Foreground="#DD7605FF" HorizontalAlignment="Left"/>
         </Label>
-        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Issuance form" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
-        <Label Content="Locker Number : " Margin="39,140,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30" Margin="175,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtLock_TextChanged" MaxLength="5"/>
-        <Label Content="Subject: " HorizontalAlignment="Left" Margin="100,184,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="cmbSubj" HorizontalAlignment="Left" Margin="175,184,0,0" VerticalAlignment="Top" Width="320"/>
-        <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubj}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
+        <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="70,78,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel x:Name="stack">
+                <StackPanel.Resources>
+                    <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
+                </StackPanel.Resources>
+                <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Width="500" Header="Information form" Background="White">
 
-        <Label Content="Schedule: " HorizontalAlignment="Left" Margin="88,234,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="175,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtSched_TextChanged" MaxLength="20"/>
-        <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left" Margin="280,510,0,0" VerticalAlignment="Top" Width="165" Click="btnGenForm_Click"/>
+                    <Grid Height="400">
+                        <Label Content="Locker Number : " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="64,24,0,0"/>
+                        <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="5" Margin="200,24,0,0" TabIndex="1"/>
+                        <Label Content="Subject: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,188,0,0"/>
+                        <ComboBox x:Name="cmbSubj" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="145,186,0,0" TabIndex="4"/>
+                        <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubj}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
+                        <Label Content="Section: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,239,0,0"/>
+                        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="20" Margin="200,138,0,0" TabIndex="3"/>
+                        <Label Content="Schedule: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,138,0,0"/>
+                        <TextBox x:Name="txtSect" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="20" Margin="200,239,0,0" TabIndex="3"/>
+                        <Label Content="Professor: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,84,0,0"/>
+                        <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="30" Margin="200,84,0,0" TabIndex="2"/>
+                        <Label Content="Issued On: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,333,0,0"/>
+                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Width="195" Margin="200,334,0,0" TabIndex="6"/>
+                        <Label Content="Issued By: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,288,0,0"/>
+                        <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" IsReadOnly="True" MaxLength="30" Margin="200,288,0,0" TabIndex="5"/>
+
+                    </Grid>
+                </Expander>
+
+                <Expander IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Width="500" Header="Student List" Background="White">
+                    <Grid Width="500" Height="436">
+                        <Label Content="Student Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="19,20,0,0" FontSize="14" FontWeight="Bold"/>
+                        <Label Content="Student No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="289,20,0,0" FontSize="14" FontWeight="Bold"/>
+                        <TextBox x:Name="txtName1" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="19,60,0,0" MaxLength="30" FontSize="12" materialDesign:HintAssist.Hint="Surname, First Name, M.I"/>
+                        <TextBox x:Name="txtName2" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="19,90,0,0" MaxLength="30" FontSize="12" materialDesign:HintAssist.Hint="Surname, First Name, M.I"/>
+                        <TextBox x:Name="txtName3" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="19,120,0,0" MaxLength="30" FontSize="12" materialDesign:HintAssist.Hint="Surname, First Name, M.I"/>
+                        <TextBox x:Name="txtName4" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="19,150,0,0" MaxLength="30" FontSize="12" materialDesign:HintAssist.Hint="Surname, First Name, M.I"/>
+
+                        <TextBox x:Name="txtStud1" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Margin="289,60,0,0" MaxLength="10" FontSize="12"  />
+                        <TextBox x:Name="txtStud2" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Margin="289,90,0,0" MaxLength="10" FontSize="12" />
+                        <TextBox x:Name="txtStud3" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Margin="289,120,0,0" MaxLength="10" FontSize="12" />
+                        <TextBox x:Name="txtStud4" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" Margin="289,150,0,0" MaxLength="10" FontSize="12" />
+                    </Grid>
+                </Expander>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <Button x:Name="btnGenForm" Content="GENERATE FORM" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="165" Click="btnGenForm_Click" Margin="1115,558,0,0"/>
         <DataGrid x:Name="dgSubject" HorizontalAlignment="Left" Height="464" Margin="610,78,0,0" VerticalAlignment="Top" Width="670" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False">
             <DataGrid.Columns>
                 <materialDesign:MaterialDataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
                 <materialDesign:MaterialDataGridComboBoxColumn Header="Manufacturer" ItemsSourceBinding="{Binding manufList}" SelectedItemBinding="{Binding manufacturer}"/>
-                <materialDesign:MaterialDataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Size/Remarks" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
                 <materialDesign:MaterialDataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100"/>
-            </DataGrid.Columns>  
+            </DataGrid.Columns>
         </DataGrid>
-        <Label Content="Professor: " HorizontalAlignment="Left" Margin="86,279,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" Margin="175,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" TextChanged="txtProf_TextChanged" MaxLength="30"/>
-        <Label Content="Issued On: " HorizontalAlignment="Left" Margin="82,325,0,0" VerticalAlignment="Top"/>
-        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" Margin="175,326,0,0" VerticalAlignment="Top" Width="195"/>
-        <Label Content="Issued By: " HorizontalAlignment="Left" Margin="86,370,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31" Margin="175,370,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" IsReadOnly="True" MaxLength="30"/>
-
     </Grid>
 </Page>

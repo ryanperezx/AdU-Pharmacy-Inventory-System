@@ -11,9 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
 using Xceed.Words.NET;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Drawing;
+
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
@@ -21,11 +19,8 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class GenerateIssuanceForm : System.Windows.Controls.Page
     {
-        public static string profName;
-        public static string schedule;
-        public static string lockerNumber;
-        public static string subjAndSect;
         ObservableCollection<LVIssuance> items = new ObservableCollection<LVIssuance>();
+        List<StudentInfo> studInfo = new List<StudentInfo>();
 
         int i = 1;
         public GenerateIssuanceForm(string fullName)
@@ -33,6 +28,8 @@ namespace AdU_Pharmacy_Inventory_System
             InitializeComponent();
             fillSubjects();
             txtIssued.Text = fullName;
+            stack.DataContext = new ExpanderListViewModel();
+
         }
 
         private void fillSubjects()
@@ -58,7 +55,6 @@ namespace AdU_Pharmacy_Inventory_System
         private void txtSubject_TextChanged(object sender, TextChangedEventArgs e)
         {
             dgSubject.ItemsSource = LoadCollectionData();
-            subjAndSect = txtSubject.Text;
         }
 
         private ObservableCollection<LVIssuance> LoadCollectionData()
@@ -109,7 +105,7 @@ namespace AdU_Pharmacy_Inventory_System
                             }
                             int countQty;
 
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty from ApparatusInventory where prodCode = @prodCode", conn))
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty, remarks from ApparatusInventory where prodCode = @prodCode", conn))
                             {
                                 cmd1.Parameters.AddWithValue("@prodCode", prodCode);
                                 using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -121,6 +117,12 @@ namespace AdU_Pharmacy_Inventory_System
                                             int countQtyIndex = dr.GetOrdinal("qty");
                                             countQty = Convert.ToInt32(dr.GetValue(countQtyIndex));
 
+                                            int remarksIndex = dr.GetOrdinal("remarks");
+                                            string remarks = Convert.ToString(dr.GetValue(remarksIndex));
+                                            if (!string.IsNullOrEmpty(remarks))
+                                            {
+                                                remarks = "/" + remarks;
+                                            }
                                             if (qty > countQty)
                                             {
                                                 MessageBox.Show("Item: " + name + "has low stocks, please stock in as soon as possible!");
@@ -130,8 +132,9 @@ namespace AdU_Pharmacy_Inventory_System
                                                     inventName = name,
                                                     manufList = manufacturer,
                                                     manuf = manuf,
-                                                    size = size,
-                                                    qty = countQty
+                                                    size = size + remarks,
+                                                    qty = countQty,
+                                                    prodCode = prodCode
                                                 });
                                             }
                                             else
@@ -142,8 +145,9 @@ namespace AdU_Pharmacy_Inventory_System
                                                     inventName = name,
                                                     manufList = manufacturer,
                                                     manuf = manuf,
-                                                    size = size,
-                                                    qty = qty
+                                                    size = size + remarks,
+                                                    qty = qty,
+                                                    prodCode = prodCode
                                                 });
                                             }
                                         }
@@ -165,161 +169,349 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void btnGenForm_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(cmbSubj.Text))
+            if (string.IsNullOrEmpty(cmbSubj.Text) || string.IsNullOrEmpty(txtLock.Text) || string.IsNullOrEmpty(txtIssued.Text) || string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtProf.Text) || string.IsNullOrEmpty(txtSched.Text) || string.IsNullOrEmpty(txtStud1.Text) || string.IsNullOrEmpty(txtName1.Text))
             {
                 MessageBox.Show("Fill in the missing fields");
             }
             else
             {
-                string user = Environment.UserName;
-                string filename = @"C:\Users\" + user + @"\Desktop\GENERATEDFORM.docx"; //change GENERATED FORM INTO SOMETHING THAT CAN SAVE THE ISSUEDDATE+SUBJECTANDSECT+SCHED
+                string sMessageBoxText = "Are all fields accounted form?";
+                string sCaption = "Generate issuance form";
+                MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
 
-                using (DocX document = DocX.Create(filename))
+                MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                switch (dr)
                 {
+                    case MessageBoxResult.Yes:
+                        if (string.IsNullOrEmpty(txtStud2.Text) && txtName2.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtStud2.Focus();
+                        }
+                        else if (string.IsNullOrEmpty(txtName2.Text) && txtStud2.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtName2.Focus();
+                        }
+                        else if (txtName2.Text.Length > 0 && txtStud2.Text.Length > 0)
+                        {
+                            studInfo.Add(new StudentInfo
+                            {
+                                studName = txtName2.Text,
+                                studNo = Convert.ToInt32(txtStud2.Text)
+                            });
+                        }
 
-                    var p1 = document.InsertParagraph("ISSUANCE FORM").Bold().FontSize(9)
-                    .Alignment = Alignment.right;
+                        if (string.IsNullOrEmpty(txtStud3.Text) && txtName3.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtStud3.Focus();
+                        }
+                        else if (string.IsNullOrEmpty(txtName3.Text) && txtStud3.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtName3.Focus();
+                        }
+                        else if (txtName3.Text.Length > 0 && txtStud3.Text.Length > 0)
+                        {
+                            studInfo.Add(new StudentInfo
+                            {
+                                studName = txtName3.Text,
+                                studNo = Convert.ToInt32(txtStud3.Text)
+                            });
+                        }
 
-                    var p2 = document.InsertParagraph("PHARMACY LABORATORY").Bold().FontSize(7)
-                    .UnderlineColor(System.Drawing.Color.Black).SpacingAfter(22).Alignment = Alignment.right;
+                        if (string.IsNullOrEmpty(txtStud4.Text) && txtName4.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtStud4.Focus();
+                        }
+                        else if (string.IsNullOrEmpty(txtName4.Text) && txtStud4.Text.Length > 0)
+                        {
+                            MessageBox.Show("Please fill up the missing student field!");
+                            txtName4.Focus();
+                        }
+                        else if (txtName4.Text.Length > 0 && txtStud4.Text.Length > 0)
+                        {
+                            studInfo.Add(new StudentInfo
+                            {
+                                studName = txtName4.Text,
+                                studNo = Convert.ToInt32(txtStud4.Text)
+                            });
+                        }
 
+                        string user = Environment.UserName;
+                        string filename = @"C:\Users\" + user + @"\Desktop\GENERATEDFORM.docx"; //change GENERATED FORM INTO SOMETHING THAT CAN SAVE THE ISSUEDDATE+SUBJECTANDSECT+SCHED
 
-                    var t0 = document.AddTable(2, 1);
-                    t0.Design = TableDesign.None;
-                    t0.Alignment = Alignment.right;
+                        using (DocX document = DocX.Create(filename))
+                        {
+                            string underline = "";
 
-                    t0.Rows[0].Cells[0].Paragraphs[0].Bold().Append("________"+ txtLock.Text + "___________").Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.center;
-                    t0.Rows[1].Cells[0].Paragraphs[0].Append("LOCKER NUMBER").Bold().Alignment = Alignment.center;
+                            var image = document.AddImage(@"resources/adulogo-blue.png");
+                            var picture = image.CreatePicture(50, 200);
 
-                    document.InsertTable(t0);
+                            var p0 = document.InsertParagraph();
+                            p0.AppendPicture(picture);
 
-                    document.InsertParagraph();
+                            var p1 = document.InsertParagraph("ISSUANCE FORM").Bold().FontSize(9)
+                            .Alignment = Alignment.right;
 
-                    var t1 = document.AddTable(2, 3);
-                    t1.Design = TableDesign.None;
-                    t1.AutoFit = AutoFit.Window;
-
-                    foreach(Row row in t1.Rows)
-                    {
-                        row.Cells[0].Width = 200;
-                        row.Cells[1].Width = 200;
-                        row.Cells[2].Width = 200;
-
-                    }
-
-                    t1.Rows[1].Cells[0].Paragraphs[0].Append("PROFESSOR").Bold().Alignment = Alignment.center;
-                    t1.Rows[0].Cells[0].Paragraphs[0].Append("___").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.center;
-                    t1.Rows[0].Cells[0].Paragraphs[0].Append(txtProf.Text + "___").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.center;
-                    t1.Rows[1].Cells[1].Paragraphs[0].Append("SCHEDULE").FontSize(10).Bold().Alignment = Alignment.center;
-                    t1.Rows[0].Cells[1].Paragraphs[0].Append("_____").Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.center;
-                    t1.Rows[0].Cells[1].Paragraphs[0].Append(txtSched.Text + "____").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.center;
-                    t1.Rows[1].Cells[2].Paragraphs[0].Append("SUBJECT AND SECTION").Bold().Alignment = Alignment.center;
-                    t1.Rows[0].Cells[2].Paragraphs[0].Append("____").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.center;
-                    t1.Rows[0].Cells[2].Paragraphs[0].Append(txtSubject.Text + "____").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.center;
-                    document.InsertTable(t1);
-
-                    document.InsertParagraph(); //newline
-
-                    var t2 = document.AddTable(26, 6);
-                    t2.Design = TableDesign.TableGrid;
-                    t2.AutoFit = AutoFit.Window;
-
-                    foreach(Row row in t2.Rows)
-                    {
-                        row.Cells[0].Width = 30;
-                        row.Cells[1].Width = 120;
-                        row.Cells[2].Width = 200;
-                        row.Cells[3].Width = 40;
-                        row.Cells[4].Width = 80;
-                        row.Cells[5].Width = 50;
-                    }
-
-                    t2.Rows[0].Cells[0].Paragraphs[0].Append("QTY").Bold().Alignment = Alignment.center;
-                    t2.Rows[0].Cells[1].Paragraphs[0].Append("APPARATUS").Bold().Alignment = Alignment.center;
-                    t2.Rows[0].Cells[2].Paragraphs[0].Append("SIZE / BRAND / REMARKS").Bold().Alignment = Alignment.center;
-                    t2.Rows[0].Cells[3].Paragraphs[0].Append("RTN").Bold().Alignment = Alignment.center;
-                    t2.Rows[0].Cells[3].Paragraphs[0].AppendLine("CHK").Bold().Alignment = Alignment.center;
-                    t2.Rows[0].Cells[4].Paragraphs[0].Append("BREAKAGES").Bold().Alignment = Alignment.center;
-                    t2.Rows[0].Cells[5].Paragraphs[0].Append("AMOUNT").Bold().Alignment = Alignment.center;
-                    t2.Rows[0].Cells[5].Paragraphs[0].AppendLine("CHARGE").Bold().Alignment = Alignment.center;
-
-                    document.InsertTable(t2);
+                            var p2 = document.InsertParagraph("PHARMACY LABORATORY").Bold().FontSize(7)
+                            .UnderlineColor(System.Drawing.Color.Black).SpacingAfter(15).Alignment = Alignment.right;
 
 
-                    document.InsertParagraph(); //newline
+                            var t0 = document.AddTable(2, 1);
+                            t0.Design = TableDesign.None;
+                            t0.Alignment = Alignment.right;
 
-                    var t3 = document.AddTable(2, 2);
-                    t3.Design = TableDesign.None;
-                    t3.AutoFit = AutoFit.Window;
+                            underline = returnCount(12, txtLock.Text);
 
-                    t3.Rows[0].Cells[0].Paragraphs[0].Append("ISSUED ON :         __").FontSize(10).Bold();
-                    t3.Rows[0].Cells[0].Paragraphs[0].Append(txtDate.Text + "__________").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.singleLine).Alignment = Alignment.left;
-                    t3.Rows[1].Cells[0].Paragraphs[0].Append("ISSUED BY :          __").FontSize(10).Bold().Alignment = Alignment.left;
-                    t3.Rows[1].Cells[0].Paragraphs[0].Append(txtIssued.Text + "________").UnderlineStyle(UnderlineStyle.singleLine).FontSize(10).Bold().Alignment = Alignment.left;
-                    t3.Rows[0].Cells[1].Paragraphs[0].Append("RETURNED ON :_________________________").FontSize(10).Bold().Alignment = Alignment.right;
-                    t3.Rows[1].Cells[1].Paragraphs[0].Append("RECEIVED BY   :_________________________").FontSize(10).Bold().Alignment = Alignment.right;
+                            t0.Rows[0].Cells[0].Paragraphs[0].Bold().Append("________").Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t0.Rows[0].Cells[0].Paragraphs[0].Bold().Append(txtLock.Text + underline).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            underline = "";
+                            t0.Rows[1].Cells[0].Paragraphs[0].Append("LOCKER NUMBER").Bold().Alignment = Alignment.center;
 
-                    document.InsertTable(t3);
+                            document.InsertTable(t0);
 
-                    document.InsertParagraph();
+                            document.InsertParagraph();
 
-                    var p5 = document.InsertParagraph(@"                I/We, the undersigned, acknowledge to have received the apparatus above clean, dry and in good condition. Said articles are to be returned upon the termination of the semester clean, dry and in good condition.").FontSize(9.5).Bold().Alignment = Alignment.both;
-                        
-                    document.InsertParagraph();
+                            var t1 = document.AddTable(2, 3);
+                            t1.Design = TableDesign.None;
+                            t1.AutoFit = AutoFit.Window;
 
-                    var p6 = document.InsertParagraph("FILL THE BLANKS PROPERLY AND IN PRINT").Bold().UnderlineStyle(UnderlineStyle.singleLine);
+                            foreach (Row row in t1.Rows)
+                            {
+                                row.Cells[0].Width = 200;
+                                row.Cells[1].Width = 200;
+                                row.Cells[2].Width = 200;
 
-                    document.InsertParagraph();
+                            }
 
-                    var t4 = document.AddTable(5, 4);
-                    t4.Design = TableDesign.None;
-                    t4.AutoFit = AutoFit.Window;
+                            t1.Rows[1].Cells[0].Paragraphs[0].Append("PROFESSOR").Bold().Alignment = Alignment.center;
+                            t1.Rows[0].Cells[0].Paragraphs[0].Append("___").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t1.Rows[1].Cells[1].Paragraphs[0].Append("SCHEDULE").FontSize(10).Bold().Alignment = Alignment.center;
+                            t1.Rows[0].Cells[1].Paragraphs[0].Append("_____").Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t1.Rows[1].Cells[2].Paragraphs[0].Append("SUBJECT AND SECTION").Bold().Alignment = Alignment.center;
+                            t1.Rows[0].Cells[2].Paragraphs[0].Append("___").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
 
-                    foreach (Row row in t4.Rows)
-                    {
-                        row.Cells[0].Width = 180;
-                        row.Cells[1].Width = 120;
-                        row.Cells[2].Width = 80;
-                        row.Cells[3].Width = 80;
-                    }
+                            underline = returnCount(20, txtProf.Text);
 
-                    t4.Rows[0].Cells[0].Paragraphs[0].Append("   SURNAME         FIRST NAME        M.I.").FontSize(9).Bold();
-                    t4.Rows[0].Cells[1].Paragraphs[0].Append("STUDENT NUMBER").FontSize(9).Bold().Alignment = Alignment.center;
-                    t4.Rows[0].Cells[2].Paragraphs[0].Append("COURSE").FontSize(9).Bold().Alignment = Alignment.center;
-                    t4.Rows[0].Cells[3].Paragraphs[0].Append("SIGNATURE").FontSize(9).Bold().Alignment = Alignment.center;
+                            t1.Rows[0].Cells[0].Paragraphs[0].Append(txtProf.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            underline = "";
 
-                    t4.Rows[1].Cells[0].Paragraphs[0].Append("1. _______________________________").FontSize(9);
-                    t4.Rows[2].Cells[0].Paragraphs[0].Append("2. _______________________________").FontSize(9);
-                    t4.Rows[3].Cells[0].Paragraphs[0].Append("3. _______________________________").FontSize(9);
-                    t4.Rows[4].Cells[0].Paragraphs[0].Append("4. _______________________________").FontSize(9);
+                            underline = returnCount(20, txtSched.Text);
 
-                    t4.Rows[1].Cells[1].Paragraphs[0].Append("_____________________").FontSize(9);
-                    t4.Rows[2].Cells[1].Paragraphs[0].Append("_____________________").FontSize(9);
-                    t4.Rows[3].Cells[1].Paragraphs[0].Append("_____________________").FontSize(9);
-                    t4.Rows[4].Cells[1].Paragraphs[0].Append("_____________________").FontSize(9);
+                            t1.Rows[0].Cells[1].Paragraphs[0].Append(txtSched.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            underline = "";
 
-                    t4.Rows[1].Cells[2].Paragraphs[0].Append("_________________").FontSize(9);
-                    t4.Rows[2].Cells[2].Paragraphs[0].Append("_________________").FontSize(9);
-                    t4.Rows[3].Cells[2].Paragraphs[0].Append("_________________").FontSize(9);
-                    t4.Rows[4].Cells[2].Paragraphs[0].Append("_________________").FontSize(9);
+                            underline = returnCount(25, txtSubject.Text + " " + txtSect.Text);
 
-                    t4.Rows[1].Cells[3].Paragraphs[0].Append("_________________").FontSize(9);
-                    t4.Rows[2].Cells[3].Paragraphs[0].Append("_________________").FontSize(9);
-                    t4.Rows[3].Cells[3].Paragraphs[0].Append("_________________").FontSize(9);
-                    t4.Rows[4].Cells[3].Paragraphs[0].Append("_________________").FontSize(9);
-                    document.InsertTable(t4);
+                            t1.Rows[0].Cells[2].Paragraphs[0].Append(txtSubject.Text + " " + txtSect.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            underline = "";
+                            document.InsertTable(t1);
 
-                    document.InsertParagraph();
+                            document.InsertParagraph(); //newline
 
-                    var p7 = document.InsertParagraph("PHARMACY LABORATORY'S COPY").FontSize(9).Bold().Alignment = Alignment.center;
+                            var t2 = document.AddTable(26, 6);
+                            t2.Design = TableDesign.TableGrid;
+                            t2.AutoFit = AutoFit.Window;
 
-                    foreach (var items in items)
-                    {
-                        document.InsertParagraph(items.inventName + " " + items.manuf + " " + items.prodCode);
-                    }
-                    document.Save();
+                            foreach (Row row in t2.Rows)
+                            {
+                                row.Cells[0].Width = 30;
+                                row.Cells[1].Width = 120;
+                                row.Cells[2].Width = 200;
+                                row.Cells[3].Width = 40;
+                                row.Cells[4].Width = 80;
+                                row.Cells[5].Width = 50;
+                            }
 
-                    Process.Start("WINWORD.EXE", filename);
+                            t2.Rows[0].Cells[0].Paragraphs[0].Append("QTY").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[1].Paragraphs[0].Append("APPARATUS").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[2].Paragraphs[0].Append("SIZE / BRAND / REMARKS").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[3].Paragraphs[0].Append("RTN").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[3].Paragraphs[0].AppendLine("CHK").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[4].Paragraphs[0].Append("BREAKAGES").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[5].Paragraphs[0].Append("AMOUNT").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[5].Paragraphs[0].AppendLine("CHARGE").Bold().Alignment = Alignment.center;
+
+                            //INSERTION OF ITEMS REQUESTED TO DATABASE AND WORD FILE
+                            SqlCeConnection conn = DBUtils.GetDBConnection();
+                            conn.Open();
+
+                            int rowx = 1;
+                            foreach (var items in items)
+                            {
+                                if (string.IsNullOrEmpty(items.manuf))
+                                {
+                                    MessageBox.Show("One or more manufacturing fields are empty, please fill all out.");
+                                    return;
+                                }
+                                else
+                                {
+                                    t2.Rows[rowx].Cells[0].Paragraphs[0].Append(Convert.ToString(items.qty)).Bold().Alignment = Alignment.center;
+                                    t2.Rows[rowx].Cells[1].Paragraphs[0].Append(items.inventName).Bold().Alignment = Alignment.center;
+                                    if (!string.IsNullOrEmpty(items.size))
+                                    {
+                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.size + "/" + items.manuf).Bold().Alignment = Alignment.center;
+                                    }
+                                    else
+                                    {
+                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.manuf).Bold().Alignment = Alignment.center;
+                                    }
+
+                                    rowx++;
+                                    foreach (var student in studInfo)
+                                    {
+                                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into IssuanceList (lockNo, prof, sched, subject, section, issuedDate, issuedBy, fullName, studentNo, prodCode, qty) VALUES (@lockNo, @prof, @sched, @subject, @section, @issuedDate, @issuedBy, @fullName, @studentNo, @prodCode, @qty)", conn))
+                                        {
+                                            cmd.Parameters.AddWithValue("@lockNo", txtLock.Text);
+                                            cmd.Parameters.AddWithValue("@prof", txtProf.Text);
+                                            cmd.Parameters.AddWithValue("@sched", txtSched.Text);
+                                            cmd.Parameters.AddWithValue("@subject", txtSubject.Text);
+                                            cmd.Parameters.AddWithValue("@section", txtSect.Text);
+                                            cmd.Parameters.AddWithValue("@issuedDate", txtDate.Text);
+                                            cmd.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
+                                            cmd.Parameters.AddWithValue("@fullName", student.studName);
+                                            cmd.Parameters.AddWithValue("@studentNo", student.studNo);
+                                            cmd.Parameters.AddWithValue("@prodCode", items.prodCode);
+                                            cmd.Parameters.AddWithValue("@qty", items.qty);
+                                            try
+                                            {
+                                                cmd.ExecuteNonQuery();
+                                            }
+                                            catch (SqlCeException ex)
+                                            {
+                                                MessageBox.Show("Error! Log has been updated with the error!");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            document.InsertTable(t2);
+
+
+                            document.InsertParagraph(); //newline
+
+                            var t3 = document.AddTable(2, 2);
+                            t3.Design = TableDesign.None;
+                            t3.AutoFit = AutoFit.Window;
+
+                            t3.Rows[0].Cells[0].Paragraphs[0].Append("ISSUED ON :         ").FontSize(9).Bold();
+                            t3.Rows[1].Cells[0].Paragraphs[0].Append("ISSUED BY :          ").FontSize(9).Bold().Alignment = Alignment.left;
+                            t3.Rows[0].Cells[1].Paragraphs[0].Append("RETURNED ON :_________________________").FontSize(9).Bold().Alignment = Alignment.right;
+                            t3.Rows[1].Cells[1].Paragraphs[0].Append("RECEIVED BY   :_________________________").FontSize(9).Bold().Alignment = Alignment.right;
+
+                            underline = returnCount(19, txtDate.Text);
+
+                            t3.Rows[0].Cells[0].Paragraphs[0].Append("__" + txtDate.Text + underline).FontSize(9).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.left;
+                            underline = "";
+
+                            underline = returnCount(19, txtIssued.Text);
+
+                            t3.Rows[1].Cells[0].Paragraphs[0].Append("__" + txtIssued.Text + underline).UnderlineStyle(UnderlineStyle.thick).FontSize(9).Bold().Alignment = Alignment.left;
+                            underline = "";
+
+                            document.InsertTable(t3);
+
+                            document.InsertParagraph();
+
+                            var p5 = document.InsertParagraph(@"                I/We, the undersigned, acknowledge to have received the apparatus above clean, dry and in good condition. Said articles are to be returned upon the termination of the semester clean, dry and in good condition.").FontSize(9.5).Bold().Alignment = Alignment.both;
+
+                            document.InsertParagraph();
+
+                            var p6 = document.InsertParagraph("FILL THE BLANKS PROPERLY AND IN PRINT").Bold().UnderlineStyle(UnderlineStyle.singleLine);
+
+                            document.InsertParagraph();
+
+                            var t4 = document.AddTable(5, 4);
+                            t4.Design = TableDesign.None;
+                            t4.AutoFit = AutoFit.Window;
+
+                            foreach (Row row in t4.Rows)
+                            {
+                                row.Cells[0].Width = 180;
+                                row.Cells[1].Width = 120;
+                                row.Cells[2].Width = 80;
+                                row.Cells[3].Width = 80;
+                            }
+
+                            t4.Rows[0].Cells[0].Paragraphs[0].Append("   SURNAME         FIRST NAME        M.I.").FontSize(9).Bold();
+                            t4.Rows[0].Cells[1].Paragraphs[0].Append("STUDENT NUMBER").FontSize(9).Bold().Alignment = Alignment.center;
+                            t4.Rows[0].Cells[2].Paragraphs[0].Append("COURSE").FontSize(9).Bold().Alignment = Alignment.center;
+                            t4.Rows[0].Cells[3].Paragraphs[0].Append("SIGNATURE").FontSize(9).Bold().Alignment = Alignment.center;
+
+                            t4.Rows[1].Cells[0].Paragraphs[0].Append("1. ").Bold().FontSize(9);
+                            t4.Rows[2].Cells[0].Paragraphs[0].Append("2. ").Bold().FontSize(9);
+                            t4.Rows[3].Cells[0].Paragraphs[0].Append("3. ").Bold().FontSize(9);
+                            t4.Rows[4].Cells[0].Paragraphs[0].Append("4. ").Bold().FontSize(9);
+
+                            underline = returnCount(30, txtName1.Text);
+
+                            t4.Rows[1].Cells[0].Paragraphs[0].Append("_" + txtName1.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            underline = "";
+
+                            underline = returnCount(30, txtName2.Text);
+
+                            t4.Rows[2].Cells[0].Paragraphs[0].Append("_" + txtName2.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            underline = "";
+
+                            underline = returnCount(30, txtName3.Text);
+
+                            t4.Rows[3].Cells[0].Paragraphs[0].Append("_" + txtName3.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            underline = "";
+
+                            underline = returnCount(30, txtName4.Text);
+
+                            t4.Rows[4].Cells[0].Paragraphs[0].Append("_" + txtName4.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            underline = "";
+
+                            t4.Rows[1].Cells[1].Paragraphs[0].Append("____").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[2].Cells[1].Paragraphs[0].Append("____").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[3].Cells[1].Paragraphs[0].Append("____").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[4].Cells[1].Paragraphs[0].Append("____").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+
+                            underline = returnCount(16, txtStud1.Text);
+
+                            t4.Rows[1].Cells[1].Paragraphs[0].Append(txtStud1.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            underline = "";
+
+                            underline = returnCount(16, txtStud2.Text);
+                            t4.Rows[2].Cells[1].Paragraphs[0].Append(txtStud2.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            underline = "";
+
+                            underline = returnCount(16, txtStud3.Text);
+                            t4.Rows[3].Cells[1].Paragraphs[0].Append(txtStud3.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            underline = "";
+
+                            underline = returnCount(16, txtStud4.Text);
+                            t4.Rows[4].Cells[1].Paragraphs[0].Append(txtStud4.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+
+                            t4.Rows[1].Cells[2].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[2].Cells[2].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[3].Cells[2].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[4].Cells[2].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+
+                            t4.Rows[1].Cells[3].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[2].Cells[3].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[3].Cells[3].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            t4.Rows[4].Cells[3].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
+                            document.InsertTable(t4);
+
+                            document.InsertParagraph();
+
+                            var p7 = document.InsertParagraph("PHARMACY LABORATORY'S COPY").FontSize(9).Bold().Alignment = Alignment.center;
+
+                            document.Save();
+
+
+                            Process.Start("WINWORD.EXE", filename);
+                            emptyFields();
+                        }
+                        break;
+                    case MessageBoxResult.No:
+                        break;
                 }
 
                 /*
@@ -329,18 +521,38 @@ namespace AdU_Pharmacy_Inventory_System
             }
 
         }
+        private string returnCount(int underlineCount, string text)
+        {
+            string underline = "";
+            for (i = 0; i < underlineCount - text.Length; i++)
+            {
+                underline = underline.Insert(i, "_");
+            }
+            return underline;
+        }
 
-        private void txtProf_TextChanged(object sender, TextChangedEventArgs e)
+        private void emptyFields()
         {
-            profName = txtProf.Text;
-        }
-        private void txtSched_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            schedule = txtSched.Text;
-        }
-        private void txtLock_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            lockerNumber = txtLock.Text;
+            txtDate.Text = null;
+            txtIssued.Text = null;
+            txtLock.Text = null;
+            cmbSubj.SelectedIndex = -1;
+            txtProf.Text = null;
+            txtSched.Text = null;
+            txtSect.Text = null;
+
+            txtName1.Text = null;
+            txtName2.Text = null;
+            txtName3.Text = null;
+            txtName4.Text = null;
+            txtStud1.Text = null;
+            txtStud2.Text = null;
+            txtStud3.Text = null;
+            txtStud4.Text = null;
+            
+
+            items.Clear();
+            studInfo.Clear();
         }
     }
 

@@ -1,0 +1,36 @@
+﻿<Page x:Class="AdU_Pharmacy_Inventory_System.IssuanceList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AdU_Pharmacy_Inventory_System"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="613" d:DesignWidth="1375"
+      Background="White" 
+      HorizontalAlignment="Stretch" 
+      VerticalAlignment="Stretch"
+      FontSize="16"
+      Title="IssuanceList">
+
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Issuance List" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
+
+        <DataGrid x:Name="dgList" HorizontalAlignment="Left" Height="440" Margin="85,125,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}" MouseDoubleClick="dgList_MouseDoubleClick" SelectedIndex="0" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <materialDesign:MaterialDataGridTextColumn Header="Locker No" Binding="{Binding lockNo}" IsReadOnly="True" Width="100"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Section" Binding="{Binding sect}" IsReadOnly="True" Width="100"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Schedule" Binding="{Binding sched}" IsReadOnly="True" Width="150"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Issued Date" Binding="{Binding issuedDate}" IsReadOnly="True" Width="150"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Issued By" Binding="{Binding issuedBy}" IsReadOnly="True" Width="150"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Full Name" Binding="{Binding fullName}" IsReadOnly="True" Width="200"/>
+                <materialDesign:MaterialDataGridTextColumn Header="Student No" Binding="{Binding studentNo}" IsReadOnly="True" Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Subject:" HorizontalAlignment="Left" Margin="940,69,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" Margin="1010,67,0,0" VerticalAlignment="Top" Width="275"/>
+        <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubject}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
+
+
+    </Grid>
+</Page>

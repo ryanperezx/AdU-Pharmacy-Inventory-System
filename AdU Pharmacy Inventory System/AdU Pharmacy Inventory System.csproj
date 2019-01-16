@@ -106,6 +106,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IssuanceRecord.xaml.cs">
+      <DependentUpon>IssuanceRecord.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Report Management\IssuanceList.xaml.cs">
+      <DependentUpon>IssuanceList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StudentInfo.cs" />
     <Compile Include="WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
@@ -115,6 +121,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Academic Management\List of Subjects.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IssuanceRecord.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Report Management\IssuanceList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -135,10 +149,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Report Management\ChemicalStocks.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Report Management\IssuanceForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -206,9 +216,6 @@
     <Compile Include="DBSQLServerUtils.cs" />
     <Compile Include="DBUtils.cs" />
     <Compile Include="LVApparatusStockOut.cs" />
-    <Compile Include="Report Management\IssuanceForm.xaml.cs">
-      <DependentUpon>IssuanceForm.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Stock Management\Apparatus Stock In.xaml.cs">
       <DependentUpon>Apparatus Stock In.xaml</DependentUpon>
     </Compile>
@@ -262,6 +269,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="resources\adulogo-blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

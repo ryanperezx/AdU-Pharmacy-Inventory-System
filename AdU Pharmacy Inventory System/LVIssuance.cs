@@ -79,6 +79,48 @@ namespace AdU_Pharmacy_Inventory_System
             return list;
         }
 
+        public string studentNo
+        {
+            get;
+            set;
+        }
+
+        public string fullName
+        {
+            get;
+            set;
+        }
+
+        public string issuedDate
+        {
+            get;
+            set;
+        }
+
+        public string issuedBy
+        {
+            get;
+            set;
+        }
+
+        public string lockNo
+        {
+            get;
+            set;
+        }
+
+        public string sect
+        {
+            get;
+            set;
+        }
+
+        public string sched
+        {
+            get;
+            set;
+        }
+
 
     }
 }

@@ -15,9 +15,12 @@
       Title="WelcomePage">
 
     <Grid>
-        <TextBlock Margin="480,235,450,268" FontSize="24" TextWrapping="Wrap" TextAlignment="Center">Welcome to Adamson Pharmacy Department Instrumental Room Inventory System!</TextBlock>
+        <TextBlock Margin="480,235,450,268" FontSize="24" TextWrapping="Wrap" TextAlignment="Center"><Run Text="Welcome to Adamson Pharmacy Department Instrumental Room Inventory System!"/></TextBlock>
         <TextBlock Margin="35,62,895,441" FontSize="20" TextWrapping="Wrap" TextAlignment="Center"><Run Text="Please press the "/><InlineUIContainer>
                 <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Height="23" Width="25" IsHitTestVisible="False" Foreground="Purple" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-            </InlineUIContainer><Run Text=" button to view the transaction tabs"/></TextBlock>
+            </InlineUIContainer><Run Text=" button to access the transaction tabs"/></TextBlock>
+        <TextBlock FontSize="20" TextWrapping="Wrap" TextAlignment="Center" Margin="905,63,70,441"><Run Text="Press the "/><InlineUIContainer>
+                <materialDesign:PopupBox Height="27" Foreground="Purple" IsHitTestVisible="False"/>
+            </InlineUIContainer><Run Text=" button to be able to log out or exit the application"/></TextBlock>
     </Grid>
 </Page>

@@ -69,13 +69,11 @@
                         <TextBox x:Name="txtName2" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="36,90,0,0" MaxLength="30" FontSize="12"/>
                         <TextBox x:Name="txtName3" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="36,120,0,0" MaxLength="30" FontSize="12"/>
                         <TextBox x:Name="txtName4" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="36,150,0,0" MaxLength="30" FontSize="12"/>
-                        <TextBox x:Name="txtName5" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Margin="36,180,0,0" MaxLength="30" FontSize="12"/>
 
                         <TextBox x:Name="txtStud1" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="320,60,0,0" MaxLength="10" FontSize="12"/>
                         <TextBox x:Name="txtStud2" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="320,90,0,0" MaxLength="10" FontSize="12"/>
                         <TextBox x:Name="txtStud3" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="320,120,0,0" MaxLength="10" FontSize="12"/>
                         <TextBox x:Name="txtStud4" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="320,150,0,0" MaxLength="10" FontSize="12"/>
-                        <TextBox x:Name="txtStud5" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" PreviewTextInput="txtQty_PreviewTextInput" Margin="320,180,0,0" MaxLength="10" FontSize="12"/>
 
                     </Grid>
                 </Expander>

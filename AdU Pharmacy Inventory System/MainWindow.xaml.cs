@@ -286,6 +286,21 @@ namespace AdU_Pharmacy_Inventory_System
             tbListofSubjects.TextDecorations = TextDecorations.Underline;
         }
 
+        private void tbIssuanceList_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Frame.Navigate(new IssuanceList());
+        }
+
+        private void tbIssuanceList_MouseEnter(object sender, MouseEventArgs e)
+        {
+            tbIssuanceList.TextDecorations = TextDecorations.Underline;
+        }
+
+        private void tbIssuanceList_MouseLeave(object sender, MouseEventArgs e)
+        {
+            tbIssuanceList.TextDecorations = null;
+        }
+
         private void tbListofSubjects_MouseLeave(object sender, MouseEventArgs e)
         {
             tbListofSubjects.TextDecorations = null;

@@ -190,7 +190,7 @@ namespace AdU_Pharmacy_Inventory_System
                             int count = (int)cmd1.ExecuteScalar();
                             if (count > 0)
                             {
-                                MessageBox.Show("Product code already exists! Cannot save to database!");
+                                MessageBox.Show("Product code already exists! Please choose another and try again.");
                             }
                             else
                             {
@@ -491,6 +491,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             emptyFields();
             enableFields();
+            process = 0;
         }
 
 
