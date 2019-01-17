@@ -293,7 +293,7 @@ namespace AdU_Pharmacy_Inventory_System
                             t1.Rows[1].Cells[1].Paragraphs[0].Append("SCHEDULE").FontSize(10).Bold().Alignment = Alignment.center;
                             t1.Rows[0].Cells[1].Paragraphs[0].Append("_____").Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
                             t1.Rows[1].Cells[2].Paragraphs[0].Append("SUBJECT AND SECTION").Bold().Alignment = Alignment.center;
-                            t1.Rows[0].Cells[2].Paragraphs[0].Append("___").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t1.Rows[0].Cells[2].Paragraphs[0].Append("__").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
 
                             underline = returnCount(20, txtProf.Text);
 
