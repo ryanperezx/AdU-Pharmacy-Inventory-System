@@ -121,6 +121,12 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
+        public bool breakage
+        {
+            get;
+            set;
+        }
+
 
     }
 }

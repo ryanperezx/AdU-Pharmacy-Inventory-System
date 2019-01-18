@@ -46,7 +46,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT bl.prodCode, ai.name, bl.manuf, bl.qty, bl.breakage, ai.size from BorrowerList bl INNER JOIN ApparatusInventory ai on bl.prodCode = ai.prodCode where bl.studentNo = @studentNo and bl.groupID = @grpID and bl.lockNo = @lockNo and bl.subject = @subj and bl.expName = @experiment and bl.dateReq = @dateReq and bl.dateExp = @dateExp", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT bl.prodCode, ai.name, ai.manuf, bl.qty, bl.breakage, ai.size from BorrowerList bl INNER JOIN ApparatusInventory ai on bl.prodCode = ai.prodCode where bl.studentNo = @studentNo and bl.groupID = @grpID and bl.lockNo = @lockNo and bl.subject = @subj and bl.expName = @experiment and bl.dateReq = @dateReq and bl.dateExp = @dateExp", conn))
             {
                 cmd.Parameters.AddWithValue("@studentNo", studentNo);
                 cmd.Parameters.AddWithValue("@subj", txtSubj.Text);
@@ -98,7 +98,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT studentNo, fullName from BorrowerList where groupID = @groupID and subject = @subject and expName = @expName and DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and lockNo = @lockNo", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT studentNo, fullName from BorrowerList where groupID = @groupID and subject = @subject and expName = @expName and DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and lockNo = @lockNo", conn))
             {
                 cmd.Parameters.AddWithValue("@groupID", txtGrpID.Text);
                 cmd.Parameters.AddWithValue("@subject", txtSubj.Text);
@@ -186,7 +186,7 @@ namespace AdU_Pharmacy_Inventory_System
                             }
                         }
                         int qty = 0;
-                        using (SqlCeCommand cmd = new SqlCeCommand("SELECT qty from BorrowerList where DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and manuf = @manuf and prodCode = @prodCode", conn))
+                        using (SqlCeCommand cmd = new SqlCeCommand("SELECT qty from BorrowerList where DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and prodCode = @prodCode", conn))
                         {
                             cmd.Parameters.AddWithValue("@subj", txtSubj.Text);
                             cmd.Parameters.AddWithValue("@grpID", txtGrpID.Text);
@@ -194,7 +194,6 @@ namespace AdU_Pharmacy_Inventory_System
                             cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
                             cmd.Parameters.AddWithValue("@dateReq", txtDateReq.Text);
                             cmd.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
-                            cmd.Parameters.AddWithValue("@manuf", check.manuf);
                             cmd.Parameters.AddWithValue("@prodCode", prodCode);
                             using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                             {
@@ -221,7 +220,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 if (check.qty < qty) //IF THERE ARE SOME BREAKAGES
                                 {
                                     qty -= check.qty; //working apparatus
-                                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE BorrowerList set breakage = 1, qty = qty - @qty where dateReq = @dateReq and dateExp = @dateExp and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and manuf = @manuf and prodCode = @prodCode", conn))
+                                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE BorrowerList set breakage = 1, qty = qty - @qty where dateReq = @dateReq and dateExp = @dateExp and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and prodCode = @prodCode", conn))
                                     {
                                         cmd.Parameters.AddWithValue("@dateReq", txtDateReq.Text);
                                         cmd.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
@@ -238,10 +237,9 @@ namespace AdU_Pharmacy_Inventory_System
                                             MessageBox.Show(count.ToString());
                                             if (count > 0)
                                             {
-                                                using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where prodCode = @prodCode and manuf = @manuf", conn))
+                                                using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where prodCode = @prodCode", conn))
                                                 {
                                                     cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                                                    cmd1.Parameters.AddWithValue("@manuf", check.manuf);
                                                     cmd1.Parameters.AddWithValue("@qty", qty);
                                                     try
                                                     {
@@ -267,7 +265,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 }
                                 else //IF ALL QUANTITY OF THE SPECIFIC BORROWED APPARATUS ARE BROKEN
                                 {
-                                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE BorrowerList set breakage = 1 where dateReq = @dateReq and dateExp = @dateExp and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and manuf = @manuf and prodCode = @prodCode", conn))
+                                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE BorrowerList set breakage = 1 where dateReq = @dateReq and dateExp = @dateExp and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and prodCode = @prodCode", conn))
                                     {
                                         cmd.Parameters.AddWithValue("@dateReq", txtDateReq.Text);
                                         cmd.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
@@ -275,7 +273,6 @@ namespace AdU_Pharmacy_Inventory_System
                                         cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
                                         cmd.Parameters.AddWithValue("@subj", txtSubj.Text);
                                         cmd.Parameters.AddWithValue("@experiment", txtExpName.Text);
-                                        cmd.Parameters.AddWithValue("@manuf", check.manuf);
                                         cmd.Parameters.AddWithValue("@prodCode", prodCode);
                                         try
                                         {
@@ -295,7 +292,7 @@ namespace AdU_Pharmacy_Inventory_System
                             else //IF THERE ARE NONE BROKEN
                             {
 
-                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveBorrowerList SELECT dateReq, dateExp, studentNo, fullName, groupID, lockNo, subject, expName, prodCode, manuf, qty from BorrowerList where DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and manuf = @manuf and prodCode = @prodCode", conn))
+                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveBorrowerList SELECT dateReq, dateExp, studentNo, fullName, groupID, lockNo, subject, expName, prodCode, qty from BorrowerList where DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and groupID = @grpID and lockNo = @lockNo and subject = @subj and expName = @experiment and prodCode = @prodCode", conn))
                                 {
                                     cmd.Parameters.AddWithValue("@dateReq", txtDateReq.Text);
                                     cmd.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
@@ -303,7 +300,6 @@ namespace AdU_Pharmacy_Inventory_System
                                     cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
                                     cmd.Parameters.AddWithValue("@subj", txtSubj.Text);
                                     cmd.Parameters.AddWithValue("@experiment", txtExpName.Text);
-                                    cmd.Parameters.AddWithValue("@manuf", check.manuf);
                                     cmd.Parameters.AddWithValue("@prodCode", prodCode);
                                     try
                                     {
@@ -311,16 +307,15 @@ namespace AdU_Pharmacy_Inventory_System
 
                                         if (count > 0)
                                         {
-                                            using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where prodCode = @prodCode and manuf = @manuf", conn))
+                                            using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where prodCode = @prodCode", conn))
                                             {
                                                 cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                                                cmd1.Parameters.AddWithValue("@manuf", check.manuf);
                                                 cmd1.Parameters.AddWithValue("@qty", check.qty);
                                                 try
                                                 {
                                                     cmd1.ExecuteNonQuery();
 
-                                                    using (SqlCeCommand cmd2 = new SqlCeCommand("DELETE from BorrowerList where groupID = @grpID and subject = @subjName and expName = @experiment and DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and prodCode = @prodCode and manuf = @manuf", conn))
+                                                    using (SqlCeCommand cmd2 = new SqlCeCommand("DELETE from BorrowerList where groupID = @grpID and subject = @subjName and expName = @experiment and DATEDIFF(day, dateReq, @dateReq) = 0 and DATEDIFF(day, dateExp, @dateExp) = 0 and prodCode = @prodCode", conn))
                                                     {
                                                         cmd2.Parameters.AddWithValue("@grpID", txtGrpID.Text);
                                                         cmd2.Parameters.AddWithValue("@subjName", txtSubj.Text);
@@ -328,7 +323,6 @@ namespace AdU_Pharmacy_Inventory_System
                                                         cmd2.Parameters.AddWithValue("@dateReq", txtDateReq.Text);
                                                         cmd2.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
                                                         cmd2.Parameters.AddWithValue("@prodCode", prodCode);
-                                                        cmd2.Parameters.AddWithValue("@manuf", check.manuf);
 
                                                         try
                                                         {

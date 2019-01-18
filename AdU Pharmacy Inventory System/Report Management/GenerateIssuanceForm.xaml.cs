@@ -364,7 +364,7 @@ namespace AdU_Pharmacy_Inventory_System
                                     rowx++;
                                     foreach (var student in studInfo)
                                     {
-                                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into IssuanceList (lockNo, prof, sched, subject, section, issuedDate, issuedBy, fullName, studentNo, prodCode, qty) VALUES (@lockNo, @prof, @sched, @subject, @section, @issuedDate, @issuedBy, @fullName, @studentNo, @prodCode, @qty)", conn))
+                                        using (SqlCeCommand cmd = new SqlCeCommand("INSERT into IssuanceList (lockNo, prof, sched, subject, section, issuedDate, issuedBy, fullName, studentNo, prodCode, qty, breakage) VALUES (@lockNo, @prof, @sched, @subject, @section, @issuedDate, @issuedBy, @fullName, @studentNo, @prodCode, @qty, 0)", conn))
                                         {
                                             cmd.Parameters.AddWithValue("@lockNo", txtLock.Text);
                                             cmd.Parameters.AddWithValue("@prof", txtProf.Text);

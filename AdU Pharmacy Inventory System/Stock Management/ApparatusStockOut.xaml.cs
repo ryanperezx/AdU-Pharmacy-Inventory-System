@@ -356,7 +356,7 @@ namespace AdU_Pharmacy_Inventory_System
                                     }
                                     foreach(var student in studInfo)
                                     {
-                                        using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, manuf, breakage) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, @manuf, 0)", conn))
+                                        using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, breakage) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, 0)", conn))
                                         {
                                             cmd1.Parameters.AddWithValue("@dateReq", txtDate.Text);
                                             cmd1.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
@@ -368,7 +368,6 @@ namespace AdU_Pharmacy_Inventory_System
                                             cmd1.Parameters.AddWithValue("@expName", txtExperiment.Text);
                                             cmd1.Parameters.AddWithValue("@prodCode", prodCode);
                                             cmd1.Parameters.AddWithValue("@qty", row.qty);
-                                            cmd1.Parameters.AddWithValue("@manuf", row.manuf);
                                             try
                                             {
                                                 cmd1.ExecuteNonQuery();

@@ -120,7 +120,7 @@ namespace AdU_Pharmacy_Inventory_System
         private void dgList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             LVIssuance student = dgList.SelectedItem as LVIssuance;
-            this.NavigationService.Navigate(new IssuanceRecord(student.lockNo, student.sect, student.sched, student.issuedDate, student.issuedBy));
+            this.NavigationService.Navigate(new IssuanceRecord(student.lockNo, student.sect, student.sched, student.issuedDate, student.issuedBy, cmbSubject.Text));
         }
 
         private void txtSubject_TextChanged(object sender, TextChangedEventArgs e)

@@ -39,7 +39,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Apparatus Name" Binding="{Binding prodName}" Width="150" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Manufacturer" Binding="{Binding manuf}" IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
                                 <DataGridTextColumn Header="Quantity" Binding="{Binding qty, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
@@ -73,5 +73,17 @@
                 </Expander>
             </StackPanel>
         </materialDesign:Card>
+        <Label Content="Locker No : " HorizontalAlignment="Left" Margin="104,119,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtLockNo" HorizontalAlignment="Left" Height="31" Margin="225,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" IsReadOnly="True"/>
+        <Label Content="Subject : " HorizontalAlignment="Left" Margin="124,174,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSubject" HorizontalAlignment="Left" Height="31" Margin="225,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" IsReadOnly="True"/>
+        <Label Content="Section : " HorizontalAlignment="Left" Margin="124,225,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSection" HorizontalAlignment="Left" Height="31" Margin="225,225,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" IsReadOnly="True"/>
+        <Label Content="Schedule : " HorizontalAlignment="Left" Margin="110,280,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="225,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" IsReadOnly="True"/>
+        <Label Content="Issued Date : " HorizontalAlignment="Left" Margin="92,339,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" Margin="223,339,0,0" VerticalAlignment="Top" Height="31" Width="155" IsHitTestVisible="False"/>
+        <Label Content="Issued By : " HorizontalAlignment="Left" Margin="108,394,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31" Margin="223,394,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" IsReadOnly="True"/>
     </Grid>
 </Page>
