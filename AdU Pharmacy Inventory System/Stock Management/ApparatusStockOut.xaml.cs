@@ -441,8 +441,6 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            cmbManuf.Items.Clear();
-            cmbSize.Items.Clear();
             fillSize();
             if (string.IsNullOrEmpty(txtSize.Text))
             {
