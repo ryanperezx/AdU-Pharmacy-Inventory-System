@@ -107,10 +107,19 @@ namespace AdU_Pharmacy_Inventory_System
         }
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtInventName.Text))
+            if (string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(cmbUnit.Text))
             {
-                MessageBox.Show("Inventory name field is empty!");
-                txtInventName.Focus();
+                MessageBox.Show("One or more field is empty!");
+            }
+            else if(txtSize.Text.Length > 0 && string.IsNullOrEmpty(cmbUnit.Text))
+            {
+                MessageBox.Show("Unit cannot be empty if size has value!");
+                cmbUnit.Focus();
+            }
+            else if(cmbUnit.Text.Length > 0 && string.IsNullOrEmpty(txtSize.Text))
+            {
+                MessageBox.Show("Size cannot be empty if unit has value!");
+                txtSize.Focus();
             }
             else
             {
@@ -127,10 +136,9 @@ namespace AdU_Pharmacy_Inventory_System
                         case MessageBoxResult.Yes:
                             SqlCeConnection conn = DBUtils.GetDBConnection();
                             conn.Open();
-                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set size = @size, unit = @unit, remarks = @remarks where name = @inventName and manuf = @manuf and prodCode = @prodCode", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set size = @size, remarks = @remarks where name = @inventName and manuf = @manuf and prodCode = @prodCode", conn))
                             {
-                                cmd.Parameters.AddWithValue("@size", txtSize.Text);
-                                cmd.Parameters.AddWithValue("@unit", cmbUnit.Text);
+                                cmd.Parameters.AddWithValue("@size", txtSize.Text + cmbUnit.Text);
                                 cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
                                 cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
                                 cmd.Parameters.AddWithValue("@manuf", txtManuf.Text);
@@ -163,9 +171,14 @@ namespace AdU_Pharmacy_Inventory_System
         }
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(txtManuf.Text) || string.IsNullOrEmpty(txtQty.Text))
+            if (string.IsNullOrEmpty(txtInventName.Text) || string.IsNullOrEmpty(txtManuf.Text) || string.IsNullOrEmpty(txtQty.Text) || string.IsNullOrEmpty(txtProdCode.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
+            }
+            else if (txtSize.Text.Length > 0 && string.IsNullOrEmpty(cmbUnit.Text))
+            {
+                MessageBox.Show("Unit cannot be empty if size has value!");
+                cmbUnit.Focus();
             }
             else if (process == 1)
             {

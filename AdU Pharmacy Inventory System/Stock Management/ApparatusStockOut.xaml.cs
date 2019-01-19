@@ -23,16 +23,14 @@ namespace AdU_Pharmacy_Inventory_System
     {
         int i = 1;
         List<StudentInfo> studInfo = new List<StudentInfo>();
-
-        CollectionViewSource view = new CollectionViewSource();
         ObservableCollection<LVApparatusStockOut> stockOut = new ObservableCollection<LVApparatusStockOut>();
+
         public ApparatusStockOut()
         {
             InitializeComponent();
             txtDate.Text = DateTime.Now.ToString("dd MMMM yyyy");
             stack.DataContext = new ExpanderListViewModel();
-            view.Source = stockOut;
-            lvAppaStockOut.DataContext = view;
+            lvAppaStockOut.ItemsSource = stockOut;
             fillInventory();
             fillSubjects();
         }
@@ -83,19 +81,18 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
-                cmbSize.Items.Clear();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT size from ApparatusInventory where name = @inventName", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT size from ApparatusInventory where name = @inventName and size IS NOT NULL", conn))
                 {
                     cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
                         if (reader.HasRows)
                         {
+                            cmbSize.Items.Clear();
                             while (reader.Read())
                             {
                                 int sizeIndex = reader.GetOrdinal("size");
                                 string size = Convert.ToString(reader.GetValue(sizeIndex));
-
                                 cmbSize.Items.Add(size);
                             }
                         }
@@ -109,7 +106,6 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
-                cmbManuf.Items.Clear();
                 using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT manuf from ApparatusInventory where name = @inventName and size = @size", conn))
                 {
                     cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
@@ -118,6 +114,7 @@ namespace AdU_Pharmacy_Inventory_System
                     {
                         if (reader.HasRows)
                         {
+                            cmbManuf.Items.Clear();
                             while (reader.Read())
                             {
                                 int manufIndex = reader.GetOrdinal("manuf");
@@ -159,6 +156,66 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("One or more fields are empty!");
             }
+            else if (!string.IsNullOrEmpty(cmbSize.Text) && !string.IsNullOrEmpty(cmbInventName.Text) && !string.IsNullOrEmpty(cmbManuf.Text) && !string.IsNullOrEmpty(txtQty.Text))
+            {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from ApparatusInventory where name = @inventName and manuf = @manuf and size = @size", conn))
+                {
+                    cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
+                    cmd.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                    cmd.Parameters.AddWithValue("@size", cmbSize.Text);
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        reader.Read();
+                        int qtyIndex = reader.GetOrdinal("qty");
+                        int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+
+                        int manufIndex = reader.GetOrdinal("manuf");
+                        string manuf = Convert.ToString(reader.GetValue(manufIndex));
+
+                        int sizeIndex = reader.GetOrdinal("size");
+                        string size = Convert.ToString(reader.GetValue(sizeIndex));
+
+                        int reqQty = Convert.ToInt32(txtQty.Text);
+                        if (reqQty > qty)
+                        {
+                            MessageBox.Show("Requested quantity cannot be greater than the available quantity!");
+                            return;
+                        }
+                        else
+                        {
+                            var found = stockOut.FirstOrDefault(x => (x.inventName == cmbInventName.Text) && (x.manuf == cmbManuf.Text) && (x.size == cmbSize.Text));
+                            if (found != null)
+                            {
+                                if (found.qty + reqQty > qty)
+                                {
+                                    MessageBox.Show("Requested quantity cannot be greater than the available quantity!");
+                                    return;
+                                }
+                                else
+                                {
+                                    found.qty = found.qty + reqQty;
+                                }
+                            }
+                            else
+                            {
+                                stockOut.Add(new LVApparatusStockOut
+                                {
+                                    i = i,
+                                    inventName = cmbInventName.Text,
+                                    qty = reqQty,
+                                    manuf = manuf,
+                                    size = size
+                                });
+                                i++;
+                            }
+                            emptyFields();
+                        }
+
+                    }
+                }
+            }
             else
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
@@ -176,16 +233,7 @@ namespace AdU_Pharmacy_Inventory_System
                         int manufIndex = reader.GetOrdinal("manuf");
                         string manuf = Convert.ToString(reader.GetValue(manufIndex));
 
-                        string size;
-                        if (!string.IsNullOrEmpty(cmbSize.Text))
-                        {
-                            int sizeIndex = reader.GetOrdinal("size");
-                            size = Convert.ToString(reader.GetValue(sizeIndex));
-                        }
-                        else
-                        {
-                            size = null;
-                        }
+                        string size = null;
 
                         int reqQty = Convert.ToInt32(txtQty.Text);
                         if (reqQty > qty)
@@ -233,11 +281,11 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("There are no apparatus(es) to be stock out");
             }
-            else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtGroup.Text) ||string.IsNullOrEmpty(cmbSubject.Text) || string.IsNullOrEmpty(txtExperiment.Text) || string.IsNullOrEmpty(txtLocker.Text) || string.IsNullOrEmpty(txtDateExp.Text))
+            else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtGroup.Text) || string.IsNullOrEmpty(cmbSubject.Text) || string.IsNullOrEmpty(txtExperiment.Text) || string.IsNullOrEmpty(txtLocker.Text) || string.IsNullOrEmpty(txtDateExp.Text))
             {
                 MessageBox.Show("One or more fields are empty!");
             }
-            else if(string.IsNullOrEmpty(txtStud1.Text) || String.IsNullOrEmpty(txtName1.Text))
+            else if (string.IsNullOrEmpty(txtStud1.Text) || String.IsNullOrEmpty(txtName1.Text))
             {
                 MessageBox.Show("Student Info fields are empty!");
             }
@@ -264,17 +312,17 @@ namespace AdU_Pharmacy_Inventory_System
                             studNo = Convert.ToInt32(txtStud1.Text)
                         });
 
-                        if(string.IsNullOrEmpty(txtStud2.Text) && txtName2.Text.Length > 0)
+                        if (string.IsNullOrEmpty(txtStud2.Text) && txtName2.Text.Length > 0)
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtStud2.Focus();
                         }
-                        else if(string.IsNullOrEmpty(txtName2.Text) && txtStud2.Text.Length > 0)
+                        else if (string.IsNullOrEmpty(txtName2.Text) && txtStud2.Text.Length > 0)
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtName2.Focus();
                         }
-                        else if(txtName2.Text.Length > 0 && txtStud2.Text.Length > 0)
+                        else if (txtName2.Text.Length > 0 && txtStud2.Text.Length > 0)
                         {
                             studInfo.Add(new StudentInfo
                             {
@@ -354,7 +402,7 @@ namespace AdU_Pharmacy_Inventory_System
                                         }
 
                                     }
-                                    foreach(var student in studInfo)
+                                    foreach (var student in studInfo)
                                     {
                                         using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, breakage) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, 0)", conn))
                                         {
@@ -386,10 +434,12 @@ namespace AdU_Pharmacy_Inventory_System
                                 }
                             }
                         }
-                        if(check == true)
+                        if (check == true)
                         {
                             MessageBox.Show("Stock Out Successfully");
                         }
+
+                        studInfo.Clear();
                         stockOut.Clear();
                         i = 1;
                         emptyFields();
@@ -433,16 +483,14 @@ namespace AdU_Pharmacy_Inventory_System
             txtName3.Text = null;
             txtName4.Text = null;
 
-            i = 1;
-            studInfo.Clear();
-            stockOut.Clear();
-
         }
 
         private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            cmbSize.Items.Clear();
+            cmbManuf.Items.Clear();
             fillSize();
-            if (string.IsNullOrEmpty(txtSize.Text))
+            if (cmbSize.Items.Count == 0)
             {
                 fillManufacturer();
             }
@@ -458,6 +506,10 @@ namespace AdU_Pharmacy_Inventory_System
         private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             emptyFields();
+
+            i = 1;
+            studInfo.Clear();
+            stockOut.Clear();
         }
 
         private void txtDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -466,12 +518,12 @@ namespace AdU_Pharmacy_Inventory_System
             DateTime? dateReq = txtDate.SelectedDate;
             DateTime? dateExp = txtDateExp.SelectedDate;
 
-            if(dateReq < dateToday)
+            if (dateReq < dateToday)
             {
                 MessageBox.Show("Date request should be less than date today!");
                 txtDate.SelectedDate = dateToday;
             }
-            if(dateExp < dateToday)
+            if (dateExp < dateToday)
             {
                 MessageBox.Show("Date of experiment should be less than date today!");
                 txtDateExp.SelectedDate = dateToday;

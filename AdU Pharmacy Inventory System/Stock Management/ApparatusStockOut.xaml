@@ -81,13 +81,13 @@
             </StackPanel>
         </materialDesign:Card>
 
-        <ListView x:Name="lvAppaStockOut" HorizontalAlignment="Left" Height="413" Margin="785,80,0,0" VerticalAlignment="Top" Width="475" ItemsSource="{Binding}">
+        <ListView x:Name="lvAppaStockOut" HorizontalAlignment="Left" Height="413" Margin="720,80,0,0" VerticalAlignment="Top" Width="540" ItemsSource="{Binding}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="No." Width="50" DisplayMemberBinding="{Binding i}"/>
-                    <GridViewColumn Header="Apparatus Name" Width="150" DisplayMemberBinding="{Binding inventName}"/>
+                    <GridViewColumn Header="No" Width="50" DisplayMemberBinding="{Binding i}"/>
+                    <GridViewColumn Header="Apparatus Name" Width="180" DisplayMemberBinding="{Binding inventName}"/>
                     <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
-                    <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
+                    <GridViewColumn Header="Manufacturer" Width="180" DisplayMemberBinding="{Binding manuf}"/>
                     <GridViewColumn Header="Size" Width="120" DisplayMemberBinding="{Binding size}"/>
 
                 </GridView>

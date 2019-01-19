@@ -62,6 +62,8 @@ namespace AdU_Pharmacy_Inventory_System
             SqlCeConnection conn = DBUtils.GetDBConnection();
             string name = "", size = "", manuf = "";
             conn.Open();
+            items.Clear();
+
             using (SqlCeCommand cmd = new SqlCeCommand("SELECT sub.qty, sub.prodCode, ai.name, ai.size from Subjects sub INNER JOIN ApparatusInventory ai on sub.prodCode = ai.prodCode where sub.subjName = @subjName", conn))
             {
                 cmd.Parameters.AddWithValue("@subjName", txtSubject.Text);
@@ -69,7 +71,6 @@ namespace AdU_Pharmacy_Inventory_System
                 {
                     if (reader.HasRows)
                     {
-                        items.Clear();
                         while (reader.Read())
                         {
                             int prodCodeIndex = reader.GetOrdinal("prodCode");
@@ -242,8 +243,10 @@ namespace AdU_Pharmacy_Inventory_System
                         }
 
                         string user = Environment.UserName;
-                        string filename = @"C:\Users\" + user + @"\Desktop\GENERATEDFORM.docx"; //change GENERATED FORM INTO SOMETHING THAT CAN SAVE THE ISSUEDDATE+SUBJECTANDSECT+SCHED
-
+                        string date = txtDate.Text.Replace("/", "-");
+                        string filename = @"C:\Users\" + user + @"\Desktop\[" + date + "][" + txtLock.Text + "][" + cmbSubj.Text + "][" + txtSect.Text + "].docx";
+                        filename = filename.Replace(" ", "-");
+                        
                         using (DocX document = DocX.Create(filename))
                         {
                             string underline = "";
@@ -305,7 +308,7 @@ namespace AdU_Pharmacy_Inventory_System
                             t1.Rows[0].Cells[1].Paragraphs[0].Append(txtSched.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
                             underline = "";
 
-                            underline = returnCount(25, txtSubject.Text + " " + txtSect.Text);
+                            underline = returnCount(22, txtSubject.Text + " " + txtSect.Text);
 
                             t1.Rows[0].Cells[2].Paragraphs[0].Append(txtSubject.Text + " " + txtSect.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
                             underline = "";
@@ -387,6 +390,7 @@ namespace AdU_Pharmacy_Inventory_System
                                             }
                                         }
                                     }
+                                    //DEDUCT AMOUNT REQUESTED HERE
                                 }
                             }
                             document.InsertTable(t2);
@@ -504,8 +508,6 @@ namespace AdU_Pharmacy_Inventory_System
                             var p7 = document.InsertParagraph("PHARMACY LABORATORY'S COPY").FontSize(9).Bold().Alignment = Alignment.center;
 
                             document.Save();
-
-
                             Process.Start("WINWORD.EXE", filename);
                             emptyFields();
                         }

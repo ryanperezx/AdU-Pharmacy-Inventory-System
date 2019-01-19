@@ -174,8 +174,10 @@ namespace AdU_Pharmacy_Inventory_System
 
         private void txtInventName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            cmbSize.Items.Clear();
+            cmbManuf.Items.Clear();
             fillSize();
-            if(string.IsNullOrEmpty(txtSize.Text))
+            if(cmbSize.Items.Count == 0)
             {
                 fillManufacturer();
             }

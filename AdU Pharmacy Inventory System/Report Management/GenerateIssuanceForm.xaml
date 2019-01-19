@@ -29,19 +29,19 @@
                     <Grid Height="400">
                         <Label Content="Locker Number : " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="64,24,0,0"/>
                         <TextBox x:Name="txtLock" HorizontalAlignment="Left" Height="30"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="5" Margin="200,24,0,0" TabIndex="1"/>
-                        <Label Content="Subject: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,188,0,0"/>
-                        <ComboBox x:Name="cmbSubj" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="145,186,0,0" TabIndex="4"/>
+                        <Label Content="Subject: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="62,180,0,0"/>
+                        <ComboBox x:Name="cmbSubj" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Margin="147,178,0,0" TabIndex="4"/>
                         <TextBox x:Name="txtSubject" Text="{Binding Text, ElementName=cmbSubj}" Visibility="Collapsed" TextChanged="txtSubject_TextChanged"/>
-                        <Label Content="Section: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,239,0,0"/>
-                        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="20" Margin="200,138,0,0" TabIndex="3"/>
-                        <Label Content="Schedule: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,138,0,0"/>
-                        <TextBox x:Name="txtSect" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="20" Margin="200,239,0,0" TabIndex="3"/>
-                        <Label Content="Professor: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,84,0,0"/>
-                        <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="30" Margin="200,84,0,0" TabIndex="2"/>
-                        <Label Content="Issued On: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,333,0,0"/>
-                        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Width="195" Margin="200,334,0,0" TabIndex="6"/>
-                        <Label Content="Issued By: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,288,0,0"/>
-                        <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" IsReadOnly="True" MaxLength="30" Margin="200,288,0,0" TabIndex="5"/>
+                        <Label Content="Section: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="115,229,0,0"/>
+                        <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="20" Margin="200,121,0,0" TabIndex="3"/>
+                        <Label Content="Schedule: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="107,121,0,0"/>
+                        <TextBox x:Name="txtSect" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="20" Margin="200,229,0,0" TabIndex="5"/>
+                        <Label Content="Professor: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,70,0,0"/>
+                        <TextBox x:Name="txtProf" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" MaxLength="30" Margin="200,70,0,0" TabIndex="2"/>
+                        <Label Content="Issued On: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,325,0,0"/>
+                        <DatePicker x:Name="txtDate" VerticalAlignment="Top" Margin="200,326,0,0" TabIndex="7" HorizontalAlignment="Left" Width="195" />
+                        <Label Content="Issued By: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="101,280,0,0"/>
+                        <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31"  TextWrapping="Wrap" VerticalAlignment="Top" Width="195" IsReadOnly="True" MaxLength="30" Margin="200,280,0,0" TabIndex="6"/>
 
                     </Grid>
                 </Expander>

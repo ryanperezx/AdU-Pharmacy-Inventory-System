@@ -52,6 +52,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
+            list.Clear();
             using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT lockNo, prof, sched, section, issuedDate, issuedBy from IssuanceList where subject = @subjName", conn))
             {
                 cmd.Parameters.AddWithValue("@subjName", cmbSubject.Text);
@@ -59,7 +60,6 @@ namespace AdU_Pharmacy_Inventory_System
                 {
                     if (reader.HasRows)
                     {
-                        list.Clear();
                         while (reader.Read())
                         {
                             int lockNoIndex = reader.GetOrdinal("lockNo");
