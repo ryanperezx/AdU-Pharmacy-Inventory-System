@@ -391,9 +391,10 @@ namespace AdU_Pharmacy_Inventory_System
                                     check = true;
                                     int ordinal = 0;
                                     string prodCode = null;
-                                    using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName", conn))
+                                    using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
                                     {
                                         cmd2.Parameters.AddWithValue("@inventName", row.inventName);
+                                        cmd2.Parameters.AddWithValue("@manuf", row.manuf);
                                         DbDataReader result = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable);
                                         if (result.Read())
                                         {

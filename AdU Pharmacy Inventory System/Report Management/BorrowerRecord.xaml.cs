@@ -46,6 +46,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
+            borrowers.Clear();
             using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT bl.prodCode, ai.name, ai.manuf, bl.qty, bl.breakage, ai.size from BorrowerList bl INNER JOIN ApparatusInventory ai on bl.prodCode = ai.prodCode where bl.studentNo = @studentNo and bl.groupID = @grpID and bl.lockNo = @lockNo and bl.subject = @subj and bl.expName = @experiment and bl.dateReq = @dateReq and bl.dateExp = @dateExp", conn))
             {
                 cmd.Parameters.AddWithValue("@studentNo", studentNo);
@@ -55,7 +56,6 @@ namespace AdU_Pharmacy_Inventory_System
                 cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
                 cmd.Parameters.AddWithValue("@dateReq", txtDateReq.Text);
                 cmd.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
-                borrowers.Clear();
                 using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
                     if (reader.HasRows)
@@ -277,7 +277,7 @@ namespace AdU_Pharmacy_Inventory_System
                                         try
                                         {
                                             cmd.ExecuteNonQuery();
-                                            MessageBox.Show("Successful");
+                                            MessageBox.Show("Record has been updated!");
                                         }
                                         catch (SqlCeException ex)
                                         {
@@ -347,7 +347,6 @@ namespace AdU_Pharmacy_Inventory_System
                                     {
                                         MessageBox.Show("Error! Log has been updated with the error. " + ex);
                                         return;
-
                                     }
                                 }
                             }

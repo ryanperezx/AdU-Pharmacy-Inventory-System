@@ -390,7 +390,19 @@ namespace AdU_Pharmacy_Inventory_System
                                             }
                                         }
                                     }
-                                    //DEDUCT AMOUNT REQUESTED HERE
+                                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty - @qty where prodCode = @prodCode", conn))
+                                    {
+                                        cmd.Parameters.AddWithValue("@qty", items.qty);
+                                        cmd.Parameters.AddWithValue("@prodCode", items.prodCode);
+                                        try
+                                        {
+                                            cmd.ExecuteNonQuery();
+                                        }
+                                        catch (SqlCeException ex)
+                                        {
+                                            MessageBox.Show("Error! Log has been updated with the error!");
+                                        }
+                                    }
                                 }
                             }
                             document.InsertTable(t2);

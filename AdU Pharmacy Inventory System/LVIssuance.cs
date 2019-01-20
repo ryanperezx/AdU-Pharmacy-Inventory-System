@@ -4,10 +4,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace AdU_Pharmacy_Inventory_System
 {
-    class LVIssuance
+    class LVIssuance : INotifyPropertyChanged
     {
         public int i
         {
@@ -73,9 +74,9 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
-        public static ObservableCollection<LVBorrower> getList() //updates observablecollection
+        public static ObservableCollection<LVIssuance> getList() //updates observablecollection
         {
-            var list = new ObservableCollection<LVBorrower>();
+            var list = new ObservableCollection<LVIssuance>();
             return list;
         }
 
@@ -121,10 +122,18 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
+        private bool _breakage;
         public bool breakage
         {
-            get;
-            set;
+            get { return _breakage; }
+            set { _breakage = value; OnPropertyChanged("breakage"); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
 

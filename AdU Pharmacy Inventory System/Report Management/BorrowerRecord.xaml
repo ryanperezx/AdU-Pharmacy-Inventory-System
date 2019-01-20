@@ -24,6 +24,8 @@
         <TextBox x:Name="txtDateExp" Height="31" Margin="322,139,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" IsReadOnly="True"/>
         <Label Content="Group ID:" HorizontalAlignment="Left" Margin="123,219,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtGrpID"  HorizontalAlignment="Left" Height="31" Margin="215,219,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
+        <Label Content="Locker No:" HorizontalAlignment="Left" Margin="322,219,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtLockNo"  HorizontalAlignment="Left" Height="31" Margin="425,219,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
         <Label Content="Subject:" HorizontalAlignment="Left" Margin="156,290,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSubj" HorizontalAlignment="Left" Height="31" Margin="235,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" IsReadOnly="True"/>
         <Label Content="Experiment Name:" HorizontalAlignment="Left" Margin="82,340,0,0" VerticalAlignment="Top"/>
@@ -86,9 +88,7 @@
             </StackPanel>
         </materialDesign:Card>
 
-        <Button x:Name="btnReturn" Content="RETURN PROCESS" HorizontalAlignment="Left" Margin="235,468,0,0" VerticalAlignment="Top" Width="160" Height="75" Click="btnReturn_Click"/>
-        <Label Content="Locker No:" HorizontalAlignment="Left" Margin="322,219,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtLockNo"  HorizontalAlignment="Left" Height="31" Margin="425,219,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True"/>
+        <Button x:Name="btnReturn" Content="RETURN PROCESS" HorizontalAlignment="Left" Margin="207,479,0,0" VerticalAlignment="Top" Width="188" Height="53" Click="btnReturn_Click"/>
 
 
     </Grid>

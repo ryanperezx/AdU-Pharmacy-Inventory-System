@@ -35,7 +35,7 @@ namespace AdU_Pharmacy_Inventory_System
             txtSched.Text = sched;
             txtDate.Text = issuedDate;
             txtIssued.Text = issuedBy;
-            txtSubject.Text = subject;
+            txtSubject.Text = subject;  
             fillStudents();
             updateRecords();
             dgRecords.ItemsSource = request;
@@ -106,6 +106,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
+            request.Clear();
             using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT il.prodCode, ai.name, ai.manuf, il.qty, il.breakage, ai.size from IssuanceList il INNER JOIN ApparatusInventory ai on il.prodCode = ai.prodCode where il.section = @sect and il.lockNo = @lockNo and il.subject = @subj and il.issuedBy = @issuedBy and il.sched = @sched", conn))
             {
                 cmd.Parameters.AddWithValue("@subj", txtSubject.Text);
@@ -113,13 +114,15 @@ namespace AdU_Pharmacy_Inventory_System
                 cmd.Parameters.AddWithValue("@sect", txtSection.Text);
                 cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
                 cmd.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
-                request.Clear();
                 using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                 {
                     if (reader.HasRows)
                     {
                         while (reader.Read())
                         {
+                            int prodCodeIndex = reader.GetOrdinal("prodCode");
+                            string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+
                             int nameIndex = reader.GetOrdinal("name");
                             string name = Convert.ToString(reader.GetValue(nameIndex));
 
@@ -141,7 +144,8 @@ namespace AdU_Pharmacy_Inventory_System
                                 inventName = name,
                                 manuf = manuf,
                                 qty = qty,
-                                size = size
+                                size = size,
+                                prodCode = prodCode
                             });
                         }
                     }
@@ -156,6 +160,189 @@ namespace AdU_Pharmacy_Inventory_System
         private void imgBack_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             this.NavigationService.Navigate(new IssuanceList());
+        }
+
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            string sMessageBoxText = "Are all fields checked?";
+            string sCaption = "Return process";
+            MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+            MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+            MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+            switch (dr)
+            {
+                case MessageBoxResult.Yes:
+                    SqlCeConnection conn = DBUtils.GetDBConnection();
+                    conn.Open();
+                    foreach (var check in request)
+                    {
+                        int qty = 0;
+
+                        using (SqlCeCommand cmd = new SqlCeCommand("SELECT qty from IssuanceList where lockNo = @lockNo and subject = @subject and prodCode = @prodCode and section = @section and sched = @sched", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@subject", txtSubject.Text);
+                            cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
+                            cmd.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
+                            cmd.Parameters.AddWithValue("@prodCode", check.prodCode);
+                            cmd.Parameters.AddWithValue("@sched", txtSched.Text);
+                            cmd.Parameters.AddWithValue("@section", txtSection.Text);
+                            using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                            {
+                                if (reader.HasRows)
+                                {
+                                    while (reader.Read())
+                                    {
+                                        int qtyIndex = reader.GetOrdinal("qty");
+                                        qty = Convert.ToInt32(reader.GetValue(qtyIndex));
+                                    }
+                                }
+                            }
+                        }
+
+                        if (check.qty > qty)
+                        {
+                            MessageBox.Show("Quantity of the product is greater than the old quantity value! Please change the value to be able to proceed");
+                            break;
+                        }
+                        else
+                        {
+                            if(check.breakage == true)
+                            {
+                                if(check.qty < qty)
+                                {
+                                    qty -= check.qty; //working apparatus
+                                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE IssuanceList set breakage = 1, qty = qty - @qty where where section = @sect and sched = @sched and lockNo = @lockNo and subject = @subject and prodCode = @prodCode", conn))
+                                    {
+                                        cmd.Parameters.AddWithValue("@subject", txtSubject.Text);
+                                        cmd.Parameters.AddWithValue("@sched", txtSched.Text);
+                                        cmd.Parameters.AddWithValue("@sect", txtSection.Text);
+                                        cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
+                                        cmd.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
+                                        cmd.Parameters.AddWithValue("@prodCode", check.prodCode);
+                                        cmd.Parameters.AddWithValue("@qty", qty);
+                                        try
+                                        {
+                                            int count = cmd.ExecuteNonQuery();
+                                            MessageBox.Show(count.ToString());
+                                            if (count > 0)
+                                            {
+                                                using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where prodCode = @prodCode", conn))
+                                                {
+                                                    cmd1.Parameters.AddWithValue("@prodCode", check.prodCode);
+                                                    cmd1.Parameters.AddWithValue("@qty", qty);
+                                                    try
+                                                    {
+                                                        cmd1.ExecuteNonQuery();
+                                                    }
+                                                    catch (SqlCeException ex)
+                                                    {
+                                                        MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                                        return;
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (SqlCeException ex)
+                                        {
+                                            MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                            return;
+
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE IssuanceList set breakage = 1 where section = @sect and sched = @sched and lockNo = @lockNo and subject = @subject and prodCode = @prodCode", conn))
+                                    {
+                                        cmd.Parameters.AddWithValue("@subject", txtSubject.Text);
+                                        cmd.Parameters.AddWithValue("@sched", txtSched.Text);
+                                        cmd.Parameters.AddWithValue("@sect", txtSection.Text);
+                                        cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
+                                        cmd.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
+                                        cmd.Parameters.AddWithValue("@prodCode", check.prodCode);
+                                        try
+                                        {
+                                            cmd.ExecuteNonQuery();
+                                            MessageBox.Show("Record has been updated!");
+                                        }
+                                        catch (SqlCeException ex)
+                                        {
+                                            MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveIssuanceList SELECT lockNo, prof, sched, subject, section, issuedDate, issuedBy, fullName, studentNo, prodCode, qty from IssuanceList where lockNo = @lockNo and sched = @sched and subject = @subject and section = @section and issuedBy = @issuedBy", conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@subj", txtSubject.Text);
+                                    cmd.Parameters.AddWithValue("@sched", txtSched.Text);
+                                    cmd.Parameters.AddWithValue("@sect", txtSection.Text);
+                                    cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
+                                    cmd.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
+
+                                    try
+                                    {
+                                        int count = cmd.ExecuteNonQuery();
+
+                                        if (count > 0)
+                                        {
+                                            using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where prodCode = @prodCode", conn))
+                                            {
+                                                cmd1.Parameters.AddWithValue("@prodCode", check.prodCode);
+                                                cmd1.Parameters.AddWithValue("@qty", check.qty);
+                                                try
+                                                {
+                                                    cmd1.ExecuteNonQuery();
+
+                                                    using (SqlCeCommand cmd2 = new SqlCeCommand("DELETE from IssuanceList where lockNo = @lockNo and subject = @subject and section = @sect and sched = @sched and issuedBy = @issuedBy and prodCode = @prodCode", conn))
+                                                    {
+                                                        cmd2.Parameters.AddWithValue("@subject", txtSubject.Text);
+                                                        cmd2.Parameters.AddWithValue("@sched", txtSched.Text);
+                                                        cmd2.Parameters.AddWithValue("@sect", txtSection.Text);
+                                                        cmd2.Parameters.AddWithValue("@lockNo", txtLockNo.Text);
+                                                        cmd2.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
+                                                        cmd2.Parameters.AddWithValue("@prodCode", check.prodCode);
+
+                                                        try
+                                                        {
+                                                            cmd2.ExecuteNonQuery();
+                                                        }
+                                                        catch (SqlCeException ex)
+                                                        {
+                                                            MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                                        }
+                                                    }
+                                                }
+                                                catch (SqlCeException ex)
+                                                {
+                                                    MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                                    return;
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch (SqlCeException ex)
+                                    {
+                                        MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                        return;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                    updateRecords();
+                    break;
+
+                case MessageBoxResult.No:
+                    break;
+            }
         }
     }
 }

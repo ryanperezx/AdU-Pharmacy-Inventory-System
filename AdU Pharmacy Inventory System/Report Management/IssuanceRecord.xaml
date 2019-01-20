@@ -82,8 +82,9 @@
         <Label Content="Schedule : " HorizontalAlignment="Left" Margin="110,280,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtSched" HorizontalAlignment="Left" Height="31" Margin="225,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" IsReadOnly="True"/>
         <Label Content="Issued Date : " HorizontalAlignment="Left" Margin="92,339,0,0" VerticalAlignment="Top"/>
-        <DatePicker x:Name="txtDate" HorizontalAlignment="Left" Margin="223,339,0,0" VerticalAlignment="Top" Height="31" Width="155" IsHitTestVisible="False"/>
+        <TextBox x:Name="txtDate" HorizontalAlignment="Left" Margin="223,339,0,0" VerticalAlignment="Top" Height="31" Width="155" IsReadOnly="True"/>
         <Label Content="Issued By : " HorizontalAlignment="Left" Margin="108,394,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="txtIssued" HorizontalAlignment="Left" Height="31" Margin="223,394,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" IsReadOnly="True"/>
+        <Button x:Name="btnReturn" Content="RETURN PROCESS" HorizontalAlignment="Left" Margin="207,479,0,0" VerticalAlignment="Top" Width="188" Height="53" Click="btnReturn_Click"/>
     </Grid>
 </Page>

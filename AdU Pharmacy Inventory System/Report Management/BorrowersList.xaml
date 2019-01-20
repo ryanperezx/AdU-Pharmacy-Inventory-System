@@ -14,10 +14,14 @@
       Title="BorrowersList">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="List of student who has borrowed apparatuses as of " FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
-        <TextBlock x:Name="date" FontWeight="Bold" HorizontalAlignment="Left" Margin="862,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Width="446"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="266*"/>
+            <ColumnDefinition Width="1109*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="List of student who has borrowed apparatuses as of " FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="date" FontWeight="Bold" HorizontalAlignment="Left" Margin="596,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}" Width="446" Grid.Column="1"/>
 
-        <ListView x:Name="lvList" HorizontalAlignment="Left" Height="405" Margin="85,95,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}" MouseDoubleClick="lvList_MouseDoubleClick" SelectedIndex="0" SelectionMode="Single">
+        <ListView x:Name="lvList" HorizontalAlignment="Left" Height="405" Margin="85,95,0,0" VerticalAlignment="Top" Width="1200" ItemsSource="{Binding}" MouseDoubleClick="lvList_MouseDoubleClick" SelectedIndex="0" SelectionMode="Single" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Date Request" Width="120" DisplayMemberBinding="{Binding dateReq}"/>
