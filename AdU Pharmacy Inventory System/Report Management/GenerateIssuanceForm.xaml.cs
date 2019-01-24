@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
 using Xceed.Words.NET;
+using System.Text.RegularExpressions;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -64,7 +65,7 @@ namespace AdU_Pharmacy_Inventory_System
             conn.Open();
             items.Clear();
 
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT sub.qty, sub.prodCode, ai.name, ai.size from Subjects sub INNER JOIN ApparatusInventory ai on sub.prodCode = ai.prodCode where sub.subjName = @subjName", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT qty, name, size from Subjects where subjName = @subjName", conn))
             {
                 cmd.Parameters.AddWithValue("@subjName", txtSubject.Text);
                 using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -73,8 +74,6 @@ namespace AdU_Pharmacy_Inventory_System
                     {
                         while (reader.Read())
                         {
-                            int prodCodeIndex = reader.GetOrdinal("prodCode");
-                            string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
 
                             int qtyIndex = reader.GetOrdinal("qty");
                             int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
@@ -87,9 +86,10 @@ namespace AdU_Pharmacy_Inventory_System
 
 
                             List<string> manufacturer = new List<string>();
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT manuf from ApparatusInventory where name = @name", conn))
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT manuf from ApparatusInventory where name = @name and (size IS null or size = @size)", conn))
                             {
                                 cmd1.Parameters.AddWithValue("@name", name);
+                                cmd1.Parameters.AddWithValue("@size", size);
                                 using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                                 {
                                     if (dr.HasRows)
@@ -104,57 +104,15 @@ namespace AdU_Pharmacy_Inventory_System
                                     }
                                 }
                             }
-                            int countQty;
 
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT qty, remarks from ApparatusInventory where prodCode = @prodCode", conn))
+                            items.Add(new LVIssuance()
                             {
-                                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                                using (DbDataReader dr = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
-                                {
-                                    if (dr.HasRows)
-                                    {
-                                        while (dr.Read())
-                                        {
-                                            int countQtyIndex = dr.GetOrdinal("qty");
-                                            countQty = Convert.ToInt32(dr.GetValue(countQtyIndex));
-
-                                            int remarksIndex = dr.GetOrdinal("remarks");
-                                            string remarks = Convert.ToString(dr.GetValue(remarksIndex));
-                                            if (!string.IsNullOrEmpty(remarks))
-                                            {
-                                                remarks = "/" + remarks;
-                                            }
-                                            if (qty > countQty)
-                                            {
-                                                MessageBox.Show("Item: " + name + "has low stocks, please stock in as soon as possible!");
-                                                items.Add(new LVIssuance()
-                                                {
-                                                    i = i,
-                                                    inventName = name,
-                                                    manufList = manufacturer,
-                                                    manuf = manuf,
-                                                    size = size + remarks,
-                                                    qty = countQty,
-                                                    prodCode = prodCode
-                                                });
-                                            }
-                                            else
-                                            {
-                                                items.Add(new LVIssuance()
-                                                {
-                                                    i = i,
-                                                    inventName = name,
-                                                    manufList = manufacturer,
-                                                    manuf = manuf,
-                                                    size = size + remarks,
-                                                    qty = qty,
-                                                    prodCode = prodCode
-                                                });
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                                i = i,
+                                inventName = name,
+                                manufList = manufacturer,
+                                size = size,
+                                qty = qty
+                            });
                             i++;
                         }
                     }
@@ -162,6 +120,7 @@ namespace AdU_Pharmacy_Inventory_System
             }
             return items;
         }
+
 
         private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -185,6 +144,20 @@ namespace AdU_Pharmacy_Inventory_System
                 switch (dr)
                 {
                     case MessageBoxResult.Yes:
+                        foreach (var items in items) //VALIDATION CHECKING
+                        {
+                            if (string.IsNullOrEmpty(items.manuf))
+                            {
+                                MessageBox.Show("One or more manufacturing fields are empty, please fill all out.");
+                                return;
+                            }
+
+                        }
+                            studInfo.Add(new StudentInfo
+                        {
+                            studName = txtName1.Text,
+                            studNo = Convert.ToInt32(txtStud1.Text)
+                        });
                         if (string.IsNullOrEmpty(txtStud2.Text) && txtName2.Text.Length > 0)
                         {
                             MessageBox.Show("Please fill up the missing student field!");
@@ -246,7 +219,7 @@ namespace AdU_Pharmacy_Inventory_System
                         string date = txtDate.Text.Replace("/", "-");
                         string filename = @"C:\Users\" + user + @"\Desktop\[" + date + "][" + txtLock.Text + "][" + cmbSubj.Text + "][" + txtSect.Text + "].docx";
                         filename = filename.Replace(" ", "-");
-                        
+
                         using (DocX document = DocX.Create(filename))
                         {
                             string underline = "";
@@ -331,11 +304,15 @@ namespace AdU_Pharmacy_Inventory_System
                             }
 
                             t2.Rows[0].Cells[0].Paragraphs[0].Append("QTY").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[0].VerticalAlignment = Xceed.Words.NET.VerticalAlignment.Bottom;
                             t2.Rows[0].Cells[1].Paragraphs[0].Append("APPARATUS").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[1].VerticalAlignment = Xceed.Words.NET.VerticalAlignment.Bottom;
                             t2.Rows[0].Cells[2].Paragraphs[0].Append("SIZE / BRAND / REMARKS").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[2].VerticalAlignment = Xceed.Words.NET.VerticalAlignment.Bottom;
                             t2.Rows[0].Cells[3].Paragraphs[0].Append("RTN").Bold().Alignment = Alignment.center;
                             t2.Rows[0].Cells[3].Paragraphs[0].AppendLine("CHK").Bold().Alignment = Alignment.center;
                             t2.Rows[0].Cells[4].Paragraphs[0].Append("BREAKAGES").Bold().Alignment = Alignment.center;
+                            t2.Rows[0].Cells[4].VerticalAlignment = Xceed.Words.NET.VerticalAlignment.Bottom;
                             t2.Rows[0].Cells[5].Paragraphs[0].Append("AMOUNT").Bold().Alignment = Alignment.center;
                             t2.Rows[0].Cells[5].Paragraphs[0].AppendLine("CHARGE").Bold().Alignment = Alignment.center;
 
@@ -346,6 +323,7 @@ namespace AdU_Pharmacy_Inventory_System
                             int rowx = 1;
                             foreach (var items in items)
                             {
+
                                 if (string.IsNullOrEmpty(items.manuf))
                                 {
                                     MessageBox.Show("One or more manufacturing fields are empty, please fill all out.");
@@ -353,11 +331,33 @@ namespace AdU_Pharmacy_Inventory_System
                                 }
                                 else
                                 {
+                                    string prodCode = "", remarks = "";
+                                    using (SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode, remarks from ApparatusInventory where name = @name and manuf = @manuf and (size IS null or size = @size)",conn))
+                                    {
+                                        cmd.Parameters.AddWithValue("@name", items.inventName);
+                                        cmd.Parameters.AddWithValue("@manuf", items.manuf);
+                                        cmd.Parameters.AddWithValue("@size", items.size);
+                                        using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                        {
+                                            if (reader.HasRows)
+                                            {
+                                                while (reader.Read())
+                                                {
+                                                    int prodCodeIndex = reader.GetOrdinal("prodCode");
+                                                    prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+
+                                                    int remarksIndex = reader.GetOrdinal("remarks");
+                                                    remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //////////////////////////////////////////////////////////////////////////////////////////////
                                     t2.Rows[rowx].Cells[0].Paragraphs[0].Append(Convert.ToString(items.qty)).Bold().Alignment = Alignment.center;
                                     t2.Rows[rowx].Cells[1].Paragraphs[0].Append(items.inventName).Bold().Alignment = Alignment.center;
                                     if (!string.IsNullOrEmpty(items.size))
                                     {
-                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.size + "/" + items.manuf).Bold().Alignment = Alignment.center;
+                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.size + "/" + items.manuf + "/" + remarks).Bold().Alignment = Alignment.center;
                                     }
                                     else
                                     {
@@ -367,6 +367,7 @@ namespace AdU_Pharmacy_Inventory_System
                                     rowx++;
                                     foreach (var student in studInfo)
                                     {
+
                                         using (SqlCeCommand cmd = new SqlCeCommand("INSERT into IssuanceList (lockNo, prof, sched, subject, section, issuedDate, issuedBy, fullName, studentNo, prodCode, qty, breakage) VALUES (@lockNo, @prof, @sched, @subject, @section, @issuedDate, @issuedBy, @fullName, @studentNo, @prodCode, @qty, 0)", conn))
                                         {
                                             cmd.Parameters.AddWithValue("@lockNo", txtLock.Text);
@@ -378,7 +379,7 @@ namespace AdU_Pharmacy_Inventory_System
                                             cmd.Parameters.AddWithValue("@issuedBy", txtIssued.Text);
                                             cmd.Parameters.AddWithValue("@fullName", student.studName);
                                             cmd.Parameters.AddWithValue("@studentNo", student.studNo);
-                                            cmd.Parameters.AddWithValue("@prodCode", items.prodCode);
+                                            cmd.Parameters.AddWithValue("@prodCode", prodCode);
                                             cmd.Parameters.AddWithValue("@qty", items.qty);
                                             try
                                             {
@@ -393,7 +394,7 @@ namespace AdU_Pharmacy_Inventory_System
                                     using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty - @qty where prodCode = @prodCode", conn))
                                     {
                                         cmd.Parameters.AddWithValue("@qty", items.qty);
-                                        cmd.Parameters.AddWithValue("@prodCode", items.prodCode);
+                                        cmd.Parameters.AddWithValue("@prodCode", prodCode);
                                         try
                                         {
                                             cmd.ExecuteNonQuery();
@@ -545,6 +546,12 @@ namespace AdU_Pharmacy_Inventory_System
             return underline;
         }
 
+        private void studNo_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+        }
+
         private void emptyFields()
         {
             txtDate.Text = null;
@@ -563,7 +570,7 @@ namespace AdU_Pharmacy_Inventory_System
             txtStud2.Text = null;
             txtStud3.Text = null;
             txtStud4.Text = null;
-            
+
 
             items.Clear();
             studInfo.Clear();

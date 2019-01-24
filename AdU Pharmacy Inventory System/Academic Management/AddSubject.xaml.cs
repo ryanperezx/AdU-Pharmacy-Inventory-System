@@ -60,36 +60,22 @@ namespace AdU_Pharmacy_Inventory_System
                                         int subjNameIndex = reader.GetOrdinal("subjName");
                                         subjName = Convert.ToString(reader.GetValue(subjNameIndex));
 
-                                        int prodCodeIndex = reader.GetOrdinal("prodCode");
-                                        string prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
+                                        int nameIndex = reader.GetOrdinal("name");
+                                        string name = Convert.ToString(reader.GetValue(nameIndex));
+
+                                        int sizeIndex = reader.GetOrdinal("size");
+                                        string size = Convert.ToString(reader.GetValue(sizeIndex));
 
                                         int qtyIndex = reader.GetOrdinal("qty");
                                         int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
-                                        using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT name, size from ApparatusInventory where prodCode = @prodCode", conn))
+                                        lvApparatus.Items.Add(new LVApparatusStockOut
                                         {
-                                            cmd2.Parameters.AddWithValue("@prodCode", prodCode);
-                                            using (DbDataReader dr = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable))
-                                            {
-                                                if (dr.HasRows)
-                                                {
-                                                    dr.Read();
-                                                    int nameIndex = dr.GetOrdinal("name");
-                                                    string name = Convert.ToString(dr.GetValue(nameIndex));
-
-                                                    int sizeIndex = dr.GetOrdinal("size");
-                                                    string size = Convert.ToString(dr.GetValue(sizeIndex));
-
-                                                    lvApparatus.Items.Add(new LVApparatusStockOut
-                                                    {
-                                                        i = i,
-                                                        inventName = name,
-                                                        size = size,
-                                                        qty = qty,
-                                                    });
-                                                }
-                                            }
-                                        }
+                                            i = i,
+                                            inventName = name,
+                                            size = size,
+                                            qty = qty,
+                                        });
 
                                         i++;
 
@@ -137,33 +123,18 @@ namespace AdU_Pharmacy_Inventory_System
                         string subjName = txtSubjName.Text;
                         foreach (LVApparatusStockOut row in lvApparatus.Items)
                         {
-                            int ordinal = 0;
-                            string prodCode = null;
-                            using(SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName and size = @size",conn))
-                            {
-                                cmd.Parameters.AddWithValue("@inventName", row.inventName);
-                                if (row.size == null)
-                                {
-                                    cmd.Parameters.AddWithValue("@size", "");
-
-                                }
-                                else
-                                {
-                                    cmd.Parameters.AddWithValue("@size", row.size);
-                                }
-                                DbDataReader result = cmd.ExecuteResultSet(ResultSetOptions.Scrollable);
-                                if (result.Read())
-                                {
-                                    ordinal = result.GetOrdinal("prodCode");
-                                    prodCode = Convert.ToString(result.GetValue(ordinal));
-                                }
-
-                            }
-                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, prodCode, qty) VALUES (@subjCode, @subjName, @prodCode, @qty)", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, name, size, qty) VALUES (@subjCode, @subjName, @name, @size, @qty)", conn))
                             {
                                 cmd.Parameters.AddWithValue("@subjCode", subjCode);
                                 cmd.Parameters.AddWithValue("@subjName", subjName);
-                                cmd.Parameters.AddWithValue("@prodCode", prodCode);
+                                cmd.Parameters.AddWithValue("@name", row.inventName);
+                                if (string.IsNullOrWhiteSpace(row.size))
+                                {
+                                    cmd.Parameters.AddWithValue("@size", DBNull.Value);
+                                }
+                                else {
+                                cmd.Parameters.AddWithValue("@size", row.size);
+                                }
                                 cmd.Parameters.AddWithValue("@qty", row.qty);
                                 try
                                 {
@@ -345,7 +316,7 @@ namespace AdU_Pharmacy_Inventory_System
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
                 cmbSize.Items.Clear();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT size from ApparatusInventory where name = @inventName", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT size from ApparatusInventory where name = @inventName and SIZE is NOT NULL", conn))
                 {
                     cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -369,6 +340,8 @@ namespace AdU_Pharmacy_Inventory_System
         {
             emptyAppa();
             emptyFields();
+            i = 1;
+            lvApparatus.Items.Clear();
         }
     }
 }

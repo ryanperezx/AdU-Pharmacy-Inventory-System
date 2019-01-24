@@ -32,10 +32,11 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
+        private string _manuf;
         public string manuf
         {
-            get;
-            set;
+            get { return _manuf; }
+            set { _manuf = value; OnPropertyChanged("manuf"); }
         }
 
         public string size

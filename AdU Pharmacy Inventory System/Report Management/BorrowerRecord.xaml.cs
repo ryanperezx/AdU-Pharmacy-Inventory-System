@@ -326,7 +326,11 @@ namespace AdU_Pharmacy_Inventory_System
 
                                                         try
                                                         {
-                                                            cmd2.ExecuteNonQuery();
+                                                            count = cmd2.ExecuteNonQuery();
+                                                            if(count > 0)
+                                                            {
+                                                                this.NavigationService.Navigate(new BorrowersList());
+                                                            }
                                                         }
                                                         catch (SqlCeException ex)
                                                         {

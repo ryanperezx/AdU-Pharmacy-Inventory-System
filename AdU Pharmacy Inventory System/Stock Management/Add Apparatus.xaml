@@ -37,7 +37,7 @@
         </Label>
 
         <Label Content="Apparatus Name:" HorizontalAlignment="Left" Margin="156,139,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtInventName" HorizontalAlignment="Left" Height="31" Margin="293,139,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165" MaxLength="25" TextChanged="txtInventName_TextChanged"/>
+        <TextBox x:Name="txtInventName" HorizontalAlignment="Left" Height="31" Margin="293,139,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165" MaxLength="30" TextChanged="txtInventName_TextChanged"/>
 
 
         <Label Content="Manufacturer:" HorizontalAlignment="Left" Margin="174,192,0,0" VerticalAlignment="Top"/>
@@ -53,6 +53,8 @@
             <ComboBoxItem Content="N/A"/>
             <ComboBoxItem Content="mL"/>
             <ComboBoxItem Content="g"/>
+            <ComboBoxItem Content="cc"/>
+            <ComboBoxItem Content="inch"/>
         </ComboBox>
         <Label Content="Unit:" HorizontalAlignment="Left" Margin="240,341,0,0" VerticalAlignment="Top"/>
         <Label Content="Remarks:" HorizontalAlignment="Left" Margin="215,389,0,0" VerticalAlignment="Top"/>
@@ -61,9 +63,9 @@
         <TextBlock HorizontalAlignment="Left" Margin="684,89,0,0" TextWrapping="Wrap" Text="Outstanding Inventory as of " FontWeight="Bold" VerticalAlignment="Top"/>
         <TextBlock x:Name="date" FontWeight="Bold" HorizontalAlignment="Left" Margin="905,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336"/>
 
-        <ListView x:Name="lvInvent" HorizontalAlignment="Left" Height="440" Margin="684,115,0,0" VerticalAlignment="Top" Width="601" ItemsSource="{Binding}">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
+        <DataGrid x:Name="lvInvent" HorizontalAlignment="Left" Height="440" Margin="684,115,0,0" VerticalAlignment="Top" Width="601"  ItemsSource="{Binding}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding qty}" Value="3">
                             <Setter Property="Background" Value="Red"/>
@@ -79,19 +81,17 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="No." Width="70" DisplayMemberBinding="{Binding i}"/>
-                    <GridViewColumn Header="Product Code" Width="120" DisplayMemberBinding="{Binding prodCode}"/>
-                    <GridViewColumn Header="Apparatus Name" Width="200" DisplayMemberBinding="{Binding inventName}"/>
-                    <GridViewColumn Header="Manufacturer" Width="200" DisplayMemberBinding="{Binding manuf}"/>
-                    <GridViewColumn Header="Qty" Width="70" DisplayMemberBinding="{Binding qty}"/>
-                    <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding size}"/>
-                    <GridViewColumn Header="Remarks" Width="200" DisplayMemberBinding="{Binding remarks}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+            </DataGrid.ItemContainerStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Product Code" Width="120" Binding="{Binding prodCode}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Apparatus Name" Binding="{Binding inventName}" Width="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Manufacturer" Binding="{Binding manuf}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Size" Binding="{Binding size}" Width="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding qty}" Width="100" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Remarks" Width="200" Binding="{Binding remarks}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
 
     </Grid>
 </Page>

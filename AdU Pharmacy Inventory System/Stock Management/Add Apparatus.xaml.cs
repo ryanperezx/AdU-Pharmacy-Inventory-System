@@ -328,6 +328,7 @@ namespace AdU_Pharmacy_Inventory_System
             cmbUnit.SelectedIndex = -1;
             txtRemarks.Text = null;
             i = 1;
+            process = 0;
         }
         private void disableFields()
         {
@@ -439,10 +440,6 @@ namespace AdU_Pharmacy_Inventory_System
                                 size = size,
                                 remarks = remarks
                             });
-                            if (qty < 3)
-                            {
-                                MessageBox.Show("Product: " + inventName + " quantity is at critical level! Restock as soon as possible");
-                            }
                             i++;
                         }
                     }
@@ -489,10 +486,6 @@ namespace AdU_Pharmacy_Inventory_System
                                 size = size,
                                 remarks = remarks
                             });
-                            if (qty < 3)
-                            {
-                                MessageBox.Show("Product: " + inventName + " quantity is at critical level! Restock as soon as possible");
-                            }
                             i++;
                         }
                     }
@@ -504,6 +497,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             emptyFields();
             enableFields();
+            updateListView();
             process = 0;
         }
 

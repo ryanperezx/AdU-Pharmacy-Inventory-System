@@ -152,7 +152,7 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT size from ApparatusInventory where name = @inventName and size IS NOT NULL", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT size from ApparatusInventory where name = @inventName and size IS NOT NULL", conn))
                 {
                     cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))

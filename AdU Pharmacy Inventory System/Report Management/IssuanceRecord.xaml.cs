@@ -101,7 +101,6 @@ namespace AdU_Pharmacy_Inventory_System
                 }
             }
         }
-
         private void updateRecords()
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
@@ -277,9 +276,9 @@ namespace AdU_Pharmacy_Inventory_System
                             }
                             else
                             {
-                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveIssuanceList SELECT lockNo, prof, sched, subject, section, issuedDate, issuedBy, fullName, studentNo, prodCode, qty from IssuanceList where lockNo = @lockNo and sched = @sched and subject = @subject and section = @section and issuedBy = @issuedBy", conn))
+                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveIssuanceList SELECT lockNo, prof, sched, subject, section, issuedDate, issuedBy, fullName, studentNo, prodCode, qty from IssuanceList where lockNo = @lockNo and sched = @sched and subject = @subject and section = @sect and issuedBy = @issuedBy", conn))
                                 {
-                                    cmd.Parameters.AddWithValue("@subj", txtSubject.Text);
+                                    cmd.Parameters.AddWithValue("@subject", txtSubject.Text);
                                     cmd.Parameters.AddWithValue("@sched", txtSched.Text);
                                     cmd.Parameters.AddWithValue("@sect", txtSection.Text);
                                     cmd.Parameters.AddWithValue("@lockNo", txtLockNo.Text);

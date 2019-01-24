@@ -81,7 +81,7 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT size from ApparatusInventory where name = @inventName and size IS NOT NULL", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT DISTINCT size from ApparatusInventory where name = @inventName and size IS NOT NULL", conn))
                 {
                     cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -275,7 +275,7 @@ namespace AdU_Pharmacy_Inventory_System
                 }
             }
         }
-        private void btnStockOut_Click(object sender, RoutedEventArgs e) //NOT CHECKED
+        private void btnStockOut_Click(object sender, RoutedEventArgs e)
         {
             if (lvAppaStockOut.Items.Count == 0)
             {
