@@ -11,7 +11,8 @@ using System.Windows.Input;
 using System.Data.SqlServerCe;
 using System.Data.Common;
 using System.Text.RegularExpressions;
-
+using System.Collections.ObjectModel;
+using NLog;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -22,10 +23,15 @@ namespace AdU_Pharmacy_Inventory_System
     {
         int i = 1;
         bool check = false;
+        ObservableCollection<LVApparatusStockOut> items = new ObservableCollection<LVApparatusStockOut>();
+
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
         public AddSubject()
         {
             InitializeComponent();
             stack.DataContext = new ExpanderListViewModel();
+            lvApparatus.ItemsSource = items;
             fillInventory();
         }
 
@@ -69,7 +75,7 @@ namespace AdU_Pharmacy_Inventory_System
                                         int qtyIndex = reader.GetOrdinal("qty");
                                         int qty = Convert.ToInt32(reader.GetValue(qtyIndex));
 
-                                        lvApparatus.Items.Add(new LVApparatusStockOut
+                                        items.Add(new LVApparatusStockOut
                                         {
                                             i = i,
                                             inventName = name,
@@ -93,7 +99,6 @@ namespace AdU_Pharmacy_Inventory_System
                 }
             }
         }
-
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -121,7 +126,7 @@ namespace AdU_Pharmacy_Inventory_System
 
                         string subjCode = txtSubjCode.Text;
                         string subjName = txtSubjName.Text;
-                        foreach (LVApparatusStockOut row in lvApparatus.Items)
+                        foreach (var row in items)
                         {
                             using (SqlCeCommand cmd = new SqlCeCommand("INSERT into Subjects (subjCode, subjName, name, size, qty) VALUES (@subjCode, @subjName, @name, @size, @qty)", conn))
                             {
@@ -139,18 +144,22 @@ namespace AdU_Pharmacy_Inventory_System
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    Log = LogManager.GetLogger("addSubject");
+                                    Log.Info("Subject " + txtSubjName.Text + " has been added to database");
                                     check = true;
                                 }
                                 catch (SqlCeException ex)
                                 {
-                                    MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                    MessageBox.Show("Error! Log has been updated with the error.");
+                                    Log = LogManager.GetLogger("*");
+                                    Log.Error(ex, "Query Error");
                                 }
                             }
                         }
                         if (check == true)
                         {
                             MessageBox.Show("Subject Added!");
-                            lvApparatus.Items.Clear();
+                            items.Clear();
                             emptyFields();
                         }
                         break;
@@ -193,8 +202,12 @@ namespace AdU_Pharmacy_Inventory_System
                                         using (SqlCeCommand command = new SqlCeCommand("DELETE from Subjects where subjCode= @subjCode", conn))
                                         {
                                             command.Parameters.AddWithValue("@subjCode", txtSubjCode.Text);
-                                            int query = command.ExecuteNonQuery();
+                                            command.ExecuteNonQuery();
+                                            Log = LogManager.GetLogger("deleteSubject");
+                                            Log.Info("Subject " + txtSubjName.Text + " has been deleted");
                                             MessageBox.Show("Subject has been deleted!");
+                                            emptyAppa();
+                                            emptyFields();
                                         }
                                     }
                                     else
@@ -223,6 +236,11 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("One or more fields are empty!");
             }
+            else if (cmbInventName.Text.Length > 0 && cmbSize.Items.Count > 0 && string.IsNullOrEmpty(cmbSize.Text))
+            {
+                MessageBox.Show("Please select size!");
+                cmbSize.Focus();
+            }
             else
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
@@ -235,7 +253,6 @@ namespace AdU_Pharmacy_Inventory_System
                     {
                         reader.Read();
 
-
                         string size;
                         if (!string.IsNullOrEmpty(cmbSize.Text))
                         {
@@ -246,17 +263,23 @@ namespace AdU_Pharmacy_Inventory_System
                         {
                             size = null;
                         }
-
-                        lvApparatus.Items.Add(new LVApparatusStockOut
+                        var found = items.FirstOrDefault(x => (x.inventName == txtInventName.Text) && ((x.size == cmbSize.Text) || (x.size == null)));
+                        if (found != null)
                         {
-                            i = i,
-                            inventName = cmbInventName.Text,
-                            qty = Convert.ToInt32(txtQty.Text),
-                            size = size,
-                        });
-                        i++;
-                        emptyAppa();
-
+                            found.qty = found.qty + Convert.ToInt32(txtQty.Text);
+                        }
+                        else
+                        {
+                            items.Add(new LVApparatusStockOut
+                            {
+                                i = i,
+                                inventName = cmbInventName.Text,
+                                qty = Convert.ToInt32(txtQty.Text),
+                                size = size,
+                            });
+                            i++;
+                            emptyAppa();
+                        }
                     }
                 }
             }
@@ -266,6 +289,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             txtSubjCode.Text = null;
             txtSubjName.Text = null;
+            items.Clear();
             check = false;
             i = 1;
         }
@@ -341,7 +365,7 @@ namespace AdU_Pharmacy_Inventory_System
             emptyAppa();
             emptyFields();
             i = 1;
-            lvApparatus.Items.Clear();
+            items.Clear();
         }
     }
 }

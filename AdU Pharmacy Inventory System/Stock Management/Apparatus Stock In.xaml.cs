@@ -16,7 +16,7 @@ using System.Text.RegularExpressions;
 using System.Data.SqlServerCe;
 using System.Data.SqlClient;
 using System.Data.Common;
-
+using NLog;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -25,6 +25,8 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class Stock_In : Page
     {
+
+        private static Logger Log = LogManager.GetCurrentClassLogger();
         public Stock_In()
         {
             InitializeComponent();
@@ -59,11 +61,16 @@ namespace AdU_Pharmacy_Inventory_System
                             {
                                 cmd1.ExecuteNonQuery();
                                 MessageBox.Show("Added Successfully");
+                                Log = LogManager.GetLogger("stockApparatus");
+                                Log.Info("Apparatus [" + txtInventName.Text + "][" + txtSize.Text + "][" + cmbManuf.Text + "] has been replenished. Quantity : " + txtQty.Text);
+
                                 emptyFields();
                             }
                             catch (SqlCeException ex)
                             {
                                 MessageBox.Show("Error! Log has been updated with the error.");
+                                Log = LogManager.GetLogger("*");
+                                Log.Error(ex, "Query Error");
                             }
                         }
                     }

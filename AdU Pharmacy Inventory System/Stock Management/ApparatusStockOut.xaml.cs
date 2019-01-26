@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using System.Data.Common;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
+using NLog;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -24,6 +25,8 @@ namespace AdU_Pharmacy_Inventory_System
         int i = 1;
         List<StudentInfo> studInfo = new List<StudentInfo>();
         ObservableCollection<LVApparatusStockOut> stockOut = new ObservableCollection<LVApparatusStockOut>();
+
+        private static Logger Log = LogManager.GetCurrentClassLogger();
 
         public ApparatusStockOut()
         {
@@ -156,6 +159,11 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("One or more fields are empty!");
             }
+            else if(cmbInventName.Text.Length > 0 && cmbSize.Items.Count > 0 && string.IsNullOrEmpty(cmbSize.Text))
+            {
+                MessageBox.Show("Please select size!");
+                cmbSize.Focus();
+            }
             else if (!string.IsNullOrEmpty(cmbSize.Text) && !string.IsNullOrEmpty(cmbInventName.Text) && !string.IsNullOrEmpty(cmbManuf.Text) && !string.IsNullOrEmpty(txtQty.Text))
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
@@ -185,7 +193,7 @@ namespace AdU_Pharmacy_Inventory_System
                         }
                         else
                         {
-                            var found = stockOut.FirstOrDefault(x => (x.inventName == cmbInventName.Text) && (x.manuf == cmbManuf.Text) && (x.size == cmbSize.Text));
+                            var found = stockOut.FirstOrDefault(x => (x.inventName == cmbInventName.Text) && (x.manuf == cmbManuf.Text) && ((x.size == cmbSize.Text) || (x.size == null)));
                             if (found != null)
                             {
                                 if (found.qty + reqQty > qty)
@@ -305,7 +313,7 @@ namespace AdU_Pharmacy_Inventory_System
                         SqlCeConnection conn = DBUtils.GetDBConnection();
                         conn.Open();
                         bool check = false;
-
+                        
                         studInfo.Add(new StudentInfo
                         {
                             studName = txtName1.Text,
@@ -423,21 +431,35 @@ namespace AdU_Pharmacy_Inventory_System
                                             }
                                             catch (SqlCeException ex)
                                             {
-                                                MessageBox.Show("Error! Log has been updated with the error" + ex);
+                                                MessageBox.Show("Error! Log has been updated with the error.");
+                                                Log = LogManager.GetLogger("*");
+                                                Log.Error(ex, "Query Error");
                                             }
                                         }
                                     }
 
                                 }
-                                catch (SqlException ex)
+                                catch (SqlCeException ex)
                                 {
-                                    MessageBox.Show("Error! Log has been updated with the error    " + ex);
+                                    MessageBox.Show("Error! Log has been updated with the error.");
+                                    Log = LogManager.GetLogger("*");
+                                    Log.Error(ex, "Query Error");
                                 }
                             }
                         }
                         if (check == true)
                         {
                             MessageBox.Show("Stock Out Successfully");
+                            Log = LogManager.GetLogger("generateBorrowerForm");
+                            string newLine = System.Environment.NewLine;
+                            Log.Info("A Borrower form has been generated with the following details: " + newLine +
+                                "Date Requested: " + txtDate.Text + newLine +
+                                "Date of Experiment" + txtDateExp.Text + newLine +
+                                "Subject: " + cmbSubject.Text + newLine +
+                                "Experiment Title: " + txtExperiment.Text + newLine +
+                                "Locker No.: " + txtLocker.Text + newLine +
+                                "Group No: " + txtGroup.Text
+                                );
                         }
 
                         studInfo.Clear();

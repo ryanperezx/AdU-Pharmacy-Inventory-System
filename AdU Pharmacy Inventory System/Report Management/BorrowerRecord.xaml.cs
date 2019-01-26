@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Data.SqlServerCe;
 using System.Collections.ObjectModel;
 using System.Data.Common;
+using NLog;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -25,6 +26,7 @@ namespace AdU_Pharmacy_Inventory_System
     {
         ObservableCollection<LVBorrower> borrowers = new ObservableCollection<LVBorrower>();
         List<StudentInfo> studInfo = new List<StudentInfo>();
+        private static Logger Log = LogManager.GetCurrentClassLogger();
         string studentNo;
         public BorrowerRecord(string studentNo, string dateReq, string dateExp, string subj, int grpID, string experiment, string lockNo)
         {
@@ -89,7 +91,7 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                     else
                     {
-                        //IF NO RECORDS ANYMORE DELETE RECORD
+                        this.NavigationService.Navigate(new BorrowersList());
                     }
                 }
             }
@@ -247,18 +249,20 @@ namespace AdU_Pharmacy_Inventory_System
                                                     }
                                                     catch (SqlCeException ex)
                                                     {
-                                                        MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                                        MessageBox.Show("Error! Log has been updated with the error.");
+                                                        Log = LogManager.GetLogger("*");
+                                                        Log.Error(ex, "Query Error");
                                                         return;
-
                                                     }
                                                 }
                                             }
                                         }
                                         catch (SqlCeException ex)
                                         {
-                                            MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                            MessageBox.Show("Error! Log has been updated with the error.");
+                                            Log = LogManager.GetLogger("*");
+                                            Log.Error(ex, "Query Error");
                                             return;
-
                                         }
                                     }
 
@@ -327,22 +331,31 @@ namespace AdU_Pharmacy_Inventory_System
                                                         try
                                                         {
                                                             count = cmd2.ExecuteNonQuery();
-                                                            if(count > 0)
-                                                            {
-                                                                this.NavigationService.Navigate(new BorrowersList());
-                                                            }
+                                                            Log = LogManager.GetLogger("borrowerFormRecord");
+                                                            string newLine = System.Environment.NewLine;
+                                                            Log.Info("A Borrower form has been returned with the following information: " + newLine +
+                                                                "Date Requested: " + txtDateReq.Text + newLine +
+                                                                "Date of Experiment" + txtDateExp.Text + newLine +
+                                                                "Subject: " + txtSubj.Text + newLine +
+                                                                "Experiment Title: " + txtExpName.Text + newLine +
+                                                                "Locker No.: " + txtLockNo.Text + newLine +
+                                                                "Group No: " + txtGrpID.Text
+                                                                );
                                                         }
                                                         catch (SqlCeException ex)
                                                         {
-                                                            MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                                            MessageBox.Show("Error! Log has been updated with the error.");
+                                                            Log = LogManager.GetLogger("*");
+                                                            Log.Error(ex, "Query Error");
                                                         }
                                                     }
                                                 }
                                                 catch (SqlCeException ex)
                                                 {
-                                                    MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                                    MessageBox.Show("Error! Log has been updated with the error.");
+                                                    Log = LogManager.GetLogger("*");
+                                                    Log.Error(ex, "Query Error");
                                                     return;
-
                                                 }
                                             }
                                         }

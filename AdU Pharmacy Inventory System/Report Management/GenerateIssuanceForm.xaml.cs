@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Xceed.Words.NET;
 using System.Text.RegularExpressions;
+using NLog;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -22,6 +23,7 @@ namespace AdU_Pharmacy_Inventory_System
     {
         ObservableCollection<LVIssuance> items = new ObservableCollection<LVIssuance>();
         List<StudentInfo> studInfo = new List<StudentInfo>();
+        private static Logger Log = LogManager.GetCurrentClassLogger();
 
         int i = 1;
         public GenerateIssuanceForm(string fullName)
@@ -144,6 +146,7 @@ namespace AdU_Pharmacy_Inventory_System
                 switch (dr)
                 {
                     case MessageBoxResult.Yes:
+                        bool success = false;
                         foreach (var items in items) //VALIDATION CHECKING
                         {
                             if (string.IsNullOrEmpty(items.manuf))
@@ -383,11 +386,17 @@ namespace AdU_Pharmacy_Inventory_System
                                             cmd.Parameters.AddWithValue("@qty", items.qty);
                                             try
                                             {
-                                                cmd.ExecuteNonQuery();
+                                                int count = cmd.ExecuteNonQuery();
+                                                if(count > 0)
+                                                {
+                                                    success = true;
+                                                }
                                             }
                                             catch (SqlCeException ex)
                                             {
-                                                MessageBox.Show("Error! Log has been updated with the error!");
+                                                MessageBox.Show("Error! Log has been updated with the error.");
+                                                Log = LogManager.GetLogger("*");
+                                                Log.Error(ex, "Query Error");
                                             }
                                         }
                                     }
@@ -401,7 +410,9 @@ namespace AdU_Pharmacy_Inventory_System
                                         }
                                         catch (SqlCeException ex)
                                         {
-                                            MessageBox.Show("Error! Log has been updated with the error!");
+                                            MessageBox.Show("Error! Log has been updated with the error.");
+                                            Log = LogManager.GetLogger("*");
+                                            Log.Error(ex, "Query Error");
                                         }
                                     }
                                 }
@@ -524,15 +535,24 @@ namespace AdU_Pharmacy_Inventory_System
                             Process.Start("WINWORD.EXE", filename);
                             emptyFields();
                         }
+                        if (success)
+                        {
+                            Log = LogManager.GetLogger("generateIssuanceForm");
+                            string newLine = System.Environment.NewLine;
+                            Log.Info("A Issuance form has been generated with the following details: " + newLine +
+                                "Date Requested: " + txtDate.Text + newLine +
+                                "Subject: " + cmbSubj.Text + newLine +
+                                "Section: " + txtSect.Text + newLine +
+                                "Schedule: " + txtSched.Text + newLine +
+                                "Professor: " + txtProf.Text + newLine +
+                                "Locker No.: " + txtLock.Text + newLine +
+                                "Issued by: " + txtIssued.Text
+                                );
+                        }
                         break;
                     case MessageBoxResult.No:
                         break;
                 }
-
-                /*
-                Report_Management.IssuanceForm issuanceForm = new Report_Management.IssuanceForm();
-                issuanceForm.Show();
-                */
             }
 
         }

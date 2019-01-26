@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Data.SqlServerCe;
 using System.Collections.ObjectModel;
 using System.Data.Common;
+using NLog;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
@@ -22,7 +23,7 @@ namespace AdU_Pharmacy_Inventory_System
         ObservableCollection<LVIssuance> request = new ObservableCollection<LVIssuance>();
         List<StudentInfo> studInfo = new List<StudentInfo>();
 
-
+        private static Logger Log = LogManager.GetCurrentClassLogger();
 
         public IssuanceRecord(string lockNo, string section, string sched, string issuedDate, string issuedBy, string subject)
         {
@@ -150,7 +151,7 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                     else
                     {
-                        //IF NO RECORDS ANYMORE DELETE RECORD
+                        this.NavigationService.Navigate(new IssuanceList());
                     }
                 }
             }
@@ -236,18 +237,20 @@ namespace AdU_Pharmacy_Inventory_System
                                                     }
                                                     catch (SqlCeException ex)
                                                     {
-                                                        MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                                        MessageBox.Show("Error! Log has been updated with the error.");
+                                                        Log = LogManager.GetLogger("*");
+                                                        Log.Error(ex, "Query Error");
                                                         return;
-
                                                     }
                                                 }
                                             }
                                         }
                                         catch (SqlCeException ex)
                                         {
-                                            MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                            MessageBox.Show("Error! Log has been updated with the error.");
+                                            Log = LogManager.GetLogger("*");
+                                            Log.Error(ex, "Query Error");
                                             return;
-
                                         }
                                     }
                                 }
@@ -268,7 +271,9 @@ namespace AdU_Pharmacy_Inventory_System
                                         }
                                         catch (SqlCeException ex)
                                         {
-                                            MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                            MessageBox.Show("Error! Log has been updated with the error.");
+                                            Log = LogManager.GetLogger("*");
+                                            Log.Error(ex, "Query Error");
                                             return;
                                         }
                                     }
@@ -310,6 +315,16 @@ namespace AdU_Pharmacy_Inventory_System
                                                         try
                                                         {
                                                             cmd2.ExecuteNonQuery();
+                                                            Log = LogManager.GetLogger("issuanceFormRecord");
+                                                            string newLine = System.Environment.NewLine;
+                                                            Log.Info("A Issuance form has been returned with the ff information: " + newLine +
+                                                                "Date Requested: " + txtDate.Text + newLine +
+                                                                "Subject: " + txtSubject.Text + newLine +
+                                                                "Section: " + txtSection.Text + newLine +
+                                                                "Schedule: " + txtSched.Text + newLine +
+                                                                "Locker No.: " + txtLockNo.Text + newLine +
+                                                                "Issued by: " + txtIssued.Text
+                                                                );
                                                         }
                                                         catch (SqlCeException ex)
                                                         {

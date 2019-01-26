@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using System.Data.SqlServerCe;
-
+using NLog;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -23,7 +23,8 @@ namespace AdU_Pharmacy_Inventory_System
     public partial class ForgotPassword : MetroWindow
     {
         string user, question, answer;
-        
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
         public ForgotPassword(string username)
         {
             InitializeComponent();
@@ -99,6 +100,9 @@ namespace AdU_Pharmacy_Inventory_System
                                 cmd1.Parameters.AddWithValue("@tries", 0);
                                 cmd1.ExecuteNonQuery();
                                 MessageBox.Show("Password has been changed.");
+
+                                Log = LogManager.GetLogger("AccountLog");
+                                Log.Info("Account: " + user + " changed their password");
                             }
                             this.DialogResult = false;
 

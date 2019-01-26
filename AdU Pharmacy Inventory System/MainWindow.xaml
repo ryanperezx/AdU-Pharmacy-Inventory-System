@@ -118,6 +118,6 @@
 
 
         <!--Frame-->
-        <Frame x:Name="Frame" HorizontalAlignment="Right" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  Margin="0,75,0,0" NavigationUIVisibility="Hidden" Panel.ZIndex="-1"/>
+        <Frame x:Name="Frame" HorizontalAlignment="Right" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  Margin="0,75,0,0" NavigationUIVisibility="Hidden" Panel.ZIndex="-1" Navigating="Frame_Navigating"/>
     </Grid>
 </Window>

@@ -15,6 +15,7 @@ using MahApps.Metro.Controls;
 using System.Data.SqlServerCe;
 using System.Data.Common;
 using System.Diagnostics;
+using NLog;
 
 namespace AdU_Pharmacy_Inventory_System
 {
@@ -25,6 +26,8 @@ namespace AdU_Pharmacy_Inventory_System
     {
         string user;
         public static int userLevel;
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
 
         public Login()
         {
@@ -77,8 +80,8 @@ namespace AdU_Pharmacy_Inventory_System
                                 dr.Dispose();
                                 cmd2.ExecuteNonQuery();
                                 MessageBox.Show("Login Successful");
-                                //Log = LogManager.GetLogger("userLogin");
-                                //Log.Info(" Account Name: " + txtUser.Text + " has logged in.");
+                                Log = LogManager.GetLogger("userLogin");
+                                Log.Info(" Account Name: " + txtUser.Text + " has logged in.");
                             }
 
                         }

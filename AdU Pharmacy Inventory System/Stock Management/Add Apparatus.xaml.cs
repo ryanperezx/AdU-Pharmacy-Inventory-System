@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Data.Common;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
-
+using NLog;
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
@@ -24,6 +24,9 @@ namespace AdU_Pharmacy_Inventory_System
         int i = 1;
         CollectionViewSource view = new CollectionViewSource();
         ObservableCollection<LVOutstanding> summary = new ObservableCollection<LVOutstanding>();
+
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+
         public Add_Inventory()
         {
             InitializeComponent();
@@ -148,13 +151,17 @@ namespace AdU_Pharmacy_Inventory_System
                                 {
                                     cmd.ExecuteNonQuery();
                                     MessageBox.Show("Updated Successfully");
+                                    Log = LogManager.GetLogger("editApparatus");
+                                    Log.Info("Item " + txtProdCode.Text + " records has been modified/updated");
                                     emptyFields();
                                     enableFields();
 
                                 }
-                                catch (SqlException ex)
+                                catch (SqlCeException ex)
                                 {
                                     MessageBox.Show("Error! Log has been updated with the error.");
+                                    Log = LogManager.GetLogger("*");
+                                    Log.Error(ex, "Query Error");
                                 }
 
                             }
@@ -237,11 +244,15 @@ namespace AdU_Pharmacy_Inventory_System
                                     {
                                         cmd.ExecuteNonQuery();
                                         MessageBox.Show("Added Successfully");
+                                        Log = LogManager.GetLogger("addNewApparatus");
+                                        Log.Info("Item " + txtProdCode.Text + " has been added to database!");
                                         emptyFields();
                                     }
                                     catch (SqlCeException ex)
                                     {
-                                        MessageBox.Show("Error! Log has been updated with the error. " + ex);
+                                        MessageBox.Show("Error! Log has been updated with the error. ");
+                                        Log = LogManager.GetLogger("*");
+                                        Log.Error(ex, "Query Error");
                                     }
                                 }
                             }
@@ -293,6 +304,8 @@ namespace AdU_Pharmacy_Inventory_System
 
                                         int query = command.ExecuteNonQuery();
                                         MessageBox.Show("Item has been deleted!");
+                                        Log = LogManager.GetLogger("deleteApparatus");
+                                        Log.Info("Item " + txtProdCode.Text + " has been archived!");
                                         emptyFields();
                                         enableFields();
                                         process = 0;

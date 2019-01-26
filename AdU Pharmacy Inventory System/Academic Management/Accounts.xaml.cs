@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.Common;
 using System.Data.SqlServerCe;
-using System.Data.SqlClient;
+using NLog;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -26,32 +26,12 @@ namespace AdU_Pharmacy_Inventory_System
     /// </summary>
     public partial class Accounts : Page
     {
+        private static Logger Log = LogManager.GetCurrentClassLogger();
+        public string passwordStatus;
+
         public Accounts()
         {
             InitializeComponent();
-        }
-
-        public string passwordStatus;
-        public string PasswordStatus
-        {
-            get { return passwordStatus; }
-            set
-            {
-                passwordStatus = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
         }
 
         private void searchUser_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -159,12 +139,16 @@ namespace AdU_Pharmacy_Inventory_System
                                             {
                                                 cmd1.ExecuteNonQuery();
                                                 MessageBox.Show("Registered successfully");
+                                                Log = LogManager.GetLogger("registerAccount");
+                                                Log.Info("Account " + txtUser.Text + " has been registered!");
                                                 emptyFields();
 
                                             }
                                             catch (SqlCeException ex)
                                             {
-                                                MessageBox.Show("Error! Log has been updated with the error!");
+                                                MessageBox.Show("Error! Log has been updated with the error.");
+                                                Log = LogManager.GetLogger("*");
+                                                Log.Error(ex, "Query Error");
                                             }
                                         }
                                         break;
@@ -186,7 +170,6 @@ namespace AdU_Pharmacy_Inventory_System
             }
             
         }
-
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(txtUser.Text))
@@ -222,14 +205,18 @@ namespace AdU_Pharmacy_Inventory_System
                                         using (SqlCeCommand command = new SqlCeCommand("DELETE from Accounts where username= @username", conn))
                                         {
                                             command.Parameters.AddWithValue("@username", txtUser.Text);
-                                            int query = command.ExecuteNonQuery();
+                                            command.ExecuteNonQuery();
                                             MessageBox.Show("Account has been deleted!");
+                                            Log = LogManager.GetLogger("deleteAccount");
+                                            Log.Info("Account " + txtUser.Text + " has been deleted!");
                                             emptyFields();
                                         }
                                     }
-                                    catch(SqlCeException ex)
+                                    catch (SqlCeException ex)
                                     {
-                                        MessageBox.Show("Error! Log has been updated with the error!");
+                                        MessageBox.Show("Error! Log has been updated with the error.");
+                                        Log = LogManager.GetLogger("*");
+                                        Log.Error(ex, "Query Error");
                                     }
                                 }
                                 break;
@@ -261,7 +248,6 @@ namespace AdU_Pharmacy_Inventory_System
         {
             emptyFields();
         }
-
         private void txtPass_PasswordChanged(object sender, RoutedEventArgs e)
         {
             //Password must contain at least 8 characters, 1 uppercase, 1 numeric
@@ -285,5 +271,25 @@ namespace AdU_Pharmacy_Inventory_System
                 lblPassword.Content = null;
             }
         }
+        protected void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public string PasswordStatus
+        {
+            get { return passwordStatus; }
+            set
+            {
+                passwordStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
     }
 }

@@ -301,6 +301,18 @@ namespace AdU_Pharmacy_Inventory_System
             tbIssuanceList.TextDecorations = null;
         }
 
+        private void Frame_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (e.NavigationMode == NavigationMode.Forward)
+            {
+                e.Cancel = true;
+            }
+            if(e.NavigationMode == NavigationMode.Back)
+            {
+                e.Cancel = true;
+            }
+        }
+
         private void tbListofSubjects_MouseLeave(object sender, MouseEventArgs e)
         {
             tbListofSubjects.TextDecorations = null;
