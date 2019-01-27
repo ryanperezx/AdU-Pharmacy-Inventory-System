@@ -15,7 +15,7 @@
       Title="ApparatusStockOut">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Apparatus Stock Out" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,10,0,0" TextWrapping="Wrap" Text="Borrowers form" FontWeight="Bold" VerticalAlignment="Top" Style="{StaticResource MaterialDesignDisplay1TextBlock}"/>
 
         <Label HorizontalAlignment="Left"  PreviewMouseLeftButtonDown="PackIconMaterial_PreviewMouseLeftButtonDown" VerticalAlignment="Top" Height="50" Width="50" Margin="1300,10,0,0" Cursor="Hand">
             <iconPacks:PackIconMaterial Kind="Refresh" Height="40" Width="40" Foreground="#DD7605FF" HorizontalAlignment="Left"/>
