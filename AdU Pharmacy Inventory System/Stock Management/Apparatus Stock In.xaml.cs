@@ -31,6 +31,7 @@ namespace AdU_Pharmacy_Inventory_System
         {
             InitializeComponent();
             fillInventoryList();
+            dateStockIn.SelectedDate = DateTime.Now;
             dateStockIn.Text = DateTime.Now.ToString("dd MMMM yyyy");
         }
 
@@ -45,40 +46,29 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT count(1) from ApparatusInventory where name = @inventName", conn))
+                using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where name = @inventName and manuf = @manuf and (size IS null or size = @size)", conn))
                 {
-                    cmd.Parameters.AddWithValue("@inventName", cmbInventName.Text);
-                    int count = (int)cmd.ExecuteScalar();
-                    if (count > 0)
+                    cmd1.Parameters.AddWithValue("@qty", txtQty.Text);
+                    cmd1.Parameters.AddWithValue("@inventName", txtInventName.Text);
+                    cmd1.Parameters.AddWithValue("@manuf", cmbManuf.Text);
+                    cmd1.Parameters.AddWithValue("@size", cmbSize.Text);
+                    try
                     {
-                        using (SqlCeCommand cmd1 = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty + @qty where name = @inventName and manuf = @manuf and size = @size", conn))
-                        {
-                            cmd1.Parameters.AddWithValue("@qty", txtQty.Text);
-                            cmd1.Parameters.AddWithValue("@inventName", txtInventName.Text);
-                            cmd1.Parameters.AddWithValue("@manuf", cmbManuf.Text);
-                            cmd1.Parameters.AddWithValue("@size", cmbSize.Text);
-                            try
-                            {
-                                cmd1.ExecuteNonQuery();
-                                MessageBox.Show("Added Successfully");
-                                Log = LogManager.GetLogger("stockApparatus");
-                                Log.Info("Apparatus [" + txtInventName.Text + "][" + txtSize.Text + "][" + cmbManuf.Text + "] has been replenished. Quantity : " + txtQty.Text);
+                        cmd1.ExecuteNonQuery();
+                        MessageBox.Show("Added Successfully");
+                        Log = LogManager.GetLogger("stockApparatus");
+                        Log.Info("Apparatus [" + txtInventName.Text + "][" + txtSize.Text + "][" + cmbManuf.Text + "] has been replenished. Quantity : " + txtQty.Text);
 
-                                emptyFields();
-                            }
-                            catch (SqlCeException ex)
-                            {
-                                MessageBox.Show("Error! Log has been updated with the error.");
-                                Log = LogManager.GetLogger("*");
-                                Log.Error(ex, "Query Error");
-                            }
-                        }
+                        emptyFields();
                     }
-                    else
+                    catch (SqlCeException ex)
                     {
-                        MessageBox.Show("Item does not exist!");
+                        MessageBox.Show("Error! Log has been updated with the error.");
+                        Log = LogManager.GetLogger("*");
+                        Log.Error(ex, "Query Error");
                     }
                 }
+
             }
         }
 
@@ -184,7 +174,7 @@ namespace AdU_Pharmacy_Inventory_System
             cmbSize.Items.Clear();
             cmbManuf.Items.Clear();
             fillSize();
-            if(cmbSize.Items.Count == 0)
+            if (cmbSize.Items.Count == 0)
             {
                 fillManufacturer();
             }

@@ -179,12 +179,10 @@ namespace AdU_Pharmacy_Inventory_System
                     }
                     else
                     {
-                        MessageBox.Show("User already does not exist!");
+                        MessageBox.Show("User does not exist!");
 
                     }
                 }
-
-
             }
         }
 

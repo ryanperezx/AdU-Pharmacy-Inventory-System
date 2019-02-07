@@ -57,8 +57,6 @@
             <ComboBoxItem Content="inch"/>
         </ComboBox>
         <Label Content="Unit:" HorizontalAlignment="Left" Margin="240,341,0,0" VerticalAlignment="Top"/>
-        <Label Content="Remarks:" HorizontalAlignment="Left" Margin="215,389,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtRemarks" materialDesign:HintAssist.Hint="Optional" HorizontalAlignment="Left" Height="31" Margin="293,389,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="165" MaxLength="30"/>
 
         <TextBlock HorizontalAlignment="Left" Margin="684,89,0,0" TextWrapping="Wrap" Text="Outstanding Inventory as of " FontWeight="Bold" VerticalAlignment="Top"/>
         <TextBlock x:Name="date" FontWeight="Bold" HorizontalAlignment="Left" Margin="905,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336"/>

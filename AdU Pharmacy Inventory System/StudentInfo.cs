@@ -14,7 +14,7 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
         
-        public int studNo
+        public string studNo
         {
             get;
             set;

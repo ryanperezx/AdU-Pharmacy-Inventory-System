@@ -77,9 +77,6 @@ namespace AdU_Pharmacy_Inventory_System
                                         int sizeIndex = reader.GetOrdinal("size");
                                         string size = Convert.ToString(reader.GetValue(sizeIndex));
 
-                                        int remarksIndex = reader.GetOrdinal("remarks");
-                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
-
                                         var unit = Regex.Replace(size, @"[\d-]", string.Empty);
                                         string numberOnly = Regex.Replace(size, "[^0-9.]", "");
 
@@ -89,10 +86,8 @@ namespace AdU_Pharmacy_Inventory_System
                                         txtQty.Text = qty.ToString();
                                         txtSize.Text = numberOnly;
                                         cmbUnit.Text = unit;
-                                        txtRemarks.Text = remarks;
                                         disableFields();
                                         txtSize.IsEnabled = true;
-                                        txtRemarks.IsEnabled = true;
                                         cmbUnit.IsEnabled = true;
                                         process = 1;
                                     }
@@ -139,10 +134,9 @@ namespace AdU_Pharmacy_Inventory_System
                         case MessageBoxResult.Yes:
                             SqlCeConnection conn = DBUtils.GetDBConnection();
                             conn.Open();
-                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set size = @size, remarks = @remarks where name = @inventName and manuf = @manuf and prodCode = @prodCode", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set size = @size where name = @inventName and manuf = @manuf and prodCode = @prodCode", conn))
                             {
                                 cmd.Parameters.AddWithValue("@size", txtSize.Text + cmbUnit.Text);
-                                cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
                                 cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
                                 cmd.Parameters.AddWithValue("@manuf", txtManuf.Text);
                                 cmd.Parameters.AddWithValue("@prodCode", txtProdCode.Text);
@@ -223,7 +217,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 {
                                     unit = cmbUnit.Text;
                                 }
-                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ApparatusInventory (prodCode, name, manuf, qty, size, remarks) VALUES (@prodCode, @inventName, @manuf, @qty, @size, @remarks)", conn))
+                                using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ApparatusInventory (prodCode, name, manuf, qty, size) VALUES (@prodCode, @inventName, @manuf, @qty, @size)", conn))
                                 {
                                     cmd.Parameters.AddWithValue("@prodCode", txtProdCode.Text);
                                     cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
@@ -238,7 +232,6 @@ namespace AdU_Pharmacy_Inventory_System
                                         cmd.Parameters.AddWithValue("@size", DBNull.Value);
 
                                     }
-                                    cmd.Parameters.AddWithValue("@remarks", txtRemarks.Text);
 
                                     try
                                     {
@@ -252,7 +245,7 @@ namespace AdU_Pharmacy_Inventory_System
                                     {
                                         MessageBox.Show("Error! Log has been updated with the error. ");
                                         Log = LogManager.GetLogger("*");
-                                        Log.Error(ex, "Query Error");
+                                        Log.Error(ex);
                                     }
                                 }
                             }
@@ -290,7 +283,7 @@ namespace AdU_Pharmacy_Inventory_System
                         case MessageBoxResult.Yes:
                             SqlCeConnection conn = DBUtils.GetDBConnection();
                             conn.Open();
-                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveApparatusInventory (prodCode, name, qty, size, remarks, manuf) SELECT prodCode, name, qty, size, remarks, manuf from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("INSERT into ArchiveApparatusInventory (prodCode, name, qty, size, manuf) SELECT prodCode, name, qty, size, manuf from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
                             {
                                 cmd.Parameters.AddWithValue("@inventName", txtInventName.Text);
                                 cmd.Parameters.AddWithValue("@manuf", txtManuf.Text);
@@ -339,7 +332,6 @@ namespace AdU_Pharmacy_Inventory_System
             txtQty.Text = null;
             txtSize.Text = null;
             cmbUnit.SelectedIndex = -1;
-            txtRemarks.Text = null;
             i = 1;
             process = 0;
         }
@@ -351,7 +343,6 @@ namespace AdU_Pharmacy_Inventory_System
 
             txtQty.IsEnabled = false;
             txtSize.IsEnabled = false;
-            txtRemarks.IsEnabled = false;
         }
         private void enableFields()
         {
@@ -361,7 +352,6 @@ namespace AdU_Pharmacy_Inventory_System
 
             txtQty.IsEnabled = true;
             txtSize.IsEnabled = true;
-            txtRemarks.IsEnabled = true;
         }
         private void updateListView()
         {
@@ -389,8 +379,6 @@ namespace AdU_Pharmacy_Inventory_System
                         int sizeIndex = reader.GetOrdinal("size");
                         string size = Convert.ToString(reader.GetValue(sizeIndex));
 
-                        int remarksIndex = reader.GetOrdinal("remarks");
-                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
                         summary.Add(new LVOutstanding
                         {
                             i = i,
@@ -399,7 +387,6 @@ namespace AdU_Pharmacy_Inventory_System
                             manuf = manuf,
                             qty = qty.ToString(),
                             size = size,
-                            remarks = remarks
                         });
                         i++;
                     }
@@ -441,8 +428,6 @@ namespace AdU_Pharmacy_Inventory_System
                             int sizeIndex = reader.GetOrdinal("size");
                             string size = Convert.ToString(reader.GetValue(sizeIndex));
 
-                            int remarksIndex = reader.GetOrdinal("remarks");
-                            string remarks = Convert.ToString(reader.GetValue(remarksIndex));
                             summary.Add(new LVOutstanding
                             {
                                 i = i,
@@ -451,7 +436,6 @@ namespace AdU_Pharmacy_Inventory_System
                                 manuf = manuf,
                                 qty = qty.ToString(),
                                 size = size,
-                                remarks = remarks
                             });
                             i++;
                         }
@@ -487,8 +471,6 @@ namespace AdU_Pharmacy_Inventory_System
                             string size = Convert.ToString(reader.GetValue(sizeIndex));
 
 
-                            int remarksIndex = reader.GetOrdinal("remarks");
-                            string remarks = Convert.ToString(reader.GetValue(remarksIndex));
                             summary.Add(new LVOutstanding
                             {
                                 i = i,
@@ -497,7 +479,6 @@ namespace AdU_Pharmacy_Inventory_System
                                 manuf = manuf,
                                 qty = qty.ToString(),
                                 size = size,
-                                remarks = remarks
                             });
                             i++;
                         }

@@ -137,15 +137,15 @@ namespace AdU_Pharmacy_Inventory_System
                                 {
                                     cmd.Parameters.AddWithValue("@size", DBNull.Value);
                                 }
-                                else {
-                                cmd.Parameters.AddWithValue("@size", row.size);
+                                else
+                                {
+                                    cmd.Parameters.AddWithValue("@size", row.size);
                                 }
                                 cmd.Parameters.AddWithValue("@qty", row.qty);
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
-                                    Log = LogManager.GetLogger("addSubject");
-                                    Log.Info("Subject " + txtSubjName.Text + " has been added to database");
+
                                     check = true;
                                 }
                                 catch (SqlCeException ex)
@@ -159,6 +159,8 @@ namespace AdU_Pharmacy_Inventory_System
                         if (check == true)
                         {
                             MessageBox.Show("Subject Added!");
+                            Log = LogManager.GetLogger("addSubject");
+                            Log.Info("Subject " + txtSubjName.Text + " has been added to database");
                             items.Clear();
                             emptyFields();
                         }

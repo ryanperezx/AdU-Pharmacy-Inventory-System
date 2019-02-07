@@ -113,7 +113,7 @@ namespace AdU_Pharmacy_Inventory_System
                     while (rd.Read())
                     {
                         int studentNoIndex = rd.GetOrdinal("studentNo");
-                        int studentNo = Convert.ToInt32(rd.GetValue(studentNoIndex));
+                        string studentNo = Convert.ToString(rd.GetValue(studentNoIndex));
 
                         int fullNameIndex = rd.GetOrdinal("fullName");
                         string fullName = Convert.ToString(rd.GetValue(fullNameIndex));

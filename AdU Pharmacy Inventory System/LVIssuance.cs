@@ -51,10 +51,12 @@ namespace AdU_Pharmacy_Inventory_System
             set;
         }
 
+        private int _qty;
+
         public int qty
         {
-            get;
-            set;
+            get { return _qty; }
+            set { _qty = value; OnPropertyChanged("qty"); }
         }
 
         public string returnChk

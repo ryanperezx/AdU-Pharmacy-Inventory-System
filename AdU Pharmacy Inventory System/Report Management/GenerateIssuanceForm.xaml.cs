@@ -32,6 +32,7 @@ namespace AdU_Pharmacy_Inventory_System
             fillSubjects();
             txtIssued.Text = fullName;
             stack.DataContext = new ExpanderListViewModel();
+            txtDate.SelectedDate = DateTime.Today;
 
         }
 
@@ -115,6 +116,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 size = size,
                                 qty = qty
                             });
+
                             i++;
                         }
                     }
@@ -147,19 +149,51 @@ namespace AdU_Pharmacy_Inventory_System
                 {
                     case MessageBoxResult.Yes:
                         bool success = false;
-                        foreach (var items in items) //VALIDATION CHECKING
+                        foreach (var item in items) //VALIDATION CHECKING
                         {
-                            if (string.IsNullOrEmpty(items.manuf))
+                            if (string.IsNullOrEmpty(item.manuf))
                             {
                                 MessageBox.Show("One or more manufacturing fields are empty, please fill all out.");
                                 return;
                             }
+                            SqlCeConnection conn = DBUtils.GetDBConnection();
+                            conn.Open();
+                            int maxQty = 0;
+
+                            using (SqlCeCommand cmd = new SqlCeCommand("SELECT qty from ApparatusInventory where name = @name and manuf = @manuf and (size IS null or size = @size)", conn))
+                            {
+                                cmd.Parameters.AddWithValue("@size", item.size);
+                                cmd.Parameters.AddWithValue("@manuf", item.manuf);
+                                cmd.Parameters.AddWithValue("@name", item.inventName);
+                                using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            int qtyIndex = reader.GetOrdinal("qty");
+                                            maxQty = Convert.ToInt32(reader.GetValue(qtyIndex));
+                                        }
+                                    }
+                                }
+
+                                if (item.qty > maxQty)
+                                {
+                                    var found = items.FirstOrDefault(x => (x.inventName == item.inventName) && (x.manuf == item.manuf) && ((x.size == item.size) || (x.size == null)));
+                                    if (found != null)
+                                    {
+                                        MessageBox.Show("Item " + item.inventName + " size: " + item.size + " manufacturer: " + item.manuf + " has low stocks, quantity has been set to the quantity of available stocks");
+                                        found.qty = maxQty;
+                                        return;
+                                    }
+                                }
+                            }
 
                         }
-                            studInfo.Add(new StudentInfo
+                        studInfo.Add(new StudentInfo
                         {
                             studName = txtName1.Text,
-                            studNo = Convert.ToInt32(txtStud1.Text)
+                            studNo = txtStud1.Text
                         });
                         if (string.IsNullOrEmpty(txtStud2.Text) && txtName2.Text.Length > 0)
                         {
@@ -176,7 +210,7 @@ namespace AdU_Pharmacy_Inventory_System
                             studInfo.Add(new StudentInfo
                             {
                                 studName = txtName2.Text,
-                                studNo = Convert.ToInt32(txtStud2.Text)
+                                studNo = txtStud2.Text
                             });
                         }
 
@@ -195,7 +229,7 @@ namespace AdU_Pharmacy_Inventory_System
                             studInfo.Add(new StudentInfo
                             {
                                 studName = txtName3.Text,
-                                studNo = Convert.ToInt32(txtStud3.Text)
+                                studNo = txtStud3.Text
                             });
                         }
 
@@ -214,7 +248,7 @@ namespace AdU_Pharmacy_Inventory_System
                             studInfo.Add(new StudentInfo
                             {
                                 studName = txtName4.Text,
-                                studNo = Convert.ToInt32(txtStud4.Text)
+                                studNo = txtStud4.Text
                             });
                         }
 
@@ -225,6 +259,9 @@ namespace AdU_Pharmacy_Inventory_System
 
                         using (DocX document = DocX.Create(filename))
                         {
+                            document.MarginBottom = InchesToPoints(.5f);
+                            document.MarginTop = InchesToPoints(.5f);
+                            document.MarginRight = InchesToPoints(.5f);
                             string underline = "";
 
                             var image = document.AddImage(@"resources/adulogo-blue.png");
@@ -233,10 +270,11 @@ namespace AdU_Pharmacy_Inventory_System
                             var p0 = document.InsertParagraph();
                             p0.AppendPicture(picture);
 
-                            var p1 = document.InsertParagraph("ISSUANCE FORM").Bold().FontSize(9)
+                            document.InsertParagraph();
+                            var p1 = document.InsertParagraph("ISSUANCE FORM").Bold().FontSize(10)
                             .Alignment = Alignment.right;
 
-                            var p2 = document.InsertParagraph("PHARMACY LABORATORY").Bold().FontSize(7)
+                            var p2 = document.InsertParagraph("PHARMACY LABORATORY").Bold().FontSize(8)
                             .UnderlineColor(System.Drawing.Color.Black).SpacingAfter(15).Alignment = Alignment.right;
 
 
@@ -247,7 +285,7 @@ namespace AdU_Pharmacy_Inventory_System
                             underline = returnCount(12, txtLock.Text);
 
                             t0.Rows[0].Cells[0].Paragraphs[0].Bold().Append("________").Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
-                            t0.Rows[0].Cells[0].Paragraphs[0].Bold().Append(txtLock.Text + underline).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t0.Rows[0].Cells[0].Paragraphs[0].Bold().Append(txtLock.Text + underline).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center; //LOCKER NO
                             underline = "";
                             t0.Rows[1].Cells[0].Paragraphs[0].Append("LOCKER NUMBER").Bold().Alignment = Alignment.center;
 
@@ -274,19 +312,19 @@ namespace AdU_Pharmacy_Inventory_System
                             t1.Rows[1].Cells[2].Paragraphs[0].Append("SUBJECT AND SECTION").Bold().Alignment = Alignment.center;
                             t1.Rows[0].Cells[2].Paragraphs[0].Append("__").FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
 
-                            underline = returnCount(20, txtProf.Text);
+                            underline = returnCount(24, txtProf.Text);
 
-                            t1.Rows[0].Cells[0].Paragraphs[0].Append(txtProf.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t1.Rows[0].Cells[0].Paragraphs[0].Append(txtProf.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).FontSize(9).Alignment = Alignment.center; //PROFESSOR
                             underline = "";
 
                             underline = returnCount(20, txtSched.Text);
 
-                            t1.Rows[0].Cells[1].Paragraphs[0].Append(txtSched.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t1.Rows[0].Cells[1].Paragraphs[0].Append(txtSched.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center; //SCHEDULE
                             underline = "";
 
-                            underline = returnCount(22, txtSubject.Text + " " + txtSect.Text);
+                            underline = returnCount(25, txtSubject.Text + " " + txtSect.Text);
 
-                            t1.Rows[0].Cells[2].Paragraphs[0].Append(txtSubject.Text + " " + txtSect.Text + underline).FontSize(10).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center;
+                            t1.Rows[0].Cells[2].Paragraphs[0].Append(txtSubject.Text + " " + txtSect.Text + underline).FontSize(9).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.center; //SUBJECT
                             underline = "";
                             document.InsertTable(t1);
 
@@ -334,8 +372,8 @@ namespace AdU_Pharmacy_Inventory_System
                                 }
                                 else
                                 {
-                                    string prodCode = "", remarks = "";
-                                    using (SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode, remarks from ApparatusInventory where name = @name and manuf = @manuf and (size IS null or size = @size)",conn))
+                                    string prodCode = "";
+                                    using (SqlCeCommand cmd = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @name and manuf = @manuf and (size IS null or size = @size)", conn))
                                     {
                                         cmd.Parameters.AddWithValue("@name", items.inventName);
                                         cmd.Parameters.AddWithValue("@manuf", items.manuf);
@@ -348,23 +386,20 @@ namespace AdU_Pharmacy_Inventory_System
                                                 {
                                                     int prodCodeIndex = reader.GetOrdinal("prodCode");
                                                     prodCode = Convert.ToString(reader.GetValue(prodCodeIndex));
-
-                                                    int remarksIndex = reader.GetOrdinal("remarks");
-                                                    remarks = Convert.ToString(reader.GetValue(remarksIndex));
                                                 }
                                             }
                                         }
                                     }
                                     //////////////////////////////////////////////////////////////////////////////////////////////
-                                    t2.Rows[rowx].Cells[0].Paragraphs[0].Append(Convert.ToString(items.qty)).Bold().Alignment = Alignment.center;
-                                    t2.Rows[rowx].Cells[1].Paragraphs[0].Append(items.inventName).Bold().Alignment = Alignment.center;
+                                    t2.Rows[rowx].Cells[0].Paragraphs[0].Append(Convert.ToString(items.qty)).Bold().Alignment = Alignment.center; // QTY
+                                    t2.Rows[rowx].Cells[1].Paragraphs[0].Append(items.inventName).FontSize(8).Bold().Alignment = Alignment.center; //INVENT NAME
                                     if (!string.IsNullOrEmpty(items.size))
                                     {
-                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.size + "/" + items.manuf + "/" + remarks).Bold().Alignment = Alignment.center;
+                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.size + "/" + items.manuf + "/").Bold().Alignment = Alignment.center; //APPENDING SIZE MANUF AND REMARKS
                                     }
                                     else
                                     {
-                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.manuf).Bold().Alignment = Alignment.center;
+                                        t2.Rows[rowx].Cells[2].Paragraphs[0].Append(items.manuf +"/").Bold().Alignment = Alignment.center; //APPENDING MANUF AND REMARKS
                                     }
 
                                     rowx++;
@@ -387,7 +422,7 @@ namespace AdU_Pharmacy_Inventory_System
                                             try
                                             {
                                                 int count = cmd.ExecuteNonQuery();
-                                                if(count > 0)
+                                                if (count > 0)
                                                 {
                                                     success = true;
                                                 }
@@ -433,19 +468,19 @@ namespace AdU_Pharmacy_Inventory_System
 
                             underline = returnCount(19, txtDate.Text);
 
-                            t3.Rows[0].Cells[0].Paragraphs[0].Append("__" + txtDate.Text + underline).FontSize(9).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.left;
+                            t3.Rows[0].Cells[0].Paragraphs[0].Append("__" + txtDate.Text + underline).FontSize(9).Bold().UnderlineStyle(UnderlineStyle.thick).Alignment = Alignment.left; // ISSUED DATE
                             underline = "";
 
                             underline = returnCount(19, txtIssued.Text);
 
-                            t3.Rows[1].Cells[0].Paragraphs[0].Append("__" + txtIssued.Text + underline).UnderlineStyle(UnderlineStyle.thick).FontSize(9).Bold().Alignment = Alignment.left;
+                            t3.Rows[1].Cells[0].Paragraphs[0].Append("__" + txtIssued.Text + underline).UnderlineStyle(UnderlineStyle.thick).FontSize(9).Bold().Alignment = Alignment.left; // ISSUED BY
                             underline = "";
 
                             document.InsertTable(t3);
 
-                            document.InsertParagraph();
 
-                            var p5 = document.InsertParagraph(@"                I/We, the undersigned, acknowledge to have received the apparatus above clean, dry and in good condition. Said articles are to be returned upon the termination of the semester clean, dry and in good condition.").FontSize(9.5).Bold().Alignment = Alignment.both;
+                            document.InsertParagraph();
+                            var p5 = document.InsertParagraph(@"                I/We, the undersigned, acknowledge to have received the apparatus above clean, dry and in good condition. Said articles are to be returned upon the termination of the semester clean, dry and in good condition.").FontSize(10).Bold().Alignment = Alignment.both;
 
                             document.InsertParagraph();
 
@@ -475,24 +510,24 @@ namespace AdU_Pharmacy_Inventory_System
                             t4.Rows[3].Cells[0].Paragraphs[0].Append("3. ").Bold().FontSize(9);
                             t4.Rows[4].Cells[0].Paragraphs[0].Append("4. ").Bold().FontSize(9);
 
-                            underline = returnCount(30, txtName1.Text);
+                            underline = returnCount(36, txtName1.Text);
 
-                            t4.Rows[1].Cells[0].Paragraphs[0].Append("_" + txtName1.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[1].Cells[0].Paragraphs[0].Append("_" + txtName1.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NAME
                             underline = "";
 
-                            underline = returnCount(30, txtName2.Text);
+                            underline = returnCount(36, txtName2.Text);
 
-                            t4.Rows[2].Cells[0].Paragraphs[0].Append("_" + txtName2.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[2].Cells[0].Paragraphs[0].Append("_" + txtName2.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NAME
                             underline = "";
 
-                            underline = returnCount(30, txtName3.Text);
+                            underline = returnCount(36, txtName3.Text);
 
-                            t4.Rows[3].Cells[0].Paragraphs[0].Append("_" + txtName3.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[3].Cells[0].Paragraphs[0].Append("_" + txtName3.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NAME
                             underline = "";
 
-                            underline = returnCount(30, txtName4.Text);
+                            underline = returnCount(36, txtName4.Text);
 
-                            t4.Rows[4].Cells[0].Paragraphs[0].Append("_" + txtName4.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[4].Cells[0].Paragraphs[0].Append("_" + txtName4.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NAME
                             underline = "";
 
                             t4.Rows[1].Cells[1].Paragraphs[0].Append("____").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
@@ -502,19 +537,19 @@ namespace AdU_Pharmacy_Inventory_System
 
                             underline = returnCount(16, txtStud1.Text);
 
-                            t4.Rows[1].Cells[1].Paragraphs[0].Append(txtStud1.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[1].Cells[1].Paragraphs[0].Append(txtStud1.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NO
                             underline = "";
 
                             underline = returnCount(16, txtStud2.Text);
-                            t4.Rows[2].Cells[1].Paragraphs[0].Append(txtStud2.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[2].Cells[1].Paragraphs[0].Append(txtStud2.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NO
                             underline = "";
 
                             underline = returnCount(16, txtStud3.Text);
-                            t4.Rows[3].Cells[1].Paragraphs[0].Append(txtStud3.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[3].Cells[1].Paragraphs[0].Append(txtStud3.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NO
                             underline = "";
 
                             underline = returnCount(16, txtStud4.Text);
-                            t4.Rows[4].Cells[1].Paragraphs[0].Append(txtStud4.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9);
+                            t4.Rows[4].Cells[1].Paragraphs[0].Append(txtStud4.Text + underline).UnderlineStyle(UnderlineStyle.thick).Bold().FontSize(9); //STUDENT NO   
 
                             t4.Rows[1].Cells[2].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
                             t4.Rows[2].Cells[2].Paragraphs[0].Append("_________________").UnderlineStyle(UnderlineStyle.thick).FontSize(9);
@@ -531,9 +566,10 @@ namespace AdU_Pharmacy_Inventory_System
 
                             var p7 = document.InsertParagraph("PHARMACY LABORATORY'S COPY").FontSize(9).Bold().Alignment = Alignment.center;
 
+
                             document.Save();
                             Process.Start("WINWORD.EXE", filename);
-                            emptyFields();
+
                         }
                         if (success)
                         {
@@ -548,6 +584,7 @@ namespace AdU_Pharmacy_Inventory_System
                                 "Locker No.: " + txtLock.Text + newLine +
                                 "Issued by: " + txtIssued.Text
                                 );
+                            emptyFields();
                         }
                         break;
                     case MessageBoxResult.No:
@@ -595,7 +632,51 @@ namespace AdU_Pharmacy_Inventory_System
             items.Clear();
             studInfo.Clear();
         }
-    }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            if (comboBox.SelectedItem != null)
+            {
+                LVIssuance item = dgSubject.SelectedItem as LVIssuance;
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
+                int maxQty = 0;
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT qty from ApparatusInventory where name = @name and manuf = @manuf and (size IS null or size = @size)", conn))
+                {
+                    cmd.Parameters.AddWithValue("@size", item.size);
+                    cmd.Parameters.AddWithValue("@manuf", item.manuf);
+                    cmd.Parameters.AddWithValue("@name", item.inventName);
+                    using (DbDataReader dr = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                int qtyIndex = dr.GetOrdinal("qty");
+                                maxQty = Convert.ToInt32(dr.GetValue(qtyIndex));
+                            }
+                        }
+                    }
+
+                    if (item.qty > maxQty)
+                    {
+                        var found = items.FirstOrDefault(x => (x.inventName == item.inventName) && (x.manuf == item.manuf) && ((x.size == item.size) || (x.size == null)));
+                        if (found != null)
+                        {
+                            MessageBox.Show("Item " + item.inventName + " size: " + item.size + " manufacturer: " + item.manuf + " has low stocks, quantity has been set to the quantity of available stocks");
+                            found.qty = maxQty;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private float InchesToPoints(float fInches)
+        {
+            return fInches * 72.0f;
+        }
+    }
 
 }
