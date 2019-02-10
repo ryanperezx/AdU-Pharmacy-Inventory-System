@@ -199,11 +199,13 @@ namespace AdU_Pharmacy_Inventory_System
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtStud2.Focus();
+                            return;
                         }
                         else if (string.IsNullOrEmpty(txtName2.Text) && txtStud2.Text.Length > 0)
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtName2.Focus();
+                            return;
                         }
                         else if (txtName2.Text.Length > 0 && txtStud2.Text.Length > 0)
                         {
@@ -218,11 +220,13 @@ namespace AdU_Pharmacy_Inventory_System
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtStud3.Focus();
+                            return;
                         }
                         else if (string.IsNullOrEmpty(txtName3.Text) && txtStud3.Text.Length > 0)
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtName3.Focus();
+                            return;
                         }
                         else if (txtName3.Text.Length > 0 && txtStud3.Text.Length > 0)
                         {
@@ -237,11 +241,13 @@ namespace AdU_Pharmacy_Inventory_System
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtStud4.Focus();
+                            return;
                         }
                         else if (string.IsNullOrEmpty(txtName4.Text) && txtStud4.Text.Length > 0)
                         {
                             MessageBox.Show("Please fill up the missing student field!");
                             txtName4.Focus();
+                            return;
                         }
                         else if (txtName4.Text.Length > 0 && txtStud4.Text.Length > 0)
                         {
