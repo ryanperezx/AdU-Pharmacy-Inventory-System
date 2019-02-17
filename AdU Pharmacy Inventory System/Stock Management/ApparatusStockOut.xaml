@@ -1,4 +1,4 @@
-﻿ <Page x:Class="AdU_Pharmacy_Inventory_System.ApparatusStockOut"
+﻿<Page x:Class="AdU_Pharmacy_Inventory_System.ApparatusStockOut"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,7 +21,7 @@
             <iconPacks:PackIconMaterial Kind="Refresh" Height="40" Width="40" Foreground="#DD7605FF" HorizontalAlignment="Left"/>
         </Label>
 
-        <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="100,100,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="70,78,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
             <StackPanel x:Name="stack">
                 <StackPanel.Resources>
                     <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
@@ -46,19 +46,23 @@
                     </Grid>
                 </Expander>
                 <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=2, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Borrower Form" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Grid Height="290">
+                    <Grid Height="350">
                         <Label Content="Request Date: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="131,22,0,0"/>
                         <DatePicker x:Name="txtDate" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,22,0,0" Width="150" SelectedDateChanged="txtDate_SelectedDateChanged"/>
                         <Label Content="Date of Experiment: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,58,0,0"/>
                         <DatePicker x:Name="txtDateExp" HorizontalAlignment="Left" VerticalAlignment="Top" Height="31" Margin="250,58,0,0" Width="150" SelectedDateChanged="txtDate_SelectedDateChanged"/>
                         <Label Content="Group No: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,108,0,0"/>
                         <TextBox x:Name="txtGroup"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="51" PreviewTextInput="txtQty_PreviewTextInput" Margin="187,108,0,0" MaxLength="3"/>
+                        <Label Content="Section: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,214,0,0"/>
+                        <TextBox x:Name="txtSect"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" PreviewTextInput="txtQty_PreviewTextInput" Margin="125,214,0,0" MaxLength="10"/>
+                        <Label Content="Schedule: " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="258,214,0,0"/>
+                        <TextBox x:Name="txtSched"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="144" Margin="345,214,0,0" MaxLength="10"/>
                         <Label Content="Locker No:" HorizontalAlignment="Left" Margin="264,108,0,0" VerticalAlignment="Top"/>
                         <TextBox x:Name="txtLocker" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="51" Margin="370,108,0,0" MaxLength="5"/>
                         <Label Content="Subject: " HorizontalAlignment="Left"  VerticalAlignment="Top" Height="33" Margin="50,155,0,0"/>
                         <ComboBox x:Name="cmbSubject" HorizontalAlignment="Left" VerticalAlignment="Top" Width="364" Margin="125,155,0,0"/>
-                        <Label Content="Experiment Title:" HorizontalAlignment="Left" Margin="40,208,0,0" VerticalAlignment="Top"/>
-                        <TextBox x:Name="txtExperiment" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="302" Margin="187,208,0,0" MaxLength="30"/>
+                        <Label Content="Experiment Title:" HorizontalAlignment="Left" Margin="40,275,0,0" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtExperiment" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" VerticalAlignment="Top" Width="302" Margin="187,275,0,0" MaxLength="30"/>
                     </Grid>
                 </Expander>
                 <Expander IsExpanded="{Binding SelectedExpander, ConverterParameter=3, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}" Width="540" Header="Student List" HorizontalAlignment="Left" VerticalAlignment="Top">

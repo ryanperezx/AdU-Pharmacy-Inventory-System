@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Data.SqlServerCe;
-using System.Data.SqlClient;
 using System.Data.Common;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using NLog;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
-using DocumentFormat.OpenXml;
+
+using Word = Microsoft.Office.Interop.Word;
+using System.IO;
+using System.Reflection;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Office.Core;
+using System.Diagnostics;
+using System.Drawing.Drawing2D;
 
 namespace AdU_Pharmacy_Inventory_System
 {
     /// <summary>
     /// Interaction logic for ApparatusStockOut.xaml
     /// </summary>
-    public partial class ApparatusStockOut : Page
+    public partial class ApparatusStockOut : System.Windows.Controls.Page
     {
         int i = 1;
         List<StudentInfo> studInfo = new List<StudentInfo>();
@@ -293,14 +293,14 @@ namespace AdU_Pharmacy_Inventory_System
             {
                 MessageBox.Show("There are no apparatus(es) to be stock out");
             }
-            else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtGroup.Text) || string.IsNullOrEmpty(cmbSubject.Text) || string.IsNullOrEmpty(txtExperiment.Text) || string.IsNullOrEmpty(txtLocker.Text) || string.IsNullOrEmpty(txtDateExp.Text))
-            {
-                MessageBox.Show("One or more fields are empty!");
-            }
-            else if (string.IsNullOrEmpty(txtStud1.Text) || String.IsNullOrEmpty(txtName1.Text))
-            {
-                MessageBox.Show("Student Info fields are empty!");
-            }
+            //else if (string.IsNullOrEmpty(txtDate.Text) || string.IsNullOrEmpty(txtGroup.Text) || string.IsNullOrEmpty(cmbSubject.Text) || string.IsNullOrEmpty(txtExperiment.Text) || string.IsNullOrEmpty(txtLocker.Text) || string.IsNullOrEmpty(txtDateExp.Text))
+            //{
+            //    MessageBox.Show("One or more fields are empty!");
+            //}
+            //else if (string.IsNullOrEmpty(txtStud1.Text) || String.IsNullOrEmpty(txtName1.Text))
+            //{
+            //    MessageBox.Show("Student Info fields are empty!");
+            //}
             else
             {
 
@@ -318,11 +318,11 @@ namespace AdU_Pharmacy_Inventory_System
                         conn.Open();
                         bool check = false;
 
-                        studInfo.Add(new StudentInfo
-                        {
-                            studName = txtName1.Text,
-                            studNo = txtStud1.Text
-                        });
+                        //studInfo.Add(new StudentInfo
+                        //{
+                        //    studName = txtName1.Text,
+                        //    studNo = txtStud1.Text
+                        //});
 
                         if (string.IsNullOrEmpty(txtStud2.Text) && txtName2.Text.Length > 0)
                         {
@@ -389,110 +389,146 @@ namespace AdU_Pharmacy_Inventory_System
 
 
                         string date = txtDate.Text.Replace("/", "-");
-                        string filename = @"C:\Users\" + user + @"\Desktop\[" + date + "][" + cmbSubject.Text + "][" + txtExperiment.Text + "][" + txtGroup.Text + "][" + txtLocker.Text + "].docx";
-                        filename = filename.Replace(" ", "-");
+                        string temp = @"C:\Users\" + user + @"\Desktop\[" + date + "][" + cmbSubject.Text + "][" + txtExperiment.Text + "][" + txtGroup.Text + "][" + txtLocker.Text + "].docx";
+                        temp = temp.Replace(" ", "-");
+                        object filename = temp;
+
+                        try
+                        {
+                            //START INSTANCE OF WORD AND SET MARGIN TO .50
+                            object oMissing = Missing.Value;
+                            Word.Application oWord = new Word.Application();
+                            Word.Document oDoc = null;
+
+                            object format = System.AppDomain.CurrentDomain.BaseDirectory + @"resources\BFTemplate.docx";
+
+                            object readOnly = false;
+                            object isVisible = false;
+
+                            oWord.Visible = false;
+
+                            oDoc = oWord.Documents.Open(ref format, ref oMissing, ref readOnly, 
+                                ref oMissing, ref oMissing, ref oMissing, 
+                                ref oMissing, ref oMissing, ref oMissing, 
+                                ref oMissing, ref oMissing, ref oMissing, 
+                                ref oMissing, ref oMissing, ref oMissing, ref oMissing);
+
+                            oDoc.Activate();
+
+                            //FIND AND REPLACE
+
+                            this.findAndReplace(oWord, "<SUBJ>", cmbSubject.Text);
+                            this.findAndReplace(oWord, "<SECT>", txtSect.Text);
+                            this.findAndReplace(oWord, "<SCHED>", txtSched.Text);
+                            this.findAndReplace(oWord, "<LOCKER>", txtLocker.Text);
+                            this.findAndReplace(oWord, "<DATEREQ>", txtDate.Text);
+                            this.findAndReplace(oWord, "<DATEEXP>", txtDateExp.Text);
+                            this.findAndReplace(oWord, "<GROUPNO>", txtGroup.Text);
+                            this.findAndReplace(oWord, "<EXPNAME>", txtExperiment.Text);
+
+                            //REPLACE QUANTITY, UNIT AND DESC
+                            int i = 1;
+                            foreach (var row in stockOut)
+                            {
+                                this.findAndReplace(oWord, "<Q" + i + ">", row.qty);
+                                this.findAndReplace(oWord, "<U" + i + ">", Regex.Replace(row.size + "0", @"[\d-]", string.Empty));
+                                this.findAndReplace(oWord, "<DESC" + i + ">", row.inventName + "[" + row.manuf + "][" + row.size + "]");
+                                i++;
+                                //using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty - @qty where name = @inventName and  (size IS null or size = @size) and manuf = @manuf", conn))
+                                //{
+                                //    cmd.Parameters.AddWithValue("@qty", row.qty);
+                                //    cmd.Parameters.AddWithValue("@inventName", row.inventName);
+                                //    cmd.Parameters.AddWithValue("@manuf", row.manuf);
+                                //    if (!string.IsNullOrEmpty(row.size))
+                                //    {
+                                //        cmd.Parameters.AddWithValue("@size", row.size);
+                                //    }
+                                //    else
+                                //    {
+                                //        row.size = "";
+                                //        cmd.Parameters.AddWithValue("@size", row.size);
+                                //    }
+                                //    try
+                                //    {
+                                //        cmd.ExecuteNonQuery();
+                                //        check = true;
+                                //        int ordinal = 0;
+                                //        string prodCode = null;
+                                //        using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
+                                //        {
+                                //            cmd2.Parameters.AddWithValue("@inventName", row.inventName);
+                                //            cmd2.Parameters.AddWithValue("@manuf", row.manuf);
+                                //            DbDataReader result = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable);
+                                //            if (result.Read())
+                                //            {
+                                //                ordinal = result.GetOrdinal("prodCode");
+                                //                prodCode = Convert.ToString(result.GetValue(ordinal));
+                                //            }
+
+                                //        }
+                                //        foreach (var student in studInfo)
+                                //        {
+                                //            using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, breakage) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, 0)", conn))
+                                //            {
+                                //                cmd1.Parameters.AddWithValue("@dateReq", txtDate.Text);
+                                //                cmd1.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
+                                //                cmd1.Parameters.AddWithValue("@studentNo", student.studNo);
+                                //                cmd1.Parameters.AddWithValue("@fullName", student.studName);
+                                //                cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
+                                //                cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
+                                //                cmd1.Parameters.AddWithValue("@lockNo", txtLocker.Text);
+                                //                cmd1.Parameters.AddWithValue("@expName", txtExperiment.Text);
+                                //                cmd1.Parameters.AddWithValue("@prodCode", prodCode);
+                                //                cmd1.Parameters.AddWithValue("@qty", row.qty);
+                                //                try
+                                //                {
+                                //                    cmd1.ExecuteNonQuery();
+                                //                }
+                                //                catch (SqlCeException ex)
+                                //                {
+                                //                    MessageBox.Show("Error! Log has been updated with the error.");
+                                //                    Log = LogManager.GetLogger("*");
+                                //                    Log.Error(ex, "Query Error");
+                                //                }
+                                //            }
+                                //        }
+
+                                //    }
+                                //    catch (SqlCeException ex)
+                                //    {
+                                //        MessageBox.Show("Error! Log has been updated with the error.");
+                                //        Log = LogManager.GetLogger("*");
+                                //        Log.Error(ex, "Query Error");
+                                //    }
 
 
-                        using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(filename, WordprocessingDocumentType.Document)){
+                                //}
 
-                            MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
-                            mainPart.Document = new Document();
-                            Body body = new Body();
+                            }
 
-                            PageMargin pageMargin = new PageMargin() { Top = 720, Right = 720U, Bottom = 720 };
-
-                            SectionProperties sectionProps = new SectionProperties();
-                            sectionProps.Append(pageMargin);
-                            body.Append(sectionProps);
+                            oDoc.SaveAs(ref filename, ref oMissing, ref oMissing, ref oMissing,
+                                ref oMissing, ref oMissing, ref oMissing,
+                                ref oMissing, ref oMissing, ref oMissing,
+                                ref oMissing, ref oMissing, ref oMissing,
+                                ref oMissing, ref oMissing, ref oMissing);
 
 
-                            DocumentFormat.OpenXml.Wordprocessing.Paragraph para = new DocumentFormat.OpenXml.Wordprocessing.Paragraph();
-                            DocumentFormat.OpenXml.Wordprocessing.Run run = new DocumentFormat.OpenXml.Wordprocessing.Run();
+                            oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
 
-                            Text text = new Text("The Quick Brown Fox Jumps Over The Lazy Dog");
+                            //END
 
-                            run.Append(text);
-                            para.Append(run);
-                            body.Append(para);
-                            mainPart.Document.Append(body );
+                            //oWord.Documents[filename].Save();
+                            //Process.Start("WINWORD.EXE", filename);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.ToString());
                         }
 
-                        Process.Start("WINWORD.EXE", filename);
 
 
-                        //foreach (var row in stockOut)
-                        //{
-                        //    using (SqlCeCommand cmd = new SqlCeCommand("UPDATE ApparatusInventory set qty = qty - @qty where name = @inventName and  (size IS null or size = @size) and manuf = @manuf", conn))
-                        //    {
-                        //        cmd.Parameters.AddWithValue("@qty", row.qty);
-                        //        cmd.Parameters.AddWithValue("@inventName", row.inventName);
-                        //        cmd.Parameters.AddWithValue("@manuf", row.manuf);
-                        //        if (!string.IsNullOrEmpty(row.size))
-                        //        {
-                        //            cmd.Parameters.AddWithValue("@size", row.size);
-                        //        }
-                        //        else
-                        //        {
-                        //            row.size = "";
-                        //            cmd.Parameters.AddWithValue("@size", row.size);
-                        //        }
-                        //        try
-                        //        {
-                        //            cmd.ExecuteNonQuery();
-                        //            check = true;
-                        //            int ordinal = 0;
-                        //            string prodCode = null;
-                        //            using (SqlCeCommand cmd2 = new SqlCeCommand("SELECT prodCode from ApparatusInventory where name = @inventName and manuf = @manuf", conn))
-                        //            {
-                        //                cmd2.Parameters.AddWithValue("@inventName", row.inventName);
-                        //                cmd2.Parameters.AddWithValue("@manuf", row.manuf);
-                        //                DbDataReader result = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable);
-                        //                if (result.Read())
-                        //                {
-                        //                    ordinal = result.GetOrdinal("prodCode");
-                        //                    prodCode = Convert.ToString(result.GetValue(ordinal));
-                        //                }
-
-                        //            }
-                        //            foreach (var student in studInfo)
-                        //            {
-                        //                using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, breakage) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, 0)", conn))
-                        //                {
-                        //                    cmd1.Parameters.AddWithValue("@dateReq", txtDate.Text);
-                        //                    cmd1.Parameters.AddWithValue("@dateExp", txtDateExp.Text);
-                        //                    cmd1.Parameters.AddWithValue("@studentNo", student.studNo);
-                        //                    cmd1.Parameters.AddWithValue("@fullName", student.studName);
-                        //                    cmd1.Parameters.AddWithValue("@groupID", txtGroup.Text);
-                        //                    cmd1.Parameters.AddWithValue("@subject", cmbSubject.Text);
-                        //                    cmd1.Parameters.AddWithValue("@lockNo", txtLocker.Text);
-                        //                    cmd1.Parameters.AddWithValue("@expName", txtExperiment.Text);
-                        //                    cmd1.Parameters.AddWithValue("@prodCode", prodCode);
-                        //                    cmd1.Parameters.AddWithValue("@qty", row.qty);
-                        //                    try
-                        //                    {
-                        //                        cmd1.ExecuteNonQuery();
-                        //                    }
-                        //                    catch (SqlCeException ex)
-                        //                    {
-                        //                        MessageBox.Show("Error! Log has been updated with the error.");
-                        //                        Log = LogManager.GetLogger("*");
-                        //                        Log.Error(ex, "Query Error");
-                        //                    }
-                        //                }
-                        //            }
-
-                        //        }
-                        //        catch (SqlCeException ex)
-                        //        {
-                        //            MessageBox.Show("Error! Log has been updated with the error.");
-                        //            Log = LogManager.GetLogger("*");
-                        //            Log.Error(ex, "Query Error");
-                        //        }
 
 
-                        //    }
-
-                        //}
 
                         if (check == true)
                         {
@@ -572,8 +608,6 @@ namespace AdU_Pharmacy_Inventory_System
             fillManufacturer();
         }
 
-
-
         private void PackIconMaterial_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             emptyFields();
@@ -615,6 +649,35 @@ namespace AdU_Pharmacy_Inventory_System
                 underline = underline.Insert(i, "_");
             }
             return underline;
+        }
+
+
+        private void findAndReplace(Microsoft.Office.Interop.Word.Application wordApp, object findText, object replaceText)
+        {
+            object matchCase = true;
+            object matchWholeWord = true;
+            object matchWildCards = false;
+            object matchSoundLike = false;
+            object matchAllForms = false;
+            object forward = true;
+            object format = false;
+            object matchKashida = false;
+            object matchDiactitics = false;
+            object matchAlefHamza = false;
+            object matchControl = false;
+            object readOnly = false;
+            object visible = true;
+            object replace = 2;
+            object wrap = 1;
+
+            wordApp.Selection.Find.Execute(ref findText, 
+                ref matchCase, ref matchWholeWord, 
+                ref matchWildCards, ref matchSoundLike, 
+                ref matchAllForms, ref forward,
+                ref wrap, ref format, ref replaceText, 
+                ref replace, ref matchKashida, 
+                ref matchDiactitics, ref matchAlefHamza, 
+                ref matchControl);
         }
     }
 
