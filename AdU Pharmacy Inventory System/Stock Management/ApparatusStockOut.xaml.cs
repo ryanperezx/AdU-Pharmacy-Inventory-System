@@ -466,8 +466,14 @@ namespace AdU_Pharmacy_Inventory_System
                                 //            }
 
                                 //        }
+                                //          int x = 1;
+
                                 //        foreach (var student in studInfo)
                                 //        {
+                                //this.findAndReplace(oWord, "<N" + x + ">", x );
+                                //this.findAndReplace(oWord, "<NAME" + x + ">", txtName1.Text);
+                                //this.findAndReplace(oWord, "<STUD" + x + ">", txtStud1.Text);
+
                                 //            using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT into BorrowerList (dateReq, dateExp, studentNo, fullName, groupID, lockNo ,subject, expName ,prodCode, qty, breakage) VALUES (@dateReq, @dateExp, @studentNo, @fullName, @groupID, @lockNo, @subject, @expName ,@prodCode, @qty, 0)", conn))
                                 //            {
                                 //                cmd1.Parameters.AddWithValue("@dateReq", txtDate.Text);
